@@ -15,9 +15,9 @@ assignees: ''
 
 ### TODO
 
-1.  Job1
-2.  Job2
-3.  Job3
+1. [ ] Job1
+2. [ ] Job2
+3. [ ] Job3
 
 ### Estimated time
 
