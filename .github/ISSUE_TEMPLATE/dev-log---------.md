@@ -1,6 +1,6 @@
 ---
 name: Dev-Log 마크다운 템플릿
-about: Describe this issue template's purpose here.
+about: Dev-Log 마크다운 템플릿
 title: ''
 labels: ''
 assignees: ''

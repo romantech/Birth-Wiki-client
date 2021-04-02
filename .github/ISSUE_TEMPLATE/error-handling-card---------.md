@@ -1,6 +1,6 @@
 ---
 name: Error Handling Card 마크다운 템플릿
-about: Suggest an idea for this project
+about: Error Handling Card 마크다운 템플릿
 title: ''
 labels: ''
 assignees: ''
