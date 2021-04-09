@@ -1,23 +1,27 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
+import CardClicked from './CardClicked';
 
-export default function Card() {
-  const [show, setShow] = useState(true);
+const Card = () => {
+  const [showCard, setShowCard] = useState(false);
+
+  const openCard = () => {
+    setShowCard((prev) => !prev);
+  };
 
   return (
-    <Style
-      onClick={() => {
-        setShow(!show);
-      }}
-    >
-      <div className={'card ' + (show ? 'active' : 'noActive')}>
-        <Title>Title</Title>
-        <Screenshot />
-        <Content />
-      </div>
-    </Style>
+    <>
+      <Style
+        onClick={() => {
+          openCard();
+        }}
+      >
+        card1
+      </Style>
+      <CardClicked showCard={showCard} setShowCard={setShowCard} />
+    </>
   );
-}
+};
 
 const Title = styled.span`
   display: block;
@@ -44,40 +48,32 @@ const Screenshot = styled.figure`
   transition: 0.5s ease;
 `;
 
-const Content = styled.div``;
-
 const Style = styled.div`
-  & .card {
-    position: relative;
-    bottom: -50px;
-    flex-shrink: 0;
-    width: 280px;
-    margin: 0px 5px 0px 5px;
-    text-algin: left;
-    background: #fff;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: 0.5s ease;
-    box-shadow: 0 2px 20px rgba(0, 0, 0, 0.12), 0 20px 20px -10px rgba(0, 0, 0, 0.125);
+  position: relative;
+  bottom: -50px;
+  flex-shrink: 0;
+  width: 280px;
+  height: 300px;
+  margin: 0px 5px 0px 5px;
+  text-algin: left;
+  background: #fff;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: 0.5s ease;
+  box-shadow: 0 2px 20px rgba(0, 0, 0, 0.12), 0 20px 20px -10px rgba(0, 0, 0, 0.125);
 
-    &:hover {
-      transform: translate(0px, -50px);
+  &:hover {
+    transform: translate(0px, -50px);
 
-      ${Screenshot} {
-        transform: translateY(4px) scale(0.8);
-      }
+    ${Screenshot} {
+      transform: translateY(4px) scale(0.8);
+    }
 
-      ${Title} {
-        transform: translateX(30px);
-        color: #000;
-      }
+    ${Title} {
+      transform: translateX(30px);
+      color: #000;
     }
   }
-
-  & .card.active {
-    background: white;
-  }
-  & .card.noActive {
-    background: black;
-  }
 `;
+
+export default Card;

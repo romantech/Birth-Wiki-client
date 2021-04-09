@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import CardLists from './CardList';
 import WikiCulture from './WikiCulture';
@@ -49,16 +49,8 @@ export default function Weather() {
       <DateInput>
         <input type='text' onKeyPress={typeWeather} placeholder='Search...' />
       </DateInput>
-      <button
-        onClick={() => {
-          setShow(!show);
-        }}
-      >
-        {show ? '블랙' : '화이트'}
-      </button>
       <WeatherText>
         <p>{`${text} 날씨에 태어나셨습니다.`}</p>
-        <div className={'culture ' + (show ? 'culture-dark' : 'culture-light')}></div>
       </WeatherText>
       <WikiCulture />
       <CardLists />
@@ -103,18 +95,5 @@ const WeatherText = styled.div`
     margin: 10px;
     font-size: 1.4rem;
     font-weight: 800;
-  }
-
-  & .culture {
-    width: 100%;
-    height: 50px;
-    background: red;
-  }
-
-  & .culture-dark {
-    background: black;
-  }
-  & .culture-light {
-    background: white;
   }
 `;
