@@ -1,15 +1,16 @@
 import React from 'react';
 import styled from 'styled-components';
+import Card from './Card';
 
 export default function CardLists() {
   return (
     <div>
       <CardContainer>
-        <Cards>card1</Cards>
-        <Cards>card2</Cards>
-        <Cards>card3</Cards>
-        <Cards>card4</Cards>
-        <Cards>card5</Cards>
+        <Card />
+        <Card />
+        <Card />
+        <Card />
+        <Card />
       </CardContainer>
     </div>
   );

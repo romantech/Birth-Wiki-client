@@ -11,11 +11,11 @@ import Weather from './components/Weather';
 function App() {
   return (
     <div>
-      <Router>
+      <Weather />
+      {/* <Router>
         <Nav />
         <LaunchPage />
-        <Weather />
-      </Router>
+      </Router> */}
     </div>
   );
 }

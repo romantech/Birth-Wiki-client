@@ -2,87 +2,69 @@ import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import CardLists from './CardList';
 import WikiCulture from './WikiCulture';
-
-const api = {
-  keys: 'fdc351b8fee958abbcb8b3c4dcb156e1',
-  base: 'https://api.openweathermap.org/data/2.5',
-};
+import clear from '../img/clear.png';
+import rain from '../img/rain.png';
+import snow from '../img/snow.png';
+import cloud from '../img/cloud.png';
 
 export default function Weather() {
-  const [query, setQuery] = useState('');
-  const [weather, setWeather] = useState({});
+  const [weather, setWeather] = useState(clear);
+  const [text, setText] = useState('화창한');
 
-  const search = (e: any) => {
+  const typeWeather = (e: any) => {
     if (e.key === 'Enter') {
-      fetch(`${api.base}/weather?q=${query}&units=metric&APPID=${api.keys}`)
-        .then((res) => res.json())
-        .then((result) => {
-          setWeather(result);
-          setQuery('');
-          console.log(result);
-        });
+      if (e.target.value === 'rain') {
+        setWeather(rain);
+        setText('축축한');
+      } else if (e.target.value === 'snow') {
+        setWeather(snow);
+        setText('매서운');
+      } else if (e.target.value === 'cloud') {
+        setWeather(cloud);
+        setText('우울한');
+      } else if (e.target.value === 'clear') {
+        setWeather(clear);
+        setText('화창한');
+      }
     }
   };
+
+  const Background = styled.div`
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    flex-direction: column;
+    width: 100%;
+    height: 100vh;
+    overflow: hidden;
+    object-fit: contain;
+    background: url(${weather}) center center/cover no-repeat;
+    transition: 0.5s ease;
+  `;
+
+  const [show, setShow] = useState(true);
+
   return (
-    <>
-      <Background>
-        <DateInput>
-          <input
-            type='text'
-            value={query}
-            onChange={(e) => setQuery(e.target.value)}
-            onKeyPress={search}
-            placeholder='Search...'
-          />
-        </DateInput>
-        <WeatherText>
-          <p>{`맑은 날씨에 태어나셨습니다.`}</p>
-        </WeatherText>
-        <WikiCulture />
-        <CardLists />
-      </Background>
-    </>
+    <Background>
+      <DateInput>
+        <input type='text' onKeyPress={typeWeather} placeholder='Search...' />
+      </DateInput>
+      <button
+        onClick={() => {
+          setShow(!show);
+        }}
+      >
+        {show ? '블랙' : '화이트'}
+      </button>
+      <WeatherText>
+        <p>{`${text} 날씨에 태어나셨습니다.`}</p>
+        <div className={'culture ' + (show ? 'culture-dark' : 'culture-light')}></div>
+      </WeatherText>
+      <WikiCulture />
+      <CardLists />
+    </Background>
   );
 }
-
-const Background = styled.div`
-  display: flex;
-  justify-content: space-around;
-  align-items: center;
-  flex-direction: column;
-  width: 100%;
-  height: 100vh;
-  overflow: hidden;
-  background: url(https://source.unsplash.com/1920x1028/?nature,clear);
-
-  & .rain {
-    background: linear-gradient(
-        to right,
-        rgba(20, 20, 20, 0.1) 20%,
-        rgba(20, 20, 20, 0.7) 80%,
-        rgba(20, 20, 20, 1)
-      ),
-      url(https://source.unsplash.com/1600x900/?nature,rain);
-  }
-  & .clear {
-    background: linear-gradient(
-        to right,
-        rgba(20, 20, 20, 0.1) 20%,
-        rgba(20, 20, 20, 0.7) 80%,
-        rgba(20, 20, 20, 1)
-      ),
-      url(https://source.unsplash.com/1600x900/?nature,clear);
-  }
-  & .cloud {
-    background: linear-gradient(
-        to right,
-        rgba(20, 20, 20, 0.1) 20%,
-        rgba(20, 20, 20, 0.7) 80%,
-        rgba(20, 20, 20, 1)
-      ),
-      url(https://source.unsplash.com/1600x900/?nature,cloud);
-  }
-`;
 
 const DateInput = styled.div`
   width: 100%;
@@ -121,5 +103,18 @@ const WeatherText = styled.div`
     margin: 10px;
     font-size: 1.4rem;
     font-weight: 800;
+  }
+
+  & .culture {
+    width: 100%;
+    height: 50px;
+    background: red;
+  }
+
+  & .culture-dark {
+    background: black;
+  }
+  & .culture-light {
+    background: white;
   }
 `;
