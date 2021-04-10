@@ -1,7 +1,21 @@
 import React, { useRef, useEffect, useCallback } from 'react';
 import { useSpring, animated } from 'react-spring'; //나중에 react-spring@next 설치 알리기..
 import styled from 'styled-components';
-import { MdClose } from 'react-icons/md';
+import { Swiper, SwiperSlide } from 'swiper/react'; //@types-swiper도 같이 설치...
+import SwiperCore, { Navigation, Pagination, A11y, EffectCoverflow } from 'swiper';
+
+// Import Swiper styles
+import 'swiper/swiper.scss'; // npm install node-sass
+import 'swiper/components/navigation/navigation.scss';
+import 'swiper/components/pagination/pagination.scss';
+
+SwiperCore.use([Navigation, Pagination, A11y, EffectCoverflow]);
+
+// //swiper 적용
+// import Swiper from 'react-id-swiper'; //swiper,  @types-swiper도 같이 설치...
+// import 'swiper/css/swiper.css'; // swiper css
+// import 'swiper/swiper.scss'; // scss
+// import 'swiper/swiper.less'; // less
 
 const Background = styled.div`
   width: 100%;
@@ -19,54 +33,8 @@ const Background = styled.div`
 `;
 
 const CardWrapper = styled.div`
-  width: 800px;
-  height: 500px;
-  box-shadow: 0 5px 16px rgba(0, 0, 0, 0.2);
-  background: #fff;
-  color: #000;
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  position: relative;
+  width: 1000px;
   z-index: 130;
-  border-radius: 10px;
-`;
-
-const CardImg = styled.img`
-  width: 100%;
-  height: 100%;
-  border-radius: 10px 0 0 10px;
-  background: #000;
-`;
-
-const CardContent = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  line-height: 1.8;
-  color: #141414;
-
-  p {
-    margin-bottom: 1rem;
-  }
-
-  button {
-    padding: 10px 24px;
-    background: #141414;
-    color: #fff;
-    border: none;
-  }
-`;
-
-const CloseCardButton = styled(MdClose)`
-  cursor: pointer;
-  position: absolute;
-  top: 20px;
-  right: 20px;
-  width: 32px;
-  height: 32px;
-  padding: 0;
-  z-index: 10;
 `;
 
 const CardClicked = ({ showCard, setShowCard }: { showCard: boolean; setShowCard: any }) => {
@@ -74,7 +42,7 @@ const CardClicked = ({ showCard, setShowCard }: { showCard: boolean; setShowCard
 
   const animation: any = useSpring({
     config: {
-      duration: 250,
+      duration: 200,
     },
     opacity: showCard ? 1 : 0,
     transform: showCard ? `translateY(0%)` : `translateY(100%)`,
@@ -86,19 +54,60 @@ const CardClicked = ({ showCard, setShowCard }: { showCard: boolean; setShowCard
     }
   };
 
+  const data = [
+    {
+      id: 1,
+      username: 'jake',
+      img: 'https://images.unsplash.com/photo-1527239441953-caffd968d952',
+    },
+    {
+      id: 2,
+      username: 'jake',
+      img: 'https://images.unsplash.com/photo-1604079628040-94301bb21b91',
+    },
+    {
+      id: 3,
+      username: 'jake',
+      img: 'https://images.unsplash.com/photo-1557180295-76eee20ae8aa',
+    },
+    {
+      id: 4,
+      username: 'jake',
+      img: 'https://images.unsplash.com/photo-1535043205849-513fe27db33e',
+    },
+    {
+      id: 5,
+      username: 'jake',
+      img: 'https://images.unsplash.com/photo-1554866585-cd94860890b7',
+    },
+    {
+      id: 6,
+      username: 'jake',
+      img: 'https://images.unsplash.com/photo-1493612276216-ee3925520721',
+    },
+  ];
+
   return (
     <>
       {showCard ? (
         <Background ref={cardRef} onClick={closeCard}>
           <animated.div style={animation}>
             <CardWrapper>
-              {/* <CardImg src={require('../img/clear.png')} alt='Card_BG' />
-              <CardContent>
-                <h1>Are you ready</h1>
-                <p>Get exclusive access to our next launch</p>
-                <button>Join Now</button>
-              </CardContent>
-              <CloseCardButton aria-label='Close card' onClick={() => setShowCard((prev: any) => !prev)} /> */}
+              <Swiper
+                effect='coverflow'
+                spaceBetween={50}
+                slidesPerView={3}
+                navigation
+                pagination={{ clickable: true }}
+                onSlideChange={() => console.log('slide change')}
+                onSwiper={(swiper) => console.log(swiper)}
+              >
+                {data.map((image) => (
+                  <SwiperSlide style={{ width: '500px' }} key={image.id}>
+                    <img style={{ width: '300px', height: '400px' }} src={image.img} alt='' />
+                  </SwiperSlide>
+                ))}
+              </Swiper>
             </CardWrapper>
           </animated.div>
         </Background>
