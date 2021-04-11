@@ -1,39 +1,55 @@
 import React from 'react';
 import styled from 'styled-components';
 
-const Category = styled.button<{ imagePath: string }>`
-  border: none;
-  border-radius: 20px;
-  outline: none;
-  min-width: 17%;
-  height: 8rem;
+const Wrapper = styled.div`
+  min-width: 20%;
+  min-height: 6rem;
+  max-height: 8rem;
   margin-right: 1rem;
-  font-size: 1.8rem;
+  border-radius: 20px;
+  overflow: hidden;
+
+  @media (max-width: 1200px) {
+    min-width: 25%;
+  }
+
+  @media (max-width: 992px) {
+    min-width: 30%;
+  }
+
+  @media (max-width: 768px) {
+    min-width: 35%;
+  }
+
+  @media (max-width: 576px) {
+    min-width: 40%;
+  }
+`;
+
+const Category = styled.button<{ imagePath: string }>`
   cursor: pointer;
+  font-size: 1.5rem;
+  height: 100%;
+  width: 100%;
+  outline: none;
+  border: none;
   background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),
     url(${props => props.imagePath});
   background-repeat: no-repeat;
   background-size: cover;
   color: white;
+  transition: all 0.2s linear;
 
-  @media (max-width: 1200px) {
-    font-size: 1.8rem;
-    min-width: 20%;
-  }
-
-  @media (max-width: 992px) {
-    font-size: 1.6rem;
-    min-width: 20%;
-  }
-
-  @media (max-width: 768px) {
-    font-size: 1.4rem;
-    min-width: 25%;
-  }
-
-  @media (max-width: 576px) {
-    font-size: 1.2rem;
-    min-width: 25%;
+  &:hover {
+    background: linear-gradient(rgba(0, 0, 0, 0.185), rgba(0, 0, 0, 0.185)),
+      url(${props => props.imagePath});
+    background-size: cover;
+    background-repeat: no-repeat;
+    -webkit-transform: scale(1.2);
+    -moz-transform: scale(1.2);
+    -ms-transform: scale(1.2);
+    -o-transform: scale(1.2);
+    transform: scale(1.2);
   }
 `;
 
@@ -46,7 +62,11 @@ interface Props {
 
 const FavoriteCategories = ({ category }: Props): JSX.Element => {
   const { imagePath, categoryName } = category;
-  return <Category imagePath={imagePath}>{categoryName}</Category>;
+  return (
+    <Wrapper>
+      <Category imagePath={imagePath}>{categoryName}</Category>
+    </Wrapper>
+  );
 };
 
 export default FavoriteCategories;
