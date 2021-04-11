@@ -15,9 +15,7 @@ const Card = () => {
         onClick={() => {
           openCard();
         }}
-      >
-        card1
-      </Style>
+      ></Style>
       <CardClicked showCard={showCard} setShowCard={setShowCard} />
     </>
   );

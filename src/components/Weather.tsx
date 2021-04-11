@@ -1,15 +1,25 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
-import CardLists from './CardList';
 import WikiCulture from './WikiCulture';
+import Card from './Card';
+import store from '../store';
+
+// 배경 이미지
 import clear from '../img/clear.png';
 import rain from '../img/rain.png';
 import snow from '../img/snow.png';
 import cloud from '../img/cloud.png';
 
+//redux
+import { useSelector, useDispatch } from 'react-redux';
+import { RootState } from '../store';
+
 export default function Weather() {
   const [weather, setWeather] = useState(clear);
   const [text, setText] = useState('화창한');
+
+  const data = useSelector((state: RootState) => state.dataReducer.data);
+  const dispatch = useDispatch();
 
   const typeWeather = (e: any) => {
     if (e.key === 'Enter') {
@@ -53,10 +63,20 @@ export default function Weather() {
         <p>{`${text} 날씨에 태어나셨습니다.`}</p>
       </WeatherText>
       <WikiCulture />
-      <CardLists />
+      <CardLists>
+        {data.map((img) => (
+          <Card key={img.id} />
+        ))}
+      </CardLists>
     </Background>
   );
 }
+const CardLists = styled.div`
+  display: flex;
+  width: 100%;
+  position: relative;
+  justify-content: center;
+`;
 
 const DateInput = styled.div`
   width: 100%;

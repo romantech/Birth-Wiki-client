@@ -11,12 +11,6 @@ import 'swiper/components/pagination/pagination.scss';
 
 SwiperCore.use([Navigation, Pagination, A11y, EffectCoverflow]);
 
-// //swiper 적용
-// import Swiper from 'react-id-swiper'; //swiper,  @types-swiper도 같이 설치...
-// import 'swiper/css/swiper.css'; // swiper css
-// import 'swiper/swiper.scss'; // scss
-// import 'swiper/swiper.less'; // less
-
 const Background = styled.div`
   width: 100%;
   height: 100%;
