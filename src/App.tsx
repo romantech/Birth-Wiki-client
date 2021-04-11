@@ -1,20 +1,22 @@
 import React from 'react';
 import styled from 'styled-components';
 import './App.css';
+import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import LaunchPage from './components/LaunchPage';
 import Nav from './components/Nav';
-import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import SidebarLogin from './components/SidebarLogin';
 import CardList from './components/CardList';
 import Weather from './components/Weather';
+import FavoritePage from './pages/FavoritePage';
 
-function App() {
+function App(): JSX.Element {
   return (
     <div>
       <Router>
-        <Nav />
+        {/* <Nav />
         <LaunchPage />
-        <Weather />
+        <Weather /> */}
+        <FavoritePage />
       </Router>
     </div>
   );
