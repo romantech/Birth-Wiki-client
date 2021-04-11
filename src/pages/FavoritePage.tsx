@@ -7,6 +7,7 @@ import FavoriteCategories from '../components/FavoriteCategories';
 import FavoriteCardList from '../components/FavoriteCardList';
 import categories from '../utils/categories';
 import PIXABAY_API from '../utils/PIXABAY_API';
+import ProfileCard from '../components/ProfileCard';
 
 const Container = styled.div`
   padding: 15px 15px 15px 0;
@@ -116,6 +117,7 @@ const FavoritePage = (): JSX.Element => {
             className="masonry-grid"
             columnClassName="masonry-grid_column"
           >
+            <ProfileCard />
             {imagesArray.map(item => (
               <FavoriteCardList item={item} key={item.id} />
             ))}
