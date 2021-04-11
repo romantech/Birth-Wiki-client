@@ -71,7 +71,7 @@ const FavoritePage = (): JSX.Element => {
     })
       .then(res => {
         setImagesArray([...imagesArray, ...res.data.hits]);
-        setTotalPages(Math.ceil(res.data.totalHits / res.data.hits.length));
+        setTotalPages(Math.floor(res.data.totalHits / res.data.hits.length));
       })
       .catch(err => console.log(err.name));
   };
