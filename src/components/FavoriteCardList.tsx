@@ -4,7 +4,7 @@ import styled from 'styled-components';
 interface Props {
   item: {
     webformatURL: string;
-    tag: string;
+    tags: string;
   };
 }
 
@@ -14,9 +14,9 @@ const Image = styled.img`
 `;
 
 const FavoriteCardList = ({ item }: Props): JSX.Element => {
-  const { webformatURL, tag } = item;
+  const { webformatURL, tags } = item;
 
-  return <Image src={webformatURL} alt={tag} />;
+  return <Image src={webformatURL} alt={tags} />;
 };
 
 export default FavoriteCardList;

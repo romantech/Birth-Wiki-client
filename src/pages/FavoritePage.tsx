@@ -1,6 +1,8 @@
+/* eslint-disable no-plusplus */
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import Masonry from 'react-masonry-css';
+import InfiniteScroll from 'react-infinite-scroll-component';
 import FavoriteCategories from '../components/FavoriteCategories';
 import FavoriteCardList from '../components/FavoriteCardList';
 import categories from '../utils/categories';
@@ -36,11 +38,21 @@ const MasLayout = styled.div`
   }
 `;
 
+const Loader = styled.img.attrs({
+  src: `${process.env.PUBLIC_URL}/loading.gif`,
+})`
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  height: 100px;
+  width: 100px;
+`;
+
 interface FetchImages {
   data: string[];
   id: number;
   webformatURL: string;
-  tag: string;
+  tags: string;
 }
 
 interface Category {
@@ -48,6 +60,7 @@ interface Category {
   imagePath: string;
 }
 
+let pageNumber = 1;
 const FavoritePage = (): JSX.Element => {
   const [imagesArray, setImagesArray] = useState<FetchImages[]>([]);
   const [totalPages, setTotalPages] = useState(0);
@@ -58,14 +71,16 @@ const FavoritePage = (): JSX.Element => {
     })
       .then(res => {
         setImagesArray([...imagesArray, ...res.data.hits]);
-        setTotalPages(res.data.totalHits / res.data.hits.length);
+        setTotalPages(Math.ceil(res.data.totalHits / res.data.hits.length));
       })
       .catch(err => console.log(err.name));
   };
 
   useEffect(() => {
-    fetchImages(1, 'minimal');
-  }, []);
+    if (!imagesArray.length) {
+      fetchImages(pageNumber, 'minimal');
+    }
+  });
 
   const breakPoints = {
     default: 6,
@@ -82,17 +97,31 @@ const FavoritePage = (): JSX.Element => {
           <FavoriteCategories category={category} key={category.categoryName} />
         ))}
       </Categories>
-      <MasLayout>
-        <Masonry
-          breakpointCols={breakPoints}
-          className="masonry-grid"
-          columnClassName="masonry-grid_column"
-        >
-          {imagesArray.map(item => (
-            <FavoriteCardList item={item} key={item.id} />
-          ))}
-        </Masonry>
-      </MasLayout>
+      <InfiniteScroll
+        dataLength={imagesArray.length}
+        next={() =>
+          setTimeout(() => fetchImages(++pageNumber, 'minimal'), 1500)
+        }
+        hasMore={pageNumber < totalPages}
+        loader={<Loader />}
+        endMessage={
+          <p style={{ textAlign: 'center' }}>
+            <b>Yay! You have seen it all</b>
+          </p>
+        }
+      >
+        <MasLayout>
+          <Masonry
+            breakpointCols={breakPoints}
+            className="masonry-grid"
+            columnClassName="masonry-grid_column"
+          >
+            {imagesArray.map(item => (
+              <FavoriteCardList item={item} key={item.id} />
+            ))}
+          </Masonry>
+        </MasLayout>
+      </InfiniteScroll>
     </Container>
   );
 };
