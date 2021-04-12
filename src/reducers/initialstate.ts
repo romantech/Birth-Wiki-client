@@ -69,4 +69,15 @@ export const initialState = {
         'https://images.unsplash.com/photo-1615778662355-0a77cd0eacee?ixlib=rb-1.2.1&ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&auto=format&fit=crop&w=1050&q=80',
     },
   ],
+  isLogin: false,
+  userInfo: {
+    userEmail: 'test1@naver.com',
+    password: '1234qwer',
+    userNickName: 'test',
+    profileImage: '',
+    source: 'home',
+    accessToken: '',
+    likeCard: ['card1', 'card2', 'card3'],
+    recordCard: ['card1', 'card2', 'card3'],
+  },
 };
