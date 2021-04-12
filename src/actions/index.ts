@@ -1,7 +1,23 @@
+import { UserInfo } from '../types/index';
 export const CREATE_RECORD = 'CREATE_RECORD' as const;
 export const REMOVE_RECORD = 'REMOVE_RECORD' as const;
 export const SET_CARD_LISTS = 'SET_CARD_LISTS' as const;
+export const SET_USER_INFO = 'SET_USER_INFO';
+export const SET_IS_LOGIN = 'SET_IS_LOGIN';
 
+export const setUserInfo = (userInfo: UserInfo) => {
+  return {
+    type: SET_USER_INFO,
+    payload: userInfo,
+  };
+};
+
+export const setIsLogin = (isLogin: boolean) => {
+  return {
+    type: SET_IS_LOGIN,
+    payload: isLogin,
+  };
+};
 export const createRecord = () => ({
   type: CREATE_RECORD,
   payload: {},
