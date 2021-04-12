@@ -23,8 +23,8 @@ const ProfileImg = styled.img.attrs({
   src: `${process.env.PUBLIC_URL}/img/profile.png`,
 })`
   display: block;
-  max-width: 200px;
-  max-height: 200px;
+  max-width: 150px;
+  max-height: 150px;
 `;
 
 const ProfileCard = (): JSX.Element => {
