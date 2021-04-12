@@ -70,11 +70,11 @@ const FavoritePage = (): JSX.Element => {
     PIXABAY_API.get('/', {
       params: { page: pageNum, q: query },
     })
-      .then(res => {
+      .then((res) => {
         setImagesArray([...imagesArray, ...res.data.hits]);
         setTotalPages(Math.floor(res.data.totalHits / res.data.hits.length));
       })
-      .catch(err => console.log(err.name));
+      .catch((err) => console.log(err.name));
   };
 
   useEffect(() => {
@@ -100,9 +100,7 @@ const FavoritePage = (): JSX.Element => {
       </Categories>
       <InfiniteScroll
         dataLength={imagesArray.length}
-        next={() =>
-          setTimeout(() => fetchImages(++pageNumber, 'minimal'), 1500)
-        }
+        next={() => setTimeout(() => fetchImages(++pageNumber, 'minimal'), 1500)}
         hasMore={pageNumber < totalPages}
         loader={<Loader />}
         endMessage={
@@ -114,11 +112,11 @@ const FavoritePage = (): JSX.Element => {
         <MasLayout>
           <Masonry
             breakpointCols={breakPoints}
-            className="masonry-grid"
-            columnClassName="masonry-grid_column"
+            className='masonry-grid'
+            columnClassName='masonry-grid_column'
           >
             <ProfileCard />
-            {imagesArray.map(item => (
+            {imagesArray.map((item) => (
               <FavoriteCardList item={item} key={item.id} />
             ))}
           </Masonry>

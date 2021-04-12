@@ -33,8 +33,7 @@ const Category = styled.button<{ imagePath: string }>`
   width: 100%;
   outline: none;
   border: none;
-  background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),
-    url(${props => props.imagePath});
+  background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url(${(props) => props.imagePath});
   background-repeat: no-repeat;
   background-size: cover;
   color: white;
@@ -42,7 +41,7 @@ const Category = styled.button<{ imagePath: string }>`
 
   &:hover {
     background: linear-gradient(rgba(0, 0, 0, 0.185), rgba(0, 0, 0, 0.185)),
-      url(${props => props.imagePath});
+      url(${(props) => props.imagePath});
     background-size: cover;
     background-repeat: no-repeat;
     -webkit-transform: scale(1.2);
