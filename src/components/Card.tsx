@@ -1,76 +1,83 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import CardClicked from './CardClicked';
+import { useSelector, useDispatch } from 'react-redux';
+import { RootState } from '../store';
 
 const Card = () => {
   const [showCard, setShowCard] = useState(false);
+
+  const initData = useSelector((state: RootState) => state.dataReducer.data);
 
   const openCard = () => {
     setShowCard((prev) => !prev);
   };
 
   return (
-    <>
-      <Style
-        onClick={() => {
-          openCard();
-        }}
-      ></Style>
+    <CardLists>
+      {initData.map((data) => (
+        <CardContents
+          key={data.id}
+          onClick={() => {
+            openCard();
+          }}
+        >
+          <span>{data.category}</span>
+          <img src={data.img} alt='' />
+        </CardContents>
+      ))}
       <CardClicked showCard={showCard} setShowCard={setShowCard} />
-    </>
+    </CardLists>
   );
 };
 
-const Title = styled.span`
-  display: block;
-  font-size: 1.25em;
-  font-weight: 500;
-  position: absolute;
-  z-index: 101;
-  transition: all 0.5s ease;
-  color: #fff;
-`;
-
-const Screenshot = styled.figure`
-  z-index: 100;
-  position: relative;
-  margin: 0;
-  padding: 0;
+const CardLists = styled.div`
+  display: flex;
+  justify-content: center;
   width: 100%;
-  height: 200px;
-  background: url(https://source.unsplash.com/random/280x200) 0 0 no-repeat;
-  background-size: cover;
-  border-radius: 6px 6px 0 0;
-  overflow: hidden;
-  backface-visibility: hidden;
-  transition: 0.5s ease;
+  padding: 4% 2% 0;
+  box-sizing: border-box;
+  height: 50vh;
 `;
 
-const Style = styled.div`
+const CardContents = styled.div`
+  flex: 1;
+  overflow: hidden;
+  transition: 0.8s;
+  margin: 0 1%;
+  box-shadow: 0 20px 30px rgba(0, 0, 0, 0.1);
+  border-radius: 15px;
+  line-height: 0;
+  background: rgba(0, 0, 0, 0.7);
   position: relative;
-  bottom: -50px;
-  flex-shrink: 0;
-  width: 280px;
-  height: 300px;
-  margin: 0px 5px 0px 5px;
-  text-algin: left;
-  background: #fff;
-  border-radius: 8px;
+  top: 100px;
   cursor: pointer;
-  transition: 0.5s ease;
-  box-shadow: 0 2px 20px rgba(0, 0, 0, 0.12), 0 20px 20px -10px rgba(0, 0, 0, 0.125);
+
+  & img {
+    width: 200%;
+    height: calc(80% - -5vh);
+    object-fit: cover;
+    transition: 0.6s;
+  }
+
+  & span {
+    font-size: 3.2vh;
+    display: block;
+    text-align: center;
+    height: 6vh;
+    line-height: 1.6;
+    color: #fff;
+    text-transform: uppercase;
+  }
 
   &:hover {
-    transform: translate(0px, -50px);
+    flex: 0 0 35%;
+    top: 0px;
+  }
 
-    ${Screenshot} {
-      transform: translateY(4px) scale(0.8);
-    }
-
-    ${Title} {
-      transform: translateX(30px);
-      color: #000;
-    }
+  & img:hover {
+    width: 100%;
+    height: 100%;
   }
 `;
 

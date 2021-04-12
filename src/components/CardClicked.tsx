@@ -4,6 +4,10 @@ import styled from 'styled-components';
 import { Swiper, SwiperSlide } from 'swiper/react'; //@types-swiper도 같이 설치...
 import SwiperCore, { Navigation, Pagination, A11y, EffectCoverflow } from 'swiper';
 
+//redux
+import { useSelector, useDispatch } from 'react-redux';
+import { RootState } from '../store';
+
 // Import Swiper styles
 import 'swiper/swiper.scss'; // npm install node-sass
 import 'swiper/components/navigation/navigation.scss';
@@ -27,59 +31,45 @@ const Background = styled.div`
 `;
 
 const CardWrapper = styled.div`
-  width: 1000px;
+  width: 100vw;
   z-index: 130;
+
+  & .swiper-container {
+    perspective: 1800px;
+  }
+
+  & .swiper-slide div {
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    background: rgba(0, 0, 0, 0.5);
+    color: #fff;
+    font-size: 1.2rem;
+  }
+
+  & .swiper-slide h2 {
+    margin: 2rem;
+  }
 `;
-
 const CardClicked = ({ showCard, setShowCard }: { showCard: boolean; setShowCard: any }) => {
-  const cardRef: any = useRef<HTMLDivElement>(null);
+  const initData = useSelector((state: RootState) => state.dataReducer.data); //redux
 
+  const cardRef: any = useRef<HTMLDivElement>(null); //카드 off
   const animation: any = useSpring({
     config: {
       duration: 200,
     },
     opacity: showCard ? 1 : 0,
     transform: showCard ? `translateY(0%)` : `translateY(100%)`,
-  });
+  }); //카드 클릭시 에니메이션 효과
 
   const closeCard = (e: React.SyntheticEvent) => {
     if (cardRef.current === (e.target as typeof e.target)) {
       setShowCard(false);
     }
   };
-
-  const data = [
-    {
-      id: 1,
-      username: 'jake',
-      img: 'https://images.unsplash.com/photo-1527239441953-caffd968d952',
-    },
-    {
-      id: 2,
-      username: 'jake',
-      img: 'https://images.unsplash.com/photo-1604079628040-94301bb21b91',
-    },
-    {
-      id: 3,
-      username: 'jake',
-      img: 'https://images.unsplash.com/photo-1557180295-76eee20ae8aa',
-    },
-    {
-      id: 4,
-      username: 'jake',
-      img: 'https://images.unsplash.com/photo-1535043205849-513fe27db33e',
-    },
-    {
-      id: 5,
-      username: 'jake',
-      img: 'https://images.unsplash.com/photo-1554866585-cd94860890b7',
-    },
-    {
-      id: 6,
-      username: 'jake',
-      img: 'https://images.unsplash.com/photo-1493612276216-ee3925520721',
-    },
-  ];
 
   return (
     <>
@@ -91,14 +81,22 @@ const CardClicked = ({ showCard, setShowCard }: { showCard: boolean; setShowCard
                 effect='coverflow'
                 spaceBetween={50}
                 slidesPerView={3}
+                mousewheel={true}
+                loop={true}
                 navigation
                 pagination={{ clickable: true }}
-                onSlideChange={() => console.log('slide change')}
-                onSwiper={(swiper) => console.log(swiper)}
               >
-                {data.map((image) => (
-                  <SwiperSlide style={{ width: '500px' }} key={image.id}>
-                    <img style={{ width: '300px', height: '400px' }} src={image.img} alt='' />
+                {initData.map((data) => (
+                  <SwiperSlide key={data.id}>
+                    <div>
+                      <h2>{data.title}</h2>
+                      <ul>
+                        {data.content.map((list) => (
+                          <li key={list}>{list}</li>
+                        ))}
+                      </ul>
+                    </div>
+                    <img style={{ width: '100%', height: '60vh' }} src={data.img} alt='' />
                   </SwiperSlide>
                 ))}
               </Swiper>
