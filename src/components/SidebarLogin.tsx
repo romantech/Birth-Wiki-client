@@ -6,12 +6,12 @@ import * as IconName from 'react-icons/fc';
 import axios from 'axios';
 import { validateEmail, validatePassword } from '../utils/validate';
 import { setIsLogin, setUserInfo } from '../actions/index';
-import { RootReducerType } from '../store/store';
+import { RootState } from '../store/index';
 import SidebarSignUp from './SidebarSignUp';
 
 function SidebarLogin() {
-  const state = useSelector((state: RootReducerType) => state.loginReducer.isLogin);
-  const userInfo = useSelector((state: RootReducerType) => state.userInfoReducer.userInfo);
+  const state = useSelector((state: RootState) => state.loginReducer.isLogin);
+  const userInfo = useSelector((state: RootState) => state.userInfoReducer.userInfo);
 
   const history = useHistory();
   const dispatch = useDispatch();

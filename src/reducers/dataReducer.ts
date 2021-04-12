@@ -1,5 +1,5 @@
 import { SET_CARD_LISTS, CounterAction } from '../actions/index';
-import { initialState } from './initialState';
+import initialState from './initialState';
 
 const dataReducer = (state = initialState, action: CounterAction) => {
   switch (action.type) {

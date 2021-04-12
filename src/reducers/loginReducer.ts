@@ -1,5 +1,5 @@
 import { SET_IS_LOGIN } from '../actions/index';
-import { initialState } from './initialState';
+import initialState from './initialState';
 
 // 이니셜 상태 임포트
 

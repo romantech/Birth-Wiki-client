@@ -1,4 +1,4 @@
-export const initialState = {
+export default {
   data: [
     {
       id: 1,
