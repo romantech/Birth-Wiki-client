@@ -6,12 +6,12 @@ import Nav from './components/Nav';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import SidebarLogin from './components/SidebarLogin';
 import Weather from './components/Weather';
-import { RootReducerType } from './store/store';
+import { RootState } from './store/index';
 import { useSelector } from 'react-redux';
 import SidebarSignUp from './components/SidebarSignUp';
 
 function App() {
-  const isLogin = useSelector((state: RootReducerType) => state.loginReducer.isLogin);
+  const isLogin = useSelector((state: RootState) => state.loginReducer.isLogin);
 
   return (
     <Router>

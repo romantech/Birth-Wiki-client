@@ -4,10 +4,10 @@ import { useHistory, Link } from 'react-router-dom';
 import { BsPeopleCircle } from 'react-icons/bs';
 import { useDispatch, useSelector } from 'react-redux';
 import { setIsLogin, setUserInfo } from '../actions/index';
-import { RootReducerType } from '../store/store';
+import { RootState } from '../store/index';
 
 function SidebarMypage() {
-  const userInfo = useSelector((state: RootReducerType) => state.userInfoReducer.userInfo);
+  const userInfo = useSelector((state: RootState) => state.userInfoReducer.userInfo);
   console.log('userInfo', userInfo);
   return (
     <MypageContainer>
