@@ -1,24 +1,27 @@
 import React from 'react';
+import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import styled from 'styled-components';
 import './App.css';
-import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
-import LaunchPage from './components/LaunchPage';
+import { useSelector } from 'react-redux';
+import Main from './pages/Main';
 import Nav from './components/Nav';
 import SidebarLogin from './components/SidebarLogin';
-import CardList from './components/CardList';
 import Weather from './components/Weather';
-import FavoritePage from './pages/FavoritePage';
+import { RootState } from './store/index';
+import SidebarSignUp from './components/SidebarSignUp';
 
 function App(): JSX.Element {
+  const isLogin = useSelector((state: RootState) => state.loginReducer.isLogin);
+
   return (
-    <div>
-      <Router>
-        {/* <Nav />
-        <LaunchPage />
-        <Weather /> */}
-        <FavoritePage />
-      </Router>
-    </div>
+    <Router>
+      <Nav isLogin={isLogin} />
+      <Weather />
+      <Switch>
+        <Route exact path='/' component={Main} />
+        <Route exact path='/signup' component={SidebarSignUp} />
+      </Switch>
+    </Router>
   );
 }
 
