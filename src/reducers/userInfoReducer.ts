@@ -1,5 +1,5 @@
 import { SET_USER_INFO } from '../actions/index';
-import { initialState } from './initialState';
+import initialState from './initialState';
 
 const userInfoReducer = (state = initialState, action: any) => {
   console.log('reducers', state, action.type);
