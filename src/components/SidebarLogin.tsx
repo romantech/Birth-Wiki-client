@@ -83,18 +83,6 @@ function SidebarLogin() {
   return (
     <LoginContainer>
       Login
-      <SocialLoginContainer>
-        <p>소셜 로그인</p>
-        <SocialGoogle to='#' onClick={googleLoginHandler}>
-          <IconName.FcGoogle />
-        </SocialGoogle>
-        <SocialNaver onClick={naverLoginHandler}>
-          <img src='../naver.png' alt='naver' height='35px' />
-        </SocialNaver>
-        <SocialKakao onClick={kakaoLoginHandler}>
-          <img src='../kakao.png' alt='kakao' height='35px' />
-        </SocialKakao>
-      </SocialLoginContainer>
       <EmailLoginContainer>
         <div>
           E-Mail
@@ -121,6 +109,17 @@ function SidebarLogin() {
           </HomeSignUp>
           {errorMsg ? <ErrorMsg>{errorMsg}</ErrorMsg> : ''}
         </div>
+        <SocialLoginContainer>
+          <SocialGoogle to='#' onClick={googleLoginHandler}>
+            <IconName.FcGoogle />
+          </SocialGoogle>
+          <SocialNaver onClick={naverLoginHandler}>
+            <img src='../naver.png' alt='naver' height='35px' />
+          </SocialNaver>
+          <SocialKakao onClick={kakaoLoginHandler}>
+            <img src='../kakao.png' alt='kakao' height='35px' />
+          </SocialKakao>
+        </SocialLoginContainer>
       </EmailLoginContainer>
       <MyStoryContainer>
         나만의 기록
@@ -146,16 +145,8 @@ const LoginContainer = styled.div`
 `;
 
 const SocialLoginContainer = styled.div`
-  font-size: 20px;
-  border: #fff 1px solid;
-  border-radius: 20px;
-  margin: 5px 0;
-  padding: 10px;
-  color: #fff;
-
-  p {
-    margin: 5px 0;
-  }
+  margin-top: 10px;
+  margin-left: 20px;
 `;
 
 const SocialGoogle = styled(Link)`
