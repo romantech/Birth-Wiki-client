@@ -3,21 +3,53 @@ import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import Masonry from 'react-masonry-css';
 import InfiniteScroll from 'react-infinite-scroll-component';
+import ScrollMenu from 'react-horizontal-scrolling-menu';
 import FavoriteCategories from '../components/FavoriteCategories';
 import FavoriteCardList from '../components/FavoriteCardList';
 import categories from '../utils/categories';
 import PIXABAY_API from '../utils/PIXABAY_API';
 import ProfileCard from '../components/ProfileCard';
+import { ArrowLeft, ArrowRight } from '../components/ArrowIcon';
 
 const Container = styled.div`
-  padding: 15px 15px 15px 0;
+  padding: 20px 60px 60px 60px;
+  /* background: hsl(222, 50%, 95%); */
+
+  li {
+    display: block;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.048);
+    margin-bottom: 30px;
+  }
 `;
 
 const Categories = styled.div`
-  display: flex;
+  /* display: flex;
   justify-content: space-between;
-  overflow: auto;
-  margin: auto auto 15px 15px;
+  overflow: hidden; */
+  margin: auto auto 50px 15px;
+  /* white-space: nowrap; */
+
+  .menu-item {
+    padding: 0 40px;
+    user-select: none;
+    cursor: pointer;
+    border: none;
+  }
+
+  .scroll-menu-arrow {
+    padding: 20px;
+    cursor: pointer;
+    font-size: 20px;
+    font-weight: bold;
+    color: #9c9c9c;
+  }
+
+  .arrow-prev,
+  .arrow-next {
+    &:hover {
+      fill: black;
+    }
+  }
 `;
 
 const MasLayout = styled.div`
@@ -56,15 +88,19 @@ interface FetchImages {
   tags: string;
 }
 
-interface Category {
-  categoryName: string;
-  imagePath: string;
+interface Selected {
+  selected: string | number | null;
 }
 
 let pageNumber = 1;
 const FavoritePage = (): JSX.Element => {
   const [imagesArray, setImagesArray] = useState<FetchImages[]>([]);
   const [totalPages, setTotalPages] = useState(0);
+  const [selected, setSelected] = useState<Selected>({ selected: '' });
+
+  const onSelect = (key: string | number | null) => {
+    setSelected({ selected: key });
+  };
 
   const fetchImages = (pageNum: number, query: string): void => {
     PIXABAY_API.get('/', {
@@ -93,11 +129,24 @@ const FavoritePage = (): JSX.Element => {
 
   return (
     <Container>
+      <h1>CATEGORY</h1>
       <Categories>
-        {categories.map((category: Category) => (
-          <FavoriteCategories category={category} key={category.categoryName} />
-        ))}
+        <ScrollMenu
+          data={categories.map((category) => (
+            <FavoriteCategories
+              selected={(selected as unknown) as string}
+              category={category}
+              key={category.categoryName}
+            />
+          ))}
+          arrowLeft={ArrowLeft}
+          arrowRight={ArrowRight}
+          onSelect={onSelect}
+          alignCenter={false}
+        />
       </Categories>
+      <li />
+      <h1>YOUR CARDS</h1>
       <InfiniteScroll
         dataLength={imagesArray.length}
         next={() => setTimeout(() => fetchImages(++pageNumber, 'minimal'), 1500)}

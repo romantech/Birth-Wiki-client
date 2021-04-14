@@ -2,12 +2,15 @@ import React from 'react';
 import styled from 'styled-components';
 
 const Wrapper = styled.div`
-  min-width: 20%;
+  /* min-width: 20%;
   min-height: 6rem;
-  max-height: 8rem;
+  max-height: 8rem; */
+  height: 6rem;
+  width: 18rem;
   margin-right: 1rem;
   border-radius: 20px;
   overflow: hidden;
+  isolation: isolate; // 사파리 웹킷 버그 수정
 
   @media (max-width: 1200px) {
     min-width: 25%;
@@ -57,13 +60,17 @@ interface Props {
     categoryName: string;
     imagePath: string;
   };
+  selected: string;
 }
 
-const FavoriteCategories = ({ category }: Props): JSX.Element => {
+const FavoriteCategories = ({ category, selected }: Props): JSX.Element => {
   const { imagePath, categoryName } = category;
+
   return (
     <Wrapper>
-      <Category imagePath={imagePath}>{categoryName}</Category>
+      <Category className={`menu-item ${selected ? 'active' : ''}`} imagePath={imagePath}>
+        {categoryName}
+      </Category>
     </Wrapper>
   );
 };
