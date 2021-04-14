@@ -255,7 +255,7 @@ const MyStoryList = styled.div`
   color: #fff;
   margin: 10px 0;
   font-size: 15px;
-  heigth: 30%;
+  height: 30%;
 `;
 
 const ErrorMsg = styled.div`
