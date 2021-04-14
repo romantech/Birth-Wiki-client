@@ -12,8 +12,32 @@ import ProfileCard from '../components/ProfileCard';
 import { ArrowLeft, ArrowRight } from '../components/ArrowIcon';
 
 const Container = styled.div`
-  padding: 20px 60px 60px 60px;
+  padding: 1.8rem 5rem 5rem 4rem;
   /* background: hsl(222, 50%, 95%); */
+
+  // 1200px 이하인 경우
+  @media (max-width: 1500px) {
+    padding: 1.8rem 4rem 4rem 4.1rem;
+  }
+
+  @media (max-width: 1200px) {
+    padding: 1.6rem 2.8rem 2.8rem 2.8rem;
+  }
+
+  @media (max-width: 992px) {
+    padding: 1.6rem 2.2rem 2.2rem 2.2rem;
+    h1 {
+      font-size: 1.8em;
+    }
+  }
+
+  @media (max-width: 576px) {
+    padding: 0.2rem 1.2rem 1.2rem 0.25rem;
+    h1 {
+      font-size: 1.7em;
+      text-align: center;
+    }
+  }
 
   li {
     display: block;
@@ -23,25 +47,18 @@ const Container = styled.div`
 `;
 
 const Categories = styled.div`
-  /* display: flex;
-  justify-content: space-between;
-  overflow: hidden; */
   margin: auto auto 50px 15px;
-  /* white-space: nowrap; */
 
   .menu-item {
-    padding: 0 40px;
     user-select: none;
-    cursor: pointer;
-    border: none;
   }
 
   .scroll-menu-arrow {
     padding: 20px;
     cursor: pointer;
-    font-size: 20px;
-    font-weight: bold;
-    color: #9c9c9c;
+    @media (max-width: 576px) {
+      padding: 0.5em;
+    }
   }
 
   .arrow-prev,

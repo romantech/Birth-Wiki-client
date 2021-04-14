@@ -5,14 +5,14 @@ const Wrapper = styled.div`
   /* min-width: 20%;
   min-height: 6rem;
   max-height: 8rem; */
-  height: 6rem;
+  height: 5rem;
   width: 18rem;
   margin-right: 1rem;
   border-radius: 20px;
   overflow: hidden;
   isolation: isolate; // 사파리 웹킷 버그 수정
 
-  @media (max-width: 1200px) {
+  /* @media (max-width: 1200px) {
     min-width: 25%;
   }
 
@@ -23,9 +23,9 @@ const Wrapper = styled.div`
   @media (max-width: 768px) {
     min-width: 35%;
   }
-
+   */
   @media (max-width: 576px) {
-    min-width: 40%;
+    width: 10.5rem;
   }
 `;
 
@@ -52,6 +52,10 @@ const Category = styled.button<{ imagePath: string }>`
     -ms-transform: scale(1.2);
     -o-transform: scale(1.2);
     transform: scale(1.2);
+  }
+
+  @media (max-width: 576px) {
+    font-size: 1.3rem;
   }
 `;
 
