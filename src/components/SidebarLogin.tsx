@@ -5,13 +5,14 @@ import { useHistory, Link } from 'react-router-dom';
 import * as IconName from 'react-icons/fc';
 import axios from 'axios';
 import { validateEmail, validatePassword } from '../utils/validate';
-import { setIsLogin, setUserInfo } from '../actions/index';
+import { setIsLogin, setUserInfo, setisSidbar } from '../actions/index';
 import { RootState } from '../store/index';
 import SidebarSignUp from './SidebarSignUp';
 
 function SidebarLogin() {
   const state = useSelector((state: RootState) => state.loginReducer.isLogin);
   const userInfo = useSelector((state: RootState) => state.userInfoReducer.userInfo);
+  const sidebar = useSelector((state: RootState) => state.sidebarReducer.isSidebar);
 
   const history = useHistory();
   const dispatch = useDispatch();
@@ -64,31 +65,39 @@ function SidebarLogin() {
       });
     }
 
-    if (userEmail === userInfo.userEmail && password === userInfo.password) {
+    if (userEmail !== userInfo.userEmail || password !== userInfo.password) {
+      return setUserSignInInfo({
+        ...userSignInInfo,
+        errorMsg: '❗️ 이메일 혹은 비밀번호가 올바르지 않습니다',
+      });
+    } else if (userEmail === userInfo.userEmail && password === userInfo.password) {
       dispatch(setIsLogin(true));
     }
+  };
+
+  const signupHandler = () => {
+    dispatch(setisSidbar(!sidebar));
+    <Link to='/signup' />;
   };
 
   return (
     <LoginContainer>
       Login
       <SocialLoginContainer>
-        소셜 로그인
-        <div>
-          <SocialGoogle to='#' onClick={googleLoginHandler}>
-            <IconName.FcGoogle />
-          </SocialGoogle>
-          <SocialNaver to='#' onClick={naverLoginHandler}>
-            네이버
-          </SocialNaver>
-          <SocialKakao to='#' onClick={kakaoLoginHandler}>
-            카카오
-          </SocialKakao>
-        </div>
+        <p>소셜 로그인</p>
+        <SocialGoogle to='#' onClick={googleLoginHandler}>
+          <IconName.FcGoogle />
+        </SocialGoogle>
+        <SocialNaver onClick={naverLoginHandler}>
+          <img src='../naver.png' alt='naver' height='35px' />
+        </SocialNaver>
+        <SocialKakao onClick={kakaoLoginHandler}>
+          <img src='../kakao.png' alt='kakao' height='35px' />
+        </SocialKakao>
       </SocialLoginContainer>
       <EmailLoginContainer>
         <div>
-          E-mail
+          E-Mail
           <InputField
             type='email'
             value={userEmail}
@@ -96,7 +105,7 @@ function SidebarLogin() {
             maxLength={30}
             onChange={inputHandler('userEmail')}
           ></InputField>
-          PassWord
+          Password
           <InputField
             type='password'
             value={password}
@@ -105,9 +114,11 @@ function SidebarLogin() {
             onChange={inputHandler('password')}
           />
           <HomeLogin type='submit' onClick={homeLoginHandler}>
-            로그인
+            Login
           </HomeLogin>
-          <HomeSignUp to='/signup'>회원가입</HomeSignUp>
+          <HomeSignUp to='/signup' onClick={signupHandler}>
+            Sign up
+          </HomeSignUp>
           {errorMsg ? <ErrorMsg>{errorMsg}</ErrorMsg> : ''}
         </div>
       </EmailLoginContainer>
@@ -126,86 +137,44 @@ const LoginContainer = styled.div`
   flex-direction: column;
   color: #fff;
   font-size: 30px;
-  font-weight: bold;
-  background: #060b26;
   height: 100vh;
   width: 300px;
-  margin: 15px;
-  padding: 10px;
+  margin: 10px;
   top: 60px;
   overflow: scroll;
   position: fixed;
 `;
 
 const SocialLoginContainer = styled.div`
-  background: #060b26;
   font-size: 20px;
   border: #fff 1px solid;
   border-radius: 20px;
   margin: 5px 0;
   padding: 10px;
   color: #fff;
+
+  p {
+    margin: 5px 0;
+  }
 `;
 
 const SocialGoogle = styled(Link)`
-  border-radius: 50px;
-  white-space: nowrap;
-  width: 70px;
-  margin: 15px;
-  color: #010606;
+  margin: 5px 0 5px 10px;
   font-size: 2em;
-  outline: none;
-  border: none;
   cursor: pointer;
   transition: all 0.2s ease-in-out;
-  text-decoration: none;
-  &:hover {
-    transition: all 0.2s ease-in-out;
-    background: #fff;
-    color: #010606;
-  }
 `;
 
-const SocialNaver = styled(Link)`
-  border-radius: 50px;
-  background: yellow;
-  white-space: nowrap;
-  width: 70px;
-  padding: 10px 0;
-  margin: 5px;
-  color: #010606;
-  font-size: 16px;
-  outline: none;
-  border: none;
+const SocialNaver = styled.span`
+  margin: 5px 10px;
   cursor: pointer;
   transition: all 0.2s ease-in-out;
-  text-decoration: none;
-  &:hover {
-    transition: all 0.2s ease-in-out;
-    background: #fff;
-    color: #010606;
-  }
 `;
 
-const SocialKakao = styled(Link)`
-  border-radius: 50px;
-  background: yellow;
-  white-space: nowrap;
-  width: 70px;
-  padding: 10px 0;
+const SocialKakao = styled.span`
   margin: 5px;
-  color: #010606;
-  font-size: 16px;
-  outline: none;
-  border: none;
   cursor: pointer;
   transition: all 0.2s ease-in-out;
-  text-decoration: none;
-  &:hover {
-    transition: all 0.2s ease-in-out;
-    background: #fff;
-    color: #010606;
-  }
 `;
 
 const EmailLoginContainer = styled.div`
@@ -218,20 +187,24 @@ const EmailLoginContainer = styled.div`
 `;
 
 const InputField = styled.input`
-  width: 80%;
-  height: 30px;
+  width: 90%;
+  height: 40px;
   padding: 0.5rem;
   margin: 0.4rem;
+  border: none;
+  border-bottom: 2px solid #fff;
+  background-color: rgba(0, 0, 0, 0);
+  color: #fff;
 `;
 
 const HomeLogin = styled.button`
-  border-radius: 50px;
-  background: yellow;
+  border-radius: 20px;
+  background: rgba(6, 11, 38, 0.8);
   white-space: nowrap;
   width: 100px;
   padding: 10px 0;
   margin: 10px;
-  color: #010606;
+  color: #fff;
   font-size: 16px;
   outline: none;
   border: none;
@@ -240,19 +213,19 @@ const HomeLogin = styled.button`
   text-decoration: none;
   &:hover {
     transition: all 0.2s ease-in-out;
-    background: #fff;
-    color: #010606;
+    background: rgba(255, 255, 255, 0.8);
+    color: #000;
   }
 `;
 
 const HomeSignUp = styled(Link)`
-  border-radius: 50px;
-  background: yellow;
+  border-radius: 20px;
+  background: rgba(6, 11, 38, 0.8);
   white-space: nowrap;
   width: 100px;
   padding: 10px 25px;
   margin: 10px;
-  color: #010606;
+  color: #fff;
   font-size: 16px;
   outline: none;
   border: none;
@@ -262,8 +235,8 @@ const HomeSignUp = styled(Link)`
   font-weight: normal;
   &:hover {
     transition: all 0.2s ease-in-out;
-    background: #fff;
-    color: #010606;
+    background: rgba(255, 255, 255, 0.8);
+    color: #000;
   }
 `;
 
@@ -271,7 +244,7 @@ const MyStoryContainer = styled.div`
   font-size: 20px;
   color: #fff;
   font-weight: bold;
-  height: 100px;
+  height: 80px;
   border: #fff 1px solid;
   border-radius: 20px;
   margin: 5px 0;
