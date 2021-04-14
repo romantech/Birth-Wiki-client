@@ -70,14 +70,15 @@ export default {
     },
   ],
   isLogin: false,
+  isSidebar: false,
   userInfo: {
     userEmail: 'test1@naver.com',
     password: '1234qwer',
     userNickName: 'test',
-    profileImage: '',
+    profileImage: 'https://upload.wikimedia.org/wikipedia/commons/7/7e/Circle-icons-profile.svg',
     source: 'home',
     accessToken: '',
-    likeCard: ['card1', 'card2', 'card3'],
-    recordCard: ['card1', 'card2', 'card3'],
+    likeCard: ['1999-08-02', '1993-01-12', '1994-01-14'],
+    recordCard: ['1993-01-12', '1999-08-02'],
   },
 };

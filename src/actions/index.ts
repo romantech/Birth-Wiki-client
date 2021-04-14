@@ -4,6 +4,7 @@ export const REMOVE_RECORD = 'REMOVE_RECORD' as const;
 export const SET_CARD_LISTS = 'SET_CARD_LISTS' as const;
 export const SET_USER_INFO = 'SET_USER_INFO';
 export const SET_IS_LOGIN = 'SET_IS_LOGIN';
+export const SET_IS_SIDEBAR = 'SET_IS_SIDEBAR';
 
 export const setUserInfo = (userInfo: UserInfo) => {
   return {
@@ -32,7 +33,12 @@ export const setCardLists = () => ({
   type: SET_CARD_LISTS,
   payload: {},
 });
-
+export const setisSidbar = (isSidebar: boolean) => {
+  return {
+    type: SET_IS_SIDEBAR,
+    payload: isSidebar,
+  };
+};
 export type CounterAction =
   | ReturnType<typeof createRecord>
   | ReturnType<typeof removeRecord>

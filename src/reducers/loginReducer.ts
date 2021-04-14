@@ -12,6 +12,5 @@ const loginReducer = (state = initialState, action: any) => {
       return state;
   }
 };
-
 // 리듀서 쓰고 내보내기
 export default loginReducer;

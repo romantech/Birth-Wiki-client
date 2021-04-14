@@ -13,43 +13,21 @@ import {
   validateKoreanName,
 } from '../utils/validate';
 
-function SidebarSignUp() {
-  const userInfo = useSelector((state: RootState) => state.userInfoReducer.userInfo);
+function SidebarEdit() {
   const sidebar = useSelector((state: RootState) => state.sidebarReducer.isSidebar);
+  const userInfo = useSelector((state: RootState) => state.userInfoReducer.userInfo);
   const dispatch = useDispatch();
   const history = useHistory();
+  const [editUserInfo, setEditUserInfo] = useState(userInfo);
   const [showModal, setShowModal] = useState(true);
-  const [signUpInfo, setSignUpInfo] = useState({
-    userEmail: '',
-    password: '',
-    password2: '',
-    userNickName: '',
-    errorMsg: '',
-  });
-
-  const { userEmail, password, password2, userNickName, errorMsg } = signUpInfo;
 
   const inputHandler = (key: string) => (e: React.ChangeEvent<HTMLInputElement>) => {
-    setSignUpInfo({
-      ...signUpInfo,
-      [key]: e.target.value,
-    });
+    setEditUserInfo(Object.assign({}, editUserInfo, { [key]: e.target.value }));
   };
 
-  const signUpSubmitHandler = () => {
-    console.log('가입전', userInfo);
-
-    dispatch(
-      setUserInfo({
-        ...userInfo,
-        userEmail: signUpInfo.userEmail,
-        password: signUpInfo.password,
-        userNickName: signUpInfo.userNickName,
-        source: 'Home',
-      }),
-    );
+  const editSubmitHandler = () => {
+    dispatch(setUserInfo(editUserInfo));
     dispatch(setisSidbar(true));
-    console.log('회원가입 후', userInfo);
     history.push('/');
   };
 
@@ -58,53 +36,44 @@ function SidebarSignUp() {
   const optional = <i className='far fa-edit' aria-hidden='true' />;
   const inlineBlockStyle = { display: 'inline-block' };
 
-  console.log('signUpInfo', signUpInfo);
+  console.log('userInfo', userInfo);
   return (
     <Background>
       {showModal ? (
         <ModalWrapper>
-          <h1>회원가입</h1>
-          <SignUpContainer>
-            <InputCatecory>E-mail</InputCatecory>
+          <h1>회원 정보 수정</h1>
+          <EditContainer>
+            <InputCatecory>프로필 변경</InputCatecory>
+            <InputField type='file' onChange={inputHandler('profileImage')} />
+            <InputCatecory>닉네임</InputCatecory>
             <InputField
-              type='email'
-              value={userEmail}
-              placeholder='수신 가능한 이메일 주소 입력'
-              maxLength={30}
-              onChange={inputHandler('userEmail')}
+              type='text'
+              value={editUserInfo.userNickName}
+              maxLength={10}
+              onChange={inputHandler('userNickName')}
             />
-            {validateEmail(userEmail) ? valid : inValid}
+            {validateKoreanName(editUserInfo.userNickName) ? valid : inValid}
             <InputCatecory>password</InputCatecory>
             <InputField
               type='password'
-              value={password}
+              value={editUserInfo.password}
               placeholder='숫자와 영문을 포함해 최소 8자리'
               maxLength={16}
               onChange={inputHandler('password')}
             />
-            {validatePassword(password) ? valid : inValid}
+            {validatePassword(editUserInfo.password) ? valid : inValid}
             <InputCatecory>password 확인 </InputCatecory>
             <InputField
               type='password'
-              value={password2}
               maxLength={16}
               placeholder='위와 동일한 비밀번호 입력'
               onChange={inputHandler('password2')}
             />
-            {matchPassword(password, password2) ? valid : inValid}
-            <InputCatecory>닉네임</InputCatecory>
-            <InputField
-              type='text'
-              value={userNickName}
-              maxLength={10}
-              placeholder='한글만 입력 가능합니다'
-              onChange={inputHandler('userNickName')}
-            />
-            {validateKoreanName(userNickName) ? valid : inValid}
-          </SignUpContainer>
-          <SignUpSubmit type='submit' onClick={signUpSubmitHandler}>
-            회원가입
-          </SignUpSubmit>
+            {/* {matchPassword(editUserInfo.password, editUserInfo.password2) ? valid : inValid} */}
+          </EditContainer>
+          <EditSubmit type='submit' onClick={editSubmitHandler}>
+            수정
+          </EditSubmit>
           <CloseModalButton
             aria-label='Close modal'
             onClick={() => {
@@ -117,7 +86,7 @@ function SidebarSignUp() {
   );
 }
 
-export default SidebarSignUp;
+export default SidebarEdit;
 
 const Background = styled.div`
   background: rgb(245, 245, 245);
@@ -152,8 +121,7 @@ const ModalImg = styled.img`
   background: #000;
 `;
 
-const SignUpContainer = styled.form`
-  grid-template-columns: 1fr 2.5fr 0.3fr;
+const EditContainer = styled.form`
   line-height: 1.8;
   color: #141414;
 `;
@@ -171,7 +139,7 @@ const InputField = styled.input`
   margin: 0.4rem;
 `;
 
-const SignUpSubmit = styled.button`
+const EditSubmit = styled.button`
   border-radius: 50px;
   background: yellow;
   white-space: nowrap;
