@@ -8,28 +8,51 @@ const Card = () => {
   const [showCard, setShowCard] = useState(false);
 
   const initData = useSelector((state: RootState) => state.dataReducer.data);
+  const isLogin = useSelector((state: RootState) => state.loginReducer);
 
   const openCard = () => {
     setShowCard((prev) => !prev);
   };
 
-  return (
-    <CardLists>
-      {initData.map((data) => (
-        <CardContents
-          key={data.id}
-          onClick={() => {
-            openCard();
-          }}
-        >
-          <span>{data.category}</span>
-          <img src={data.img} alt='' />
+  const cardlists = initData.map((data) => (
+    <CardContents
+      key={data.id}
+      onClick={() => {
+        openCard();
+      }}
+    >
+      <span>{data.category}</span>
+      <img src={data.img} alt='' />
+    </CardContents>
+  ));
+
+  if (isLogin) {
+    return (
+      <CardLists>
+        {cardlists}
+        <CardContents>
+          <CardCreate>
+            <span style={{ fontSize: '1.2rem' }}>기록카드 만들기</span>
+            <img
+              src='https://images.unsplash.com/photo-1527345931282-806d3b11967f?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=967&q=80'
+              alt=''
+            />
+          </CardCreate>
         </CardContents>
-      ))}
-      <CardClicked showCard={showCard} setShowCard={setShowCard} />
-    </CardLists>
-  );
+        <CardClicked showCard={showCard} setShowCard={setShowCard} />
+      </CardLists>
+    );
+  } else {
+    return (
+      <CardLists>
+        {cardlists}
+        <CardClicked showCard={showCard} setShowCard={setShowCard} />
+      </CardLists>
+    );
+  }
 };
+
+const CardCreate = styled.div``;
 
 const CardLists = styled.div`
   display: flex;
