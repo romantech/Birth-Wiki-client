@@ -9,6 +9,7 @@ import Weather from './components/Weather';
 import { RootState } from './store/index';
 import SidebarSignUp from './components/SidebarSignUp';
 import SidebarEdit from './components/SidebarEdit';
+import FavoritePage from './pages/FavoritePage';
 
 function App(): JSX.Element {
   const isLogin = useSelector((state: RootState) => state.loginReducer.isLogin);
@@ -16,12 +17,13 @@ function App(): JSX.Element {
   return (
     <Router>
       <Nav isLogin={isLogin} />
-      <Switch>
+      <FavoritePage />
+      {/* <Switch>
         <Route exact path='/' component={Main} />
         <Route exact path='/weather' component={Weather} />
         <Route exact path='/signup' component={SidebarSignUp} />
         <Route exact path='/edit' component={SidebarEdit} />
-      </Switch>
+      </Switch> */}
     </Router>
   );
 }

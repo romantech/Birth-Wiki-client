@@ -17,17 +17,21 @@ const Container = styled.div`
 
   // 1200px 이하인 경우
   @media (max-width: 1500px) {
-    padding: 1.8rem 4rem 4rem 4.1rem;
+    padding: 1.8rem 4rem 4rem 3rem;
   }
 
   @media (max-width: 1200px) {
-    padding: 1.6rem 2.8rem 2.8rem 2.8rem;
+    padding: 1.6rem 2rem 2rem 1rem;
+    h1 {
+      margin-left: 1rem;
+    }
   }
 
-  @media (max-width: 992px) {
-    padding: 1.6rem 2.2rem 2.2rem 2.2rem;
+  @media (max-width: 922px) {
+    padding: 1.6rem 1.8rem 1.8rem 0.9rem;
     h1 {
       font-size: 1.8em;
+      margin-left: 1rem;
     }
   }
 
@@ -138,9 +142,10 @@ const FavoritePage = (): JSX.Element => {
 
   const breakPoints = {
     default: 6,
+    1500: 5,
     1200: 4,
-    992: 3,
-    768: 2,
+    922: 3,
+    768: 3,
     576: 2,
   };
 
