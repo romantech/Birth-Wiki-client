@@ -88,6 +88,7 @@ const ScrollIcon = styled(FaArrowCircleUp)`
     color: black;
     transition: all 0.3s ease-in-out;
     bottom: 30px;
+    opacity: 0.7;
   }
 `;
 
