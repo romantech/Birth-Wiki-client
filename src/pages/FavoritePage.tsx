@@ -14,7 +14,7 @@ import { FaArrowCircleUp } from 'react-icons/fa';
 
 const Container = styled.div`
   padding: 1.8rem 5rem 5rem 4rem;
-  /* background: hsl(222, 50%, 95%); */
+  /* background: #d4dbdd; */
 
   // 1200px 이하인 경우
   @media (max-width: 1500px) {
