@@ -10,6 +10,7 @@ import categories from '../utils/categories';
 import PIXABAY_API from '../utils/PIXABAY_API';
 import ProfileCard from '../components/ProfileCard';
 import { ArrowLeft, ArrowRight } from '../components/ArrowIcon';
+import { FaArrowCircleUp } from 'react-icons/fa';
 
 const Container = styled.div`
   padding: 1.8rem 5rem 5rem 4rem;
@@ -60,8 +61,8 @@ const Categories = styled.div`
   .scroll-menu-arrow {
     padding: 20px;
     cursor: pointer;
-    @media (max-width: 576px) {
-      padding: 0.5em;
+    @media (max-width: 922px) {
+      display: none;
     }
   }
 
@@ -70,6 +71,23 @@ const Categories = styled.div`
     &:hover {
       fill: black;
     }
+  }
+`;
+
+const ScrollIcon = styled(FaArrowCircleUp)`
+  color: gray;
+  opacity: 0.4;
+  font-size: 2.5rem;
+  cursor: pointer;
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  transition: all 0.3s ease-in-out;
+
+  &:hover {
+    color: black;
+    transition: all 0.3s ease-in-out;
+    bottom: 30px;
   }
 `;
 
@@ -192,6 +210,7 @@ const FavoritePage = (): JSX.Element => {
             ))}
           </Masonry>
         </MasLayout>
+        <ScrollIcon onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })} />
       </InfiniteScroll>
     </Container>
   );
