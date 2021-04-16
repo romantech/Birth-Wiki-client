@@ -9,6 +9,7 @@ import Weather from './components/Weather';
 import { RootState } from './store/index';
 import SidebarSignUp from './components/SidebarSignUp';
 import SidebarEdit from './components/SidebarEdit';
+import FavoritePage from './pages/FavoritePage';
 
 function App(): JSX.Element {
   const isLogin = useSelector((state: RootState) => state.loginReducer.isLogin);
@@ -21,6 +22,7 @@ function App(): JSX.Element {
         <Route exact path='/weather/:date' component={Weather} />
         <Route exact path='/signup' component={SidebarSignUp} />
         <Route exact path='/edit' component={SidebarEdit} />
+        <Route exact path='/myFavorite' component={FavoritePage} />
       </Switch>
     </Router>
   );
