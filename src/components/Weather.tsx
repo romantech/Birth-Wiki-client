@@ -13,14 +13,13 @@ import rain from '../img/rain.jpg';
 import snow from '../img/snow.jpg';
 import cloud from '../img/cloud.jpg';
 
-export default function Weather() {
-  const [weather, setWeather] = useState(clear); //날씨 배경이미지
-  const [text, setText] = useState('화창한'); //날씨 택스트
-  const [date, setDate] = useState('1991-11-29');
-  const [showCard, setShowCard] = useState(false); //스와이프 모달 on/off
-  const initData = useSelector((state: RootState) => state.dataReducer.data); //리덕스
-  const loggin = useSelector((state: RootState) => state.loginReducer); //리덕스
-
+export default function Weather({ match }: any) {
+  const selectedDate = match.params.date.replace(/(\d{4})(\d{2})(\d{2})/g, '$1-$2-$3');
+  console.log(selectedDate);
+  const [weather, setWeather] = useState(clear);
+  const [text, setText] = useState('화창한');
+  const [showCard, setShowCard] = useState(false);
+  const initData = useSelector((state: RootState) => state.dataReducer.data);
   const typeWeather = (e: any) => {
     //날짜에 따른 배경이미지/택스트 조건문 (이후에 수정예정)
     if (e.key === 'Enter') {
@@ -39,18 +38,6 @@ export default function Weather() {
       }
     }
   };
-
-  useEffect(() => {
-    //날짜입력후 data 가져오기
-    Axios.post('https://server.birthwiki.com/data/date', date).then((res) => {
-      console.log(res.data);
-
-      if (res.data.success) {
-      } else {
-        alert('서버에 자료 가져오는 것을 실패했습니다.');
-      }
-    });
-  }, []);
 
   const Background = styled.div`
     display: flex;
@@ -227,7 +214,7 @@ export default function Weather() {
   return (
     <Background>
       <DateInput>
-        <input type='text' onKeyPress={typeWeather} placeholder='1991-11-29' />
+        <input type='text' onKeyPress={typeWeather} placeholder={selectedDate} />
       </DateInput>
       <WeatherText>
         <p>{`${text} 날씨에 태어나셨습니다.`}</p>

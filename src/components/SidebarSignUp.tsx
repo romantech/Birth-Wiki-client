@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import styled from 'styled-components';
 import { MdClose } from 'react-icons/md';
 import { useDispatch, useSelector } from 'react-redux';
@@ -24,10 +24,11 @@ function SidebarSignUp() {
     password: '',
     password2: '',
     userNickName: '',
+    profileImage: '' || `${process.env.PUBLIC_URL}/img/profile.png`,
     errorMsg: '',
   });
 
-  const { userEmail, password, password2, userNickName, errorMsg } = signUpInfo;
+  const { userEmail, password, password2, userNickName, profileImage, errorMsg } = signUpInfo;
 
   const inputHandler = (key: string) => (e: React.ChangeEvent<HTMLInputElement>) => {
     setSignUpInfo({
@@ -45,6 +46,7 @@ function SidebarSignUp() {
         userEmail: signUpInfo.userEmail,
         password: signUpInfo.password,
         userNickName: signUpInfo.userNickName,
+        profileImage: signUpInfo.profileImage,
         source: 'Home',
       }),
     );
@@ -57,13 +59,20 @@ function SidebarSignUp() {
   const valid = <Fas />;
   const optional = <i className='far fa-edit' aria-hidden='true' />;
   const inlineBlockStyle = { display: 'inline-block' };
+  const SigninRef: any = useRef<HTMLDivElement>(null);
+  const closeSignin = (e: React.SyntheticEvent) => {
+    if (SigninRef.current === (e.target as typeof e.target)) {
+      dispatch(setisSidbar(!sidebar));
+      history.goBack();
+    }
+  };
 
-  console.log('signUpInfo', signUpInfo);
   return (
-    <Background>
+    <Background ref={SigninRef} onClick={closeSignin}>
       {showModal ? (
         <ModalWrapper>
-          <h1>회원가입</h1>
+          <Title>Welcome!</Title>
+          <SubTitle>필수 사항</SubTitle>
           <SignUpContainer>
             <InputCatecory>E-mail</InputCatecory>
             <InputField
@@ -100,17 +109,14 @@ function SidebarSignUp() {
               placeholder='한글만 입력 가능합니다'
               onChange={inputHandler('userNickName')}
             />
+            <SubTitle>선택사항</SubTitle>
+            <InputCatecory>프로필 이미지 등록</InputCatecory>
+            <InputField type='file' onChange={inputHandler('profileImage')} />
             {validateKoreanName(userNickName) ? valid : inValid}
+            <SignUpSubmit type='submit' onClick={signUpSubmitHandler}>
+              회원가입
+            </SignUpSubmit>
           </SignUpContainer>
-          <SignUpSubmit type='submit' onClick={signUpSubmitHandler}>
-            회원가입
-          </SignUpSubmit>
-          <CloseModalButton
-            aria-label='Close modal'
-            onClick={() => {
-              setShowModal((prev: boolean) => !prev), history.push('/'), dispatch(setisSidbar(!sidebar));
-            }}
-          />
         </ModalWrapper>
       ) : null}
     </Background>
@@ -124,83 +130,101 @@ const Background = styled.div`
   width: 100%;
   height: 100vh;
   display: flex;
-  -webkit-box-pack: center;
   justify-content: center;
-  -webkit-box-align: center;
   align-items: center;
 `;
 
 const ModalWrapper = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  width: 800px;
-  height: 500px;
-  box-shadow: 0 5px 16px rgba(0, 0, 0, 0.2);
-  background: #fff;
-  color: #000;
-  position: relative;
+  background-color: #15172b;
+  border-radius: 20px;
+  box-sizing: border-box;
+  height: 660px;
+  padding: 20px 25px;
+  width: 400px;
+  transition: all 0.2s ease-in-out;
+  text-decoration: none;
   z-index: 10;
-  border-radius: 10px;
+  position: relative;
 `;
 
-const ModalImg = styled.img`
-  width: 100%;
-  height: 100%;
-  border-radius: 10px 0 0 10px;
-  background: #000;
+const Title = styled.div`
+  color: #eee;
+  font-family: sans-serif;
+  font-size: 36px;
+  font-weight: 600;
+  margin-top: 10px;
+`;
+
+const SubTitle = styled.div`
+  color: #eee;
+  font-family: sans-serif;
+  font-size: 20px;
+  font-weight: 600;
+  margin-top: 15px;
 `;
 
 const SignUpContainer = styled.form`
-  grid-template-columns: 1fr 2.5fr 0.3fr;
-  line-height: 1.8;
-  color: #141414;
+  height: 50px;
+  position: relative;
+  width: 100%;
 `;
 
 const InputCatecory = styled.div`
   width: 90%;
   height: 30px;
   padding: 0.5rem;
-  margin: 0.4rem;
+  margin: 5px;
+  color: #eee;
 `;
 
 const InputField = styled.input`
-  height: 30px;
-  padding: 0.5rem;
-  margin: 0.4rem;
+  box-sizing: border-box;
+  color: #eee;
+  font-size: 15px;
+  height: 80%;
+  outline: 0;
+  padding: 0 20px 0;
+  width: 100%;
+  border: none;
+  border-bottom: 2px solid #fff;
+  background-color: rgba(255, 255, 255, 0);
+  ::placeholder {
+    color: #87ceea;
+    font-style: italic;
+  }
 `;
 
 const SignUpSubmit = styled.button`
-  border-radius: 50px;
-  background: yellow;
-  white-space: nowrap;
-  width: 100px;
-  padding: 10px 0;
-  margin: 10px;
-  color: #010606;
-  font-size: 16px;
-  outline: none;
-  border: none;
+  background-color: #08d;
+  border-radius: 12px;
+  border: 0;
+  box-sizing: border-box;
+  color: #eee;
   cursor: pointer;
+  font-size: 18px;
+  height: 50px;
+  margin-top: 30px;
+  text-align: center;
+  width: 100%;
   transition: all 0.2s ease-in-out;
   text-decoration: none;
+
   &:hover {
     transition: all 0.2s ease-in-out;
-    background: #fff;
-    color: #010606;
+    background-color: #eee;
+    color: #15172b;
   }
 `;
 
 const CloseModalButton = styled(MdClose)`
   cursor: pointer;
-  position: absolute;
   top: 20px;
   right: 20px;
   width: 32px;
   height: 32px;
   padding: 0;
   z-index: 10;
+  color: #eee;
 `;
 
 const Fas = styled.span.attrs({

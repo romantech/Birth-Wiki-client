@@ -4,7 +4,6 @@ import initialState from './initialState';
 // 이니셜 상태 임포트
 
 const loginReducer = (state = initialState, action: any) => {
-  console.log('reducers', state, action.type);
   switch (action.type) {
     case SET_IS_LOGIN:
       return { ...state, isLogin: action.payload };

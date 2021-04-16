@@ -19,7 +19,7 @@ function App(): JSX.Element {
       <Nav isLogin={isLogin} />
       <Switch>
         <Route exact path='/' component={Main} />
-        <Route exact path='/weather' component={Weather} />
+        <Route exact path='/weather/:date' component={Weather} />
         <Route exact path='/signup' component={SidebarSignUp} />
         <Route exact path='/edit' component={SidebarEdit} />
         <Route exact path='/myFavorite' component={FavoritePage} />

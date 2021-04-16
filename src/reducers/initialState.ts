@@ -67,10 +67,21 @@ export default {
     userEmail: 'test1@naver.com',
     password: '1234qwer',
     userNickName: 'test',
-    profileImage: 'https://upload.wikimedia.org/wikipedia/commons/7/7e/Circle-icons-profile.svg',
+    profileImage: `${process.env.PUBLIC_URL}/img/profile.png`,
     source: 'home',
     accessToken: '',
     likeCard: ['1999-08-02', '1993-01-12', '1994-01-14'],
-    recordCard: ['1993-01-12', '1999-08-02'],
+    recordCard: [
+      {
+        date: '1999-01-01',
+        img: '',
+        text: '',
+      },
+      {
+        date: '1999-08-02',
+        img: '',
+        text: '',
+      },
+    ],
   },
 };

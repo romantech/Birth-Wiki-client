@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import styled from 'styled-components';
 import { MdClose } from 'react-icons/md';
 import { useDispatch, useSelector } from 'react-redux';
@@ -35,13 +35,19 @@ function SidebarEdit() {
   const valid = <Fas />;
   const optional = <i className='far fa-edit' aria-hidden='true' />;
   const inlineBlockStyle = { display: 'inline-block' };
-
-  console.log('userInfo', userInfo);
+  const EidtRef: any = useRef<HTMLDivElement>(null);
+  const closeEidt = (e: React.SyntheticEvent) => {
+    if (EidtRef.current === (e.target as typeof e.target)) {
+      dispatch(setisSidbar(!sidebar));
+      history.goBack();
+    }
+  };
   return (
-    <Background>
+    <Background ref={EidtRef} onClick={closeEidt}>
       {showModal ? (
         <ModalWrapper>
-          <h1>회원 정보 수정</h1>
+          <Title>회원 정보 수정</Title>
+          <SubTitle> 수정 사항을 입력하세요 </SubTitle>
           <EditContainer>
             <InputCatecory>프로필 변경</InputCatecory>
             <InputField type='file' onChange={inputHandler('profileImage')} />
@@ -50,13 +56,13 @@ function SidebarEdit() {
               type='text'
               value={editUserInfo.userNickName}
               maxLength={10}
+              placeholder='한글만 입력 가능합니다'
               onChange={inputHandler('userNickName')}
             />
             {validateKoreanName(editUserInfo.userNickName) ? valid : inValid}
             <InputCatecory>password</InputCatecory>
             <InputField
               type='password'
-              value={editUserInfo.password}
               placeholder='숫자와 영문을 포함해 최소 8자리'
               maxLength={16}
               onChange={inputHandler('password')}
@@ -70,16 +76,10 @@ function SidebarEdit() {
               onChange={inputHandler('password2')}
             />
             {/* {matchPassword(editUserInfo.password, editUserInfo.password2) ? valid : inValid} */}
+            <EditSubmit type='submit' onClick={editSubmitHandler}>
+              수정
+            </EditSubmit>
           </EditContainer>
-          <EditSubmit type='submit' onClick={editSubmitHandler}>
-            수정
-          </EditSubmit>
-          <CloseModalButton
-            aria-label='Close modal'
-            onClick={() => {
-              setShowModal((prev: boolean) => !prev), history.push('/'), dispatch(setisSidbar(!sidebar));
-            }}
-          />
         </ModalWrapper>
       ) : null}
     </Background>
@@ -93,82 +93,101 @@ const Background = styled.div`
   width: 100%;
   height: 100vh;
   display: flex;
-  -webkit-box-pack: center;
   justify-content: center;
-  -webkit-box-align: center;
   align-items: center;
 `;
 
 const ModalWrapper = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  width: 800px;
-  height: 500px;
-  box-shadow: 0 5px 16px rgba(0, 0, 0, 0.2);
-  background: #fff;
-  color: #000;
-  position: relative;
+  background-color: #0e6973;
+  border-radius: 20px;
+  box-sizing: border-box;
+  height: 530px;
+  padding: 20px 25px;
+  width: 400px;
+  transition: all 0.2s ease-in-out;
+  text-decoration: none;
   z-index: 10;
-  border-radius: 10px;
+  position: relative;
 `;
 
-const ModalImg = styled.img`
-  width: 100%;
-  height: 100%;
-  border-radius: 10px 0 0 10px;
-  background: #000;
+const Title = styled.div`
+  color: #eee;
+  font-family: sans-serif;
+  font-size: 36px;
+  font-weight: 600;
+  margin-top: 10px;
+`;
+
+const SubTitle = styled.div`
+  color: #eee;
+  font-family: sans-serif;
+  font-size: 16px;
+  font-weight: 600;
+  margin-top: 5px;
 `;
 
 const EditContainer = styled.form`
-  line-height: 1.8;
-  color: #141414;
+  height: 50px;
+  position: relative;
+  width: 100%;
 `;
 
 const InputCatecory = styled.div`
   width: 90%;
   height: 30px;
   padding: 0.5rem;
-  margin: 0.4rem;
+  margin: 5px;
+  color: #eee;
 `;
 
 const InputField = styled.input`
-  height: 30px;
-  padding: 0.5rem;
-  margin: 0.4rem;
+  box-sizing: border-box;
+  color: #eee;
+  font-size: 15px;
+  height: 80%;
+  outline: 0;
+  padding: 4px 20px 0;
+  width: 100%;
+  border: none;
+  border-bottom: 2px solid #fff;
+  background-color: rgba(255, 255, 255, 0.1);
+  ::placeholder {
+    color: #8fbc8f;
+    font-style: italic;
+  }
 `;
 
 const EditSubmit = styled.button`
-  border-radius: 50px;
-  background: yellow;
-  white-space: nowrap;
-  width: 100px;
-  padding: 10px 0;
-  margin: 10px;
-  color: #010606;
-  font-size: 16px;
-  outline: none;
-  border: none;
+  background-color: #e4fff7;
+  border-radius: 12px;
+  border: 0;
+  box-sizing: border-box;
+  color: #000;
   cursor: pointer;
+  font-size: 18px;
+  height: 50px;
+  margin-top: 33px;
+  text-align: center;
+  width: 100%;
   transition: all 0.2s ease-in-out;
   text-decoration: none;
+
   &:hover {
     transition: all 0.2s ease-in-out;
-    background: #fff;
-    color: #010606;
+    background-color: #04bfbf;
+    color: #15172b;
   }
 `;
 
 const CloseModalButton = styled(MdClose)`
   cursor: pointer;
-  position: absolute;
   top: 20px;
   right: 20px;
   width: 32px;
   height: 32px;
   padding: 0;
   z-index: 10;
+  color: #eee;
 `;
 
 const Fas = styled.span.attrs({
