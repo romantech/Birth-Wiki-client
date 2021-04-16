@@ -15,7 +15,7 @@ const MypageContainer = styled.div`
   position: fixed;
 `;
 
-const MyProfileContainer = styled.div`
+const ProfileContainer = styled.div`
   font-size: 20px;
   border: #fff 1px solid;
   border-radius: 20px;
@@ -24,7 +24,7 @@ const MyProfileContainer = styled.div`
   color: #fff;
 `;
 
-const MyProfile = styled.div`
+const Profile = styled.div`
   font-size: 20px;
   padding: 5px;
   display: grid;
@@ -79,7 +79,7 @@ const UserInfoEdit = styled(Link)`
   }
 `;
 
-const LogOut = styled.button`
+const Logout = styled.button`
   border-radius: 50px;
   background: rgba(6, 11, 38, 0.8);
   white-space: nowrap;
@@ -104,13 +104,12 @@ const MyStoryContainer = styled.div`
   font-size: 20px;
   border: #fff 1px solid;
   border-radius: 20px;
-  height: 30%;
   margin: 5px 0;
-  padding: 10px;
+  padding: 10px 10px 15px;
   color: #fff;
 `;
 
-const MyStoryList = styled.button`
+const MyStoryList = styled.div`
   font-size: 20px;
   border: #fff 1px solid;
   border-radius: 20px;
@@ -132,10 +131,15 @@ const MyStoryList = styled.button`
   &:hover {
     background-color: #ccc;
   }
+
+  p {
+    margin: 0;
+  }
 `;
 
-const MyStory = styled.div`
+const MyStory = styled(Link)`
   display: flex;
+  margin: 5px;
 `;
 
 const MyBookMarkList = styled.div`
@@ -160,17 +164,21 @@ const MyBookMarkList = styled.div`
   &:hover {
     background-color: #ccc;
   }
+
+  p {
+    margin: 0;
+  }
 `;
 
-const MyBookMark = styled.div`
+const MyBookMark = styled(Link)`
   display: flex;
+  margin: 5px;
 `;
 
 function SidebarMypage() {
   const userInfo = useSelector((state: RootState) => state.userInfoReducer.userInfo);
   const sidebar = useSelector((state: RootState) => state.sidebarReducer.isSidebar);
   const dispatch = useDispatch();
-  console.log('userInfo', userInfo);
   const [storyclicked, setStoryClicked] = useState(false);
   const [markclicked, setMarkClicked] = useState(false);
   const logoutHandler = () => {
@@ -191,30 +199,46 @@ function SidebarMypage() {
   return (
     <MypageContainer>
       Mypage
-      <MyProfileContainer>
-        <MyProfile>
+      <ProfileContainer>
+        <Profile>
           <UserPoto src={userInfo.profileImage}></UserPoto>
           <UserInfoContainer>
             <UserInfo>{userInfo.userNickName}</UserInfo>
             <UserInfo>{userInfo.userEmail}</UserInfo>
           </UserInfoContainer>
-        </MyProfile>
+        </Profile>
         <UserInfoEdit to='/edit' onClick={editHandler}>
           Edit
         </UserInfoEdit>
-        <LogOut type='submit' onClick={logoutHandler}>
+        <Logout type='submit' onClick={logoutHandler}>
           Logout
-        </LogOut>
-      </MyProfileContainer>
+        </Logout>
+      </ProfileContainer>
       <MyStoryContainer>
-        <MyStoryList onClick={clickedStoryHandler}>
-          나만의 기록리스트
-          {storyclicked ? <MyStory>{userInfo.recordCard}</MyStory> : ''}
+        <MyStoryList>
+          <p onClick={clickedStoryHandler}> 나만의 기록리스트 </p>
+          {storyclicked
+            ? userInfo.recordCard.map((data: any) => (
+                <MyStory
+                  to='/'
+                  key={data.id}
+                  // date={data.date}
+                >
+                  {data}
+                </MyStory>
+              ))
+            : ''}
         </MyStoryList>
 
-        <MyBookMarkList onClick={clickMarkHandler}>
-          나의 찜 리스트
-          {markclicked ? <MyBookMark>{userInfo.likeCard}</MyBookMark> : ''}
+        <MyBookMarkList>
+          <p onClick={clickMarkHandler}> 나의 찜 리스트 </p>
+          {markclicked
+            ? userInfo.likeCard.map((data: any) => (
+                <MyBookMark to='/' key={data.id}>
+                  {data}
+                </MyBookMark>
+              ))
+            : ''}
         </MyBookMarkList>
       </MyStoryContainer>
     </MypageContainer>

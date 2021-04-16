@@ -12,7 +12,9 @@ import rain from '../img/rain.jpg';
 import snow from '../img/snow.jpg';
 import cloud from '../img/cloud.jpg';
 
-export default function Weather() {
+export default function Weather({ match }: any) {
+  const selectedDate = match.params.date.replace(/(\d{4})(\d{2})(\d{2})/g, '$1-$2-$3');
+  console.log(selectedDate);
   const [weather, setWeather] = useState(clear);
   const [text, setText] = useState('화창한');
   const [showCard, setShowCard] = useState(false);
@@ -246,7 +248,7 @@ export default function Weather() {
   return (
     <Background>
       <DateInput>
-        <input type='text' onKeyPress={typeWeather} placeholder='1991-11-29' />
+        <input type='text' onKeyPress={typeWeather} placeholder={selectedDate} />
       </DateInput>
       <WeatherText>
         <p>{`${text} 날씨에 태어나셨습니다.`}</p>
