@@ -2,7 +2,6 @@ import { SET_USER_INFO } from '../actions/index';
 import initialState from './initialState';
 
 const userInfoReducer = (state = initialState, action: any) => {
-  console.log('reducers', state, action.type);
   switch (action.type) {
     case SET_USER_INFO:
       return { ...state, userInfo: action.payload };

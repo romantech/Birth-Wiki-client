@@ -16,8 +16,6 @@ function Nav({ isLogin }: any) {
     dispatch(setisSidbar(!sidebar));
   };
 
-  console.log('Nav', isLogin);
-
   return (
     <Navbar>
       <Home to='/'>BirthWiki</Home>
@@ -97,7 +95,6 @@ const NavSidebar = styled.div`
   top: 0;
   transition: 850ms;
   z-index: 100;
-
   @media screen and (max-width: 600px) {
     width: 100%;
   }

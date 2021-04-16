@@ -47,10 +47,6 @@ function SidebarLogin() {
   };
 
   const homeLoginHandler = async () => {
-    console.log(userEmail);
-    console.log(password);
-    console.log(errorMsg);
-
     if (!userEmail || !password) {
       return setUserSignInInfo({
         ...userSignInInfo,
@@ -184,12 +180,16 @@ const InputField = styled.input`
   margin: 0.4rem;
   border: none;
   border-bottom: 2px solid #fff;
-  background-color: rgba(0, 0, 0, 0);
+  background-color: rgba(255, 255, 255, 0);
   color: #fff;
+  ::placeholder {
+    color: #808080;
+    font-style: italic;
+  }
 `;
 
 const HomeLogin = styled.button`
-  border-radius: 20px;
+  border-radius: 12px;
   background: rgba(6, 11, 38, 0.8);
   white-space: nowrap;
   width: 100px;
@@ -210,7 +210,7 @@ const HomeLogin = styled.button`
 `;
 
 const HomeSignUp = styled(Link)`
-  border-radius: 20px;
+  border-radius: 12px;
   background: rgba(6, 11, 38, 0.8);
   white-space: nowrap;
   width: 100px;

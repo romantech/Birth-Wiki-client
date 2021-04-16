@@ -17,13 +17,14 @@ function App(): JSX.Element {
   return (
     <Router>
       <Nav isLogin={isLogin} />
-      <FavoritePage />
-      {/* <Switch>
+      {/* <FavoritePage /> */}
+      <Switch>
         <Route exact path='/' component={Main} />
-        <Route exact path='/weather' component={Weather} />
+        <Route exact path='/weather/:date' component={Weather} />
         <Route exact path='/signup' component={SidebarSignUp} />
         <Route exact path='/edit' component={SidebarEdit} />
-      </Switch> */}
+        <Route exact path='/myFavorite' component={FavoritePage} />
+      </Switch>
     </Router>
   );
 }
