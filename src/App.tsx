@@ -17,6 +17,7 @@ function App(): JSX.Element {
   return (
     <Router>
       <Nav isLogin={isLogin} />
+      {/* <FavoritePage /> */}
       <Switch>
         <Route exact path='/' component={Main} />
         <Route exact path='/weather/:date' component={Weather} />

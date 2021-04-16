@@ -12,20 +12,21 @@ const Wrapper = styled.div`
   overflow: hidden;
   isolation: isolate; // 사파리 웹킷 버그 수정
 
-  /* @media (max-width: 1200px) {
-    min-width: 25%;
+  // 반응형 박스 크기
+  @media (max-width: 1500px) {
+    width: 16rem;
   }
 
-  @media (max-width: 992px) {
-    min-width: 30%;
+  @media (max-width: 1200px) {
+    width: 14rem;
   }
 
-  @media (max-width: 768px) {
-    min-width: 35%;
+  @media (max-width: 922px) {
+    width: 10rem;
   }
-   */
+
   @media (max-width: 576px) {
-    width: 10.5rem;
+    width: 7.3rem;
   }
 `;
 
@@ -54,8 +55,17 @@ const Category = styled.button<{ imagePath: string }>`
     transform: scale(1.2);
   }
 
-  @media (max-width: 576px) {
+  // 반응형 폰트
+  @media (max-width: 1200px) {
+    font-size: 1.4rem;
+  }
+
+  @media (max-width: 992px) {
     font-size: 1.3rem;
+  }
+
+  @media (max-width: 576px) {
+    font-size: 1.2rem;
   }
 `;
 
