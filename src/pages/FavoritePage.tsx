@@ -199,12 +199,6 @@ const MasLayout = styled.div`
     padding-left: 15px;
     background-clip: padding-box;
   }
-
-  // TODO 필요시 img 태그 변경
-  .masonry-grid_column > img {
-    background: grey;
-    margin-bottom: 15px;
-  }
 `;
 
 const Loader = styled.img.attrs({

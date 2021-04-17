@@ -21,10 +21,14 @@ const FavoriteCardList = ({ item }: Props): JSX.Element => {
           <img src={webformatURL} alt={tags} />
         </FlipCardFront>
         <FlipCardBack>
-          <HeartIconWrapper>
-            <ShareIcon />
-            <HeartIcon />
-          </HeartIconWrapper>
+          <IconWrapper>
+            <IconCircle>
+              <HeartIcon />
+            </IconCircle>
+            <IconCircle>
+              <ShareIcon />
+            </IconCircle>
+          </IconWrapper>
           <h2>1984</h2>
           <li />
           <p>397년 - 호노리우스 황제에 의해 로마에서 야만인의 옷(barbarian clothing)을 입는 것이 금지되다.</p>
@@ -40,31 +44,39 @@ const FavoriteCardList = ({ item }: Props): JSX.Element => {
   );
 };
 
-const HeartIconWrapper = styled.div`
+const IconWrapper = styled.div`
   display: flex;
   justify-content: flex-end;
 `;
 
-const InnerCardIcon = css`
-  margin: 10px 0 0 0;
-  font-size: 1.35rem;
+const IconCircle = styled.div`
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 6.2px;
+  margin-right: 5px;
   cursor: pointer;
-  fill: #cccccc;
   &:hover {
-    color: white;
+    background: #cecece;
   }
+`;
+
+const InnerCardIcon = css`
+  font-size: 1rem;
+  color: #000000;
 `;
 
 const ShareIcon = styled(FiShare)`
   ${InnerCardIcon};
-  fill: none;
-  margin-right: 8px;
 `;
+
 const HeartIcon = styled(FiHeart)`
   ${InnerCardIcon};
-  &:hover {
-    fill: none;
-  }
+  fill: black;
 `;
 
 const CardYear = styled.p`
@@ -88,7 +100,7 @@ const CategoryName = styled(CardYear)`
 `;
 
 const FlipCardFront = styled.div`
-  position: relative;
+  position: sticky; // 사파리에서 카드 플립시 요소 계속 보이는 문제 해결
 
   img {
     width: 100%;
@@ -98,7 +110,7 @@ const FlipCardFront = styled.div`
 `;
 
 const FlipCardBack = styled.div`
-  color: #ccc;
+  color: white;
   transform: rotateY(180deg);
   overflow: auto;
 
@@ -157,8 +169,8 @@ const FlipCardInner = styled.div<{ imagePath: string }>`
 
     li {
       display: block;
-      border-bottom: 1px solid #ccc;
-      margin: 20px 0;
+      border-bottom: 1px solid white;
+      margin: 19px 0;
     }
 
     ${CardYear} {
@@ -168,7 +180,6 @@ const FlipCardInner = styled.div<{ imagePath: string }>`
 `;
 
 const FlipCard = styled.div`
-  background-color: transparent;
   perspective: 1000px;
   margin-bottom: 15px;
 
