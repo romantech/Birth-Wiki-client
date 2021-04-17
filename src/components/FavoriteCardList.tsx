@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import styled, { css } from 'styled-components';
 import { FiHeart, FiShare } from 'react-icons/fi';
+import FavoriteModal from '../components/FavoriteModal';
 
 interface Props {
   item: {
@@ -11,38 +12,63 @@ interface Props {
 
 const FavoriteCardList = ({ item }: Props): JSX.Element => {
   const { webformatURL, tags } = item;
+  const [showModal, setShowModal] = useState(false);
+
+  const openModal = () => {
+    setShowModal((prev) => !prev);
+  };
 
   return (
-    <FlipCard>
-      <FlipCardInner imagePath={webformatURL}>
-        <FlipCardFront>
-          {/* <CardYear>1984</CardYear> */}
-          <CategoryName>Births</CategoryName>
-          <img src={webformatURL} alt={tags} />
-        </FlipCardFront>
-        <FlipCardBack>
-          <IconWrapper>
-            <IconCircle>
-              <HeartIcon />
-            </IconCircle>
-            <IconCircle>
-              <ShareIcon />
-            </IconCircle>
-          </IconWrapper>
-          <h2>1984</h2>
-          <li />
-          <p>397년 - 호노리우스 황제에 의해 로마에서 야만인의 옷(barbarian clothing)을 입는 것이 금지되다.</p>
-          <p>451년 - 훈족의 아틸라가 프랑스의 메스를 약탈하고 갈리아의 다른 도시를 공격하다.</p>
-          <p>529년 - 동로마 제국의 유스티니아누스 1세가 로마법 대전의 첫 번째 초안을 편찬하다.</p>
-          <p>
-            1141년 - 마틸다 황후가 잉글랜드의 레이디(Lady of the English)로 선출됨으로써 영국 최초의 여성
-            통치자가 되다.
-          </p>
-        </FlipCardBack>
-      </FlipCardInner>
-    </FlipCard>
+    <>
+      <FlipCard>
+        <FlipCardInner imagePath={webformatURL}>
+          <FlipCardFront>
+            {/* <CardYear>1984</CardYear> */}
+            <CategoryName>Births</CategoryName>
+            <img src={webformatURL} alt={tags} />
+          </FlipCardFront>
+          <FlipCardBack>
+            <IconWrapper>
+              <IconCircle>
+                <HeartIcon />
+              </IconCircle>
+              <IconCircle>
+                <ShareIcon />
+              </IconCircle>
+            </IconWrapper>
+            <h2>1984</h2>
+            <li />
+            <p>
+              397년 - 호노리우스 황제에 의해 로마에서 야만인의 옷(barbarian clothing)을 입는 것이 금지되다.
+            </p>
+            <p>451년 - 훈족의 아틸라가 프랑스의 메스를 약탈하고 갈리아의 다른 도시를 공격하다.</p>
+            <p>529년 - 동로마 제국의 유스티니아누스 1세가 로마법 대전의 첫 번째 초안을 편찬하다.</p>
+            <p>
+              1141년 - 마틸다 황후가 잉글랜드의 레이디(Lady of the English)로 선출됨으로써 영국 최초의 여성
+              통치자가 되다.
+            </p>
+            <ModalView onClick={openModal}>크게보기</ModalView>
+          </FlipCardBack>
+        </FlipCardInner>
+      </FlipCard>
+      <FavoriteModal imagePath={webformatURL} showModal={showModal} setShowModal={setShowModal} />
+    </>
   );
 };
+
+const ModalView = styled.button`
+  min-width: 100px;
+  min-height: 25px;
+  border: none;
+  border-radius: 20px;
+  cursor: pointer;
+  outline: none;
+  margin-bottom: 10px;
+  background: #ffffffe3;
+  &:hover {
+    background: white;
+  }
+`;
 
 const IconWrapper = styled.div`
   display: flex;
@@ -53,7 +79,7 @@ const IconCircle = styled.div`
   width: 28px;
   height: 28px;
   border-radius: 50%;
-  background: white;
+  background: #ffffffe3;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -61,7 +87,7 @@ const IconCircle = styled.div`
   margin-right: 5px;
   cursor: pointer;
   &:hover {
-    background: #cecece;
+    background: white;
   }
 `;
 
