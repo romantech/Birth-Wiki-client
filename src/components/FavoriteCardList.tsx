@@ -3,6 +3,22 @@ import styled, { css } from 'styled-components';
 import { FiHeart, FiShare } from 'react-icons/fi';
 import FavoriteModal from '../components/FavoriteModal';
 
+const dummyIssue = [
+  '1월 17일 - 다국적군, 이라크에 공격을 개시하다. (걸프전 발발)',
+  '2월 27일 - 걸프전 종전. 쿠웨이트 해방.',
+  '2월 20일 - 현대자동차에서 2세대 뉴쏘나타를 출시하다.',
+  '3월 5일 - 제1호 태풍 샤론이 발생 하였다.',
+  '3월 11일 - KBS 라디오 서울 폐국',
+  '3월 20일 - SBS 라디오 방송 개국.',
+  '4월 3일 - 대한민국, 화성연쇄살인사건이 마지막 열 번째 사건이 발생하다.',
+  '5월 7일 - 현대자동차에서 4도어 뉴엑셀을 출시하다',
+  '6월 3일 - 대우자동차(한국GM의 전신)에서 프린스 시판',
+  '6월 12일 - 보리스 옐친이 러시아의 대통령으로 당선되다.',
+  '6월 20일 - 지방선거 광역의회 의원 선거',
+  '8월 6일 - 팀 버너스리가 월드 와이드 웹을 공개하다',
+  '9월 25일 - 현대정공(현대모비스의 전신)에서 갤로퍼 시판.',
+];
+
 interface Props {
   item: {
     webformatURL: string;
@@ -38,20 +54,19 @@ const FavoriteCardList = ({ item }: Props): JSX.Element => {
             </IconWrapper>
             <h2>1984</h2>
             <li />
-            <p>
-              397년 - 호노리우스 황제에 의해 로마에서 야만인의 옷(barbarian clothing)을 입는 것이 금지되다.
-            </p>
-            <p>451년 - 훈족의 아틸라가 프랑스의 메스를 약탈하고 갈리아의 다른 도시를 공격하다.</p>
-            <p>529년 - 동로마 제국의 유스티니아누스 1세가 로마법 대전의 첫 번째 초안을 편찬하다.</p>
-            <p>
-              1141년 - 마틸다 황후가 잉글랜드의 레이디(Lady of the English)로 선출됨으로써 영국 최초의 여성
-              통치자가 되다.
-            </p>
+            {dummyIssue.map((issue) => (
+              <p key={issue.split('-')[0].trim()}>{issue}</p>
+            ))}
             <ModalView onClick={openModal}>크게보기</ModalView>
           </FlipCardBack>
         </FlipCardInner>
       </FlipCard>
-      <FavoriteModal imagePath={webformatURL} showModal={showModal} setShowModal={setShowModal} />
+      <FavoriteModal
+        imagePath={webformatURL}
+        showModal={showModal}
+        setShowModal={setShowModal}
+        issue={dummyIssue}
+      />
     </>
   );
 };
@@ -75,7 +90,7 @@ const IconWrapper = styled.div`
   justify-content: flex-end;
 `;
 
-const IconCircle = styled.div`
+export const IconCircle = styled.div<{ primary?: boolean }>`
   width: 28px;
   height: 28px;
   border-radius: 50%;
@@ -86,9 +101,24 @@ const IconCircle = styled.div`
   margin-top: 6.2px;
   margin-right: 5px;
   cursor: pointer;
+
   &:hover {
     background: white;
   }
+
+  ${(props) =>
+    props.primary &&
+    css`
+      transition: all 0.2s ease-in-out;
+      background: none;
+      width: 35px;
+      height: 35px;
+      margin: 0;
+      &:hover {
+        transition: all 0.2s ease-in-out;
+        background: #e7e7e7;
+      }
+    `}
 `;
 
 const InnerCardIcon = css`
@@ -96,11 +126,11 @@ const InnerCardIcon = css`
   color: #000000;
 `;
 
-const ShareIcon = styled(FiShare)`
+export const ShareIcon = styled(FiShare)`
   ${InnerCardIcon};
 `;
 
-const HeartIcon = styled(FiHeart)`
+export const HeartIcon = styled(FiHeart)`
   ${InnerCardIcon};
   fill: black;
 `;
@@ -173,7 +203,7 @@ const FlipCardInner = styled.div<{ imagePath: string }>`
     backface-visibility: hidden;
   }
   ${FlipCardBack} {
-    padding: 10px 15px 10px 15px;
+    padding: 18px;
     position: absolute;
     top: 0;
     width: 100%;
@@ -187,7 +217,7 @@ const FlipCardInner = styled.div<{ imagePath: string }>`
 
     h2 {
       position: absolute;
-      top: -4px;
+      top: 3px;
       text-transform: uppercase;
       letter-spacing: 1.5px;
       font-weight: 900;
@@ -197,6 +227,10 @@ const FlipCardInner = styled.div<{ imagePath: string }>`
       display: block;
       border-bottom: 1px solid white;
       margin: 19px 0;
+    }
+
+    p {
+      font-size: 90%;
     }
 
     ${CardYear} {

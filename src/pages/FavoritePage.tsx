@@ -8,7 +8,7 @@ import FavoriteCategories from '../components/FavoriteCategories';
 import FavoriteCardList from '../components/FavoriteCardList';
 import categories from '../utils/categories';
 import PIXABAY_API from '../utils/PIXABAY_API';
-import ProfileCard from '../components/ProfileCard';
+import ProfileCard from '../components/FavoriteProfileCard';
 import { ArrowLeft, ArrowRight } from '../components/ArrowIcon';
 import { FaArrowCircleUp } from 'react-icons/fa';
 
@@ -56,7 +56,7 @@ const FavoritePage = (): JSX.Element => {
     1200: 4,
     922: 3,
     768: 3,
-    576: 2,
+    676: 2,
   };
 
   return (

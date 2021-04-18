@@ -2,14 +2,16 @@ import React, { useRef, useEffect, useCallback } from 'react';
 import { useSpring, animated } from 'react-spring';
 import styled from 'styled-components';
 import { MdClose } from 'react-icons/md';
+import { IconCircle, ShareIcon, HeartIcon } from './FavoriteCardList';
 
 interface Props {
   showModal: boolean;
   setShowModal: React.Dispatch<React.SetStateAction<boolean>>;
   imagePath: string;
+  issue: string[];
 }
 
-const FavoriteModal = ({ showModal, setShowModal, imagePath }: Props): JSX.Element => {
+const FavoriteModal = ({ showModal, setShowModal, imagePath, issue }: Props): JSX.Element => {
   const modalRef = useRef<HTMLDivElement>(null);
   const animation = useSpring({
     config: {
@@ -45,25 +47,33 @@ const FavoriteModal = ({ showModal, setShowModal, imagePath }: Props): JSX.Eleme
         <Background ref={modalRef} onClick={closeModal}>
           <animated.div style={animation}>
             <ModalWrapper>
-              <ModalImg src={imagePath} alt='ModalImage' />
+              <ModalImg src={imagePath} alt='Selected Image' />
               <ModalContent>
-                <h1>1984</h1>
-                <li />
-                <p>
-                  397년 - 호노리우스 황제에 의해 로마에서 야만인의 옷(barbarian clothing)을 입는 것이
-                  금지되다.
-                </p>
-                <p>451년 - 훈족의 아틸라가 프랑스의 메스를 약탈하고 갈리아의 다른 도시를 공격하다.</p>
-                <p>529년 - 동로마 제국의 유스티니아누스 1세가 로마법 대전의 첫 번째 초안을 편찬하다.</p>
-                <p>
-                  1141년 - 마틸다 황후가 잉글랜드의 레이디(Lady of the English)로 선출됨으로써 영국 최초의
-                  여성 통치자가 되다.
-                </p>
+                <div>
+                  <h1>1984</h1>
+                  <h3>Births</h3>
+                </div>
+                <div>
+                  {issue.map((issue) => (
+                    <p key={issue.split('-')[0].trim()}>{issue}</p>
+                  ))}
+                </div>
+                <IconWrapper>
+                  <IconCircle primary>
+                    <HeartIcon style={{ fontSize: '1.2rem' }} />
+                  </IconCircle>
+                  <IconCircle primary>
+                    <ShareIcon style={{ fontSize: '1.2rem' }} />
+                  </IconCircle>
+                  <IconCircle primary>
+                    <MdClose
+                      aria-label='Close Modal'
+                      onClick={() => setShowModal((prev) => !prev)}
+                      style={{ fontSize: '1.4rem' }}
+                    />
+                  </IconCircle>
+                </IconWrapper>
               </ModalContent>
-              <CloseModalButton
-                aria-label='Close Modal'
-                onClick={() => setShowModal((prev) => !prev)}
-              ></CloseModalButton>
             </ModalWrapper>
           </animated.div>
         </Background>
@@ -112,17 +122,17 @@ const ModalImg = styled.img`
 const ModalContent = styled.div`
   display: flex;
   flex-direction: column;
-  justify-content: center;
   align-items: center;
   line-height: 1.8;
   color: #141414;
   padding: 35px;
   overflow: auto;
 
-  li {
+  p:after {
+    content: '';
     display: block;
-    border-bottom: 1px solid black;
-    /* margin: 19px 0; */
+    border-bottom: 1px solid rgba(155, 155, 155, 0.13);
+    margin-top: 10px;
   }
 
   button {
@@ -131,17 +141,31 @@ const ModalContent = styled.div`
     color: #fff;
     border: none;
   }
+
+  h1,
+  h3 {
+    text-align: center;
+    text-transform: uppercase;
+  }
+
+  h3:after {
+    content: '';
+    display: block;
+    border-bottom: 2px solid black;
+    width: 150px;
+    margin: 20px 0 30px 0;
+  }
+
+  h1 {
+    margin-bottom: -30px;
+  }
 `;
 
-const CloseModalButton = styled(MdClose)`
-  cursor: pointer;
+const IconWrapper = styled.div`
   position: absolute;
+  display: flex;
   top: 20px;
-  right: 20px;
-  width: 32px;
-  height: 32px;
-  padding: 0;
-  z-index: 10;
+  right: 40px;
 `;
 
 export default FavoriteModal;
