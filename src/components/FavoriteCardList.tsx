@@ -85,11 +85,6 @@ const ModalView = styled.button`
   }
 `;
 
-const IconWrapper = styled.div`
-  display: flex;
-  justify-content: flex-end;
-`;
-
 export const IconCircle = styled.div<{ primary?: boolean }>`
   width: 28px;
   height: 28px;
@@ -99,7 +94,6 @@ export const IconCircle = styled.div<{ primary?: boolean }>`
   justify-content: center;
   align-items: center;
   margin-top: 6.2px;
-  margin-right: 5px;
   cursor: pointer;
 
   &:hover {
@@ -119,6 +113,15 @@ export const IconCircle = styled.div<{ primary?: boolean }>`
         background: #e7e7e7;
       }
     `}
+`;
+
+const IconWrapper = styled.div`
+  display: flex;
+  justify-content: flex-end;
+
+  ${IconCircle}:nth-child(1) {
+    margin-right: 5px;
+  }
 `;
 
 const InnerCardIcon = css`
@@ -160,6 +163,7 @@ const FlipCardFront = styled.div`
 
   img {
     width: 100%;
+    height: 100%;
     border-radius: 20px;
     filter: contrast(0.8);
   }
@@ -177,12 +181,14 @@ const FlipCardBack = styled.div`
 
   /* Track */
   ::-webkit-scrollbar-track {
-    background: #313131;
+    background: none;
+    margin: 15px 0;
   }
 
   /* Handle */
   ::-webkit-scrollbar-thumb {
     background: #4e4e4e;
+    border-radius: 20px;
   }
 
   /* Handle on hover */
@@ -197,6 +203,12 @@ const FlipCardInner = styled.div<{ imagePath: string }>`
   transition: transform 0.6s;
   transform-style: preserve-3d;
   transition-timing-function: ease-in-out;
+  ${(props) =>
+    !props.imagePath &&
+    css`
+      background: lightgray;
+      border-radius: 20px;
+    `}
 
   ${FlipCardBack}, ${FlipCardFront} {
     -webkit-backface-visibility: hidden; /* Safari */
@@ -208,7 +220,7 @@ const FlipCardInner = styled.div<{ imagePath: string }>`
     top: 0;
     width: 100%;
     height: 100%;
-    border-radius: 20px 0 0 20px;
+    border-radius: 20px;
     background: linear-gradient(rgba(0, 0, 0, 0.83), rgba(0, 0, 0, 0.83)), url(${(props) => props.imagePath});
     background-repeat: no-repeat;
     background-size: cover;

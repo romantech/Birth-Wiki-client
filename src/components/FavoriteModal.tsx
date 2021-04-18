@@ -59,13 +59,13 @@ const FavoriteModal = ({ showModal, setShowModal, imagePath, issue }: Props): JS
                   ))}
                 </div>
                 <IconWrapper>
-                  <IconCircle primary>
+                  <IconCircle className='icon-circle first' primary>
                     <HeartIcon style={{ fontSize: '1.2rem' }} />
                   </IconCircle>
-                  <IconCircle primary>
+                  <IconCircle className='icon-circle second' primary>
                     <ShareIcon style={{ fontSize: '1.2rem' }} />
                   </IconCircle>
-                  <IconCircle primary>
+                  <IconCircle className='icon-circle third' primary>
                     <MdClose
                       aria-label='Close Modal'
                       onClick={() => setShowModal((prev) => !prev)}
@@ -98,25 +98,60 @@ const Background = styled.div`
 `;
 
 const ModalWrapper = styled.div`
-  width: 800px;
-  height: 500px;
-  box-shadow: 0 5px 16px rgba(0, 0, 0, 0.2);
   background: #fff;
   color: #000;
-  display: grid;
-  grid-template-columns: 1fr 1.5fr;
-  position: relative;
+  box-shadow: 0 5px 16px rgba(0, 0, 0, 0.2);
+  border-radius: 15px;
   z-index: 3;
-  border-radius: 10px;
+  position: relative;
+
+  .icon-circle.first,
+  .icon-circle.second {
+    margin-right: 5px;
+  }
+
+  // 900px 이상일 때
+  @media (min-width: 900px) {
+    width: 80vw;
+    max-width: 922px;
+    height: 60vh;
+    display: grid;
+    grid-template-columns: 1fr 1.5fr;
+  }
+
+  // 900px 이하일 때
+  @media (max-width: 899px) {
+    width: 80vw;
+    max-width: 600px;
+    height: 85vh;
+    display: grid;
+    grid-template-rows: 1fr 2fr;
+
+    .icon-circle {
+      background: white;
+      border: none;
+      &:hover {
+        background: #dddddd;
+      }
+    }
+  }
 `;
 
 const ModalImg = styled.img`
   width: 100%;
   height: 100%;
-  border-radius: 10px 0 0 10px;
   background: #000;
-  object-fit: cover;
   overflow: hidden;
+
+  @media (min-width: 900px) {
+    border-radius: 15px 0 0 15px;
+    object-fit: cover;
+  }
+  @media (max-width: 899px) {
+    border-radius: 15px 15px 0 0;
+    object-fit: cover;
+    /* object-position: center center; */
+  }
 `;
 
 const ModalContent = styled.div`
@@ -159,13 +194,31 @@ const ModalContent = styled.div`
   h1 {
     margin-bottom: -30px;
   }
+
+  ::-webkit-scrollbar {
+    width: 10px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: none;
+    margin: 15px 0;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: lightgray;
+    border-radius: 20px;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: #868686;
+  }
 `;
 
 const IconWrapper = styled.div`
   position: absolute;
   display: flex;
   top: 20px;
-  right: 40px;
+  right: 25px;
 `;
 
 export default FavoriteModal;
