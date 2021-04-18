@@ -1,16 +1,16 @@
 import React, { useState, useRef } from 'react';
 import styled from 'styled-components';
-import { MdClose } from 'react-icons/md';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../store/index';
-import { setIsLogin, setUserInfo, setisSidbar } from '../actions/index';
+import { setIsLogin, setUserInfo, setIsSidbar, setIsSignup } from '../actions/index';
 import { useHistory, Link } from 'react-router-dom';
+import * as ColorIcon from 'react-icons/fc';
 import {
   validateEmail,
   validatePassword,
   matchPassword,
   checkAllItems,
-  validateKoreanName,
+  validateNickName,
 } from '../utils/validate';
 
 function SidebarEdit() {
@@ -27,18 +27,14 @@ function SidebarEdit() {
 
   const editSubmitHandler = () => {
     dispatch(setUserInfo(editUserInfo));
-    dispatch(setisSidbar(true));
+    dispatch(setIsSidbar(true));
     history.push('/');
   };
 
-  const inValid = <Far />;
-  const valid = <Fas />;
-  const optional = <i className='far fa-edit' aria-hidden='true' />;
-  const inlineBlockStyle = { display: 'inline-block' };
   const EidtRef: any = useRef<HTMLDivElement>(null);
   const closeEidt = (e: React.SyntheticEvent) => {
     if (EidtRef.current === (e.target as typeof e.target)) {
-      dispatch(setisSidbar(!sidebar));
+      dispatch(setIsSidbar(!sidebar));
       history.goBack();
     }
   };
@@ -59,7 +55,15 @@ function SidebarEdit() {
               placeholder='한글만 입력 가능합니다'
               onChange={inputHandler('userNickName')}
             />
-            {validateKoreanName(editUserInfo.userNickName) ? valid : inValid}
+            {validateNickName(editUserInfo.userNickName) ? (
+              <Valid to='#'>
+                <ColorIcon.FcApproval />
+              </Valid>
+            ) : (
+              <Invalid to='#'>
+                <ColorIcon.FcCancel />
+              </Invalid>
+            )}
             <InputCatecory>password</InputCatecory>
             <InputField
               type='password'
@@ -67,7 +71,15 @@ function SidebarEdit() {
               maxLength={16}
               onChange={inputHandler('password')}
             />
-            {validatePassword(editUserInfo.password) ? valid : inValid}
+            {validatePassword(editUserInfo.password) ? (
+              <Valid to='#'>
+                <ColorIcon.FcApproval />
+              </Valid>
+            ) : (
+              <Invalid to='#'>
+                <ColorIcon.FcCancel />
+              </Invalid>
+            )}
             <InputCatecory>password 확인 </InputCatecory>
             <InputField
               type='password'
@@ -75,7 +87,15 @@ function SidebarEdit() {
               placeholder='위와 동일한 비밀번호 입력'
               onChange={inputHandler('password2')}
             />
-            {/* {matchPassword(editUserInfo.password, editUserInfo.password2) ? valid : inValid} */}
+            {/* {matchPassword(editUserInfo.password, editUserInfo.password2) ? (
+              <Valid to='#'>
+                <ColorIcon.FcApproval />
+              </Valid>
+            ) : (
+              <Invalid to='#'>
+                <ColorIcon.FcCancel />
+              </Invalid>
+            )} */}
             <EditSubmit type='submit' onClick={editSubmitHandler}>
               수정
             </EditSubmit>
@@ -147,7 +167,7 @@ const InputField = styled.input`
   height: 80%;
   outline: 0;
   padding: 4px 20px 0;
-  width: 100%;
+  width: 88%;
   border: none;
   border-bottom: 2px solid #fff;
   background-color: rgba(255, 255, 255, 0.1);
@@ -179,25 +199,14 @@ const EditSubmit = styled.button`
   }
 `;
 
-const CloseModalButton = styled(MdClose)`
-  cursor: pointer;
-  top: 20px;
-  right: 20px;
-  width: 32px;
-  height: 32px;
-  padding: 0;
-  z-index: 10;
-  color: #eee;
+const Valid = styled(Link)`
+  font-size: 20px;
+
+  padding: 10px;
 `;
 
-const Fas = styled.span.attrs({
-  'aria-hidden': true,
-})`
-  color: rgb(51, 173, 51);
-`;
+const Invalid = styled(Link)`
+  font-size: 20px;
 
-const Far = styled.span.attrs({
-  'aria-hidden': true,
-})`
-  color: rgb(194, 194, 194);
+  padding: 10px;
 `;

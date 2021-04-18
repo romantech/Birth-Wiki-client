@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { useHistory, Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../store/index';
-import { setIsLogin, setUserInfo, setisSidbar } from '../actions/index';
+import { setIsLogin, setUserInfo, setIsSidbar, setIsSignup } from '../actions/index';
 
 const MypageContainer = styled.div`
   color: #fff;
@@ -183,10 +183,10 @@ function SidebarMypage() {
   const [markclicked, setMarkClicked] = useState(false);
   const logoutHandler = () => {
     dispatch(setIsLogin(false));
-    dispatch(setisSidbar(false));
+    dispatch(setIsSidbar(false));
   };
   const editHandler = () => {
-    dispatch(setisSidbar(!sidebar));
+    dispatch(setIsSidbar(!sidebar));
     <Link to='/edit' />;
   };
   const clickedStoryHandler = () => {

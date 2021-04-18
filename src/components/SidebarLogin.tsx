@@ -5,39 +5,65 @@ import { useHistory, Link } from 'react-router-dom';
 import * as IconName from 'react-icons/fc';
 import axios from 'axios';
 import { validateEmail, validatePassword } from '../utils/validate';
-import { setIsLogin, setUserInfo, setisSidbar } from '../actions/index';
+import { setIsLogin, setUserInfo, setIsSidbar, setIsSignup } from '../actions/index';
 import { RootState } from '../store/index';
 import SidebarSignUp from './SidebarSignUp';
+import 'dotenv/config';
 
 function SidebarLogin() {
   const state = useSelector((state: RootState) => state.loginReducer.isLogin);
   const userInfo = useSelector((state: RootState) => state.userInfoReducer.userInfo);
   const sidebar = useSelector((state: RootState) => state.sidebarReducer.isSidebar);
+  const isSignup = useSelector((state: RootState) => state.signupReducer.isSignup);
 
   const history = useHistory();
   const dispatch = useDispatch();
 
   const googleLoginHandler = () => {
-    const GOOGLE_LOGIN_URL = '';
-    window.location.assign(GOOGLE_LOGIN_URL);
+    localStorage.setItem('source', 'google');
+    const url = 'https://accounts.google.com/o/oauth2/auth';
+    const client_id = `client_id=${process.env.REACT_APP_G_CLIENTID}`;
+    const redirect_uri = `redirect_uri=${process.env.REACT_APP_URI_REDIRECT}`;
+    const scope =
+      'scope=https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/userinfo.profile';
+    const response_type = 'response_type=code';
+    const access_type = 'access_type=offline';
+
+    const GOOGLE_URL = `${url}?${client_id}&${redirect_uri}&${scope}&${response_type}&${access_type}`;
+    window.location.assign(GOOGLE_URL);
   };
   const naverLoginHandler = () => {
-    const NAVER_LOGIN_URL = '';
-    window.location.assign(NAVER_LOGIN_URL);
+    localStorage.setItem('source', 'naver');
+    const url = 'https://nid.naver.com/oauth2.0/authorize';
+    const client_id = `client_id=${process.env.REACT_APP_N_CLIENTID}`;
+    const redirect_uri = `redirect_uri=${process.env.REACT_APP_URI_REDIRECT}`;
+    const response_type = 'response_type=code';
+    const NAVER_URL = `${url}?${client_id}&${redirect_uri}&${response_type}`;
+
+    window.location.assign(NAVER_URL);
   };
   const kakaoLoginHandler = () => {
-    const KAKAO_LOGIN_URL = '';
-    window.location.assign(KAKAO_LOGIN_URL);
+    localStorage.setItem('source', 'kakao');
+    const url = 'https://kauth.kakao.com/oauth/authorize';
+    const client_id = `client_id=${process.env.REACT_APP_K_CLIENTID}`;
+    const redirect_uri = `redirect_uri=${process.env.REACT_APP_URI_REDIRECT}`;
+    const response_type = 'response_type=code';
+    const scope = 'scope=profile';
+
+    const KAKAO_URL = `${url}?${client_id}&${redirect_uri}&${response_type}&${scope}`;
+
+    window.location.assign(KAKAO_URL);
   };
   //input 관련
   const [userSignInInfo, setUserSignInInfo] = useState({
     userEmail: '',
     password: '',
+    source: 'home',
     isLogin: false,
     errorMsg: '',
   });
 
-  const { userEmail, password, errorMsg, isLogin } = userSignInInfo;
+  const { userEmail, password, errorMsg, source, isLogin } = userSignInInfo;
 
   const inputHandler = (key: string) => (e: React.ChangeEvent<HTMLInputElement>) => {
     setUserSignInInfo({
@@ -47,6 +73,7 @@ function SidebarLogin() {
   };
 
   const homeLoginHandler = async () => {
+    const birthwikiServer = 'https://server.birthwiki.space/user/login';
     if (!userEmail || !password) {
       return setUserSignInInfo({
         ...userSignInInfo,
@@ -69,11 +96,32 @@ function SidebarLogin() {
     } else if (userEmail === userInfo.userEmail && password === userInfo.password) {
       dispatch(setIsLogin(true));
     }
+    try {
+      const res = await axios.post(birthwikiServer, { userEmail, password, source });
+      console.log(res);
+      // dispatch(setUserInfo(res.data.data));
+      // setSignInInfo({
+      //   ...singInInfo,
+      //   isLogin: true,
+      // });
+      // setModalOpen(true);
+    } catch (error) {
+      console.log(error);
+      return !error.response
+        ? setUserSignInInfo({
+            ...userSignInInfo,
+            errorMsg: '❗️ 서버 오류, 잠시 후 다시 시도해주세요',
+          })
+        : setUserSignInInfo({
+            ...userSignInInfo,
+            errorMsg: '❗️ 이메일 혹은 비밀번호가 일치하지 않습니다',
+          });
+    }
   };
 
   const signupHandler = () => {
-    dispatch(setisSidbar(!sidebar));
-    <Link to='/signup' />;
+    dispatch(setIsSidbar(false));
+    dispatch(setIsSignup(true));
   };
 
   return (
@@ -100,9 +148,7 @@ function SidebarLogin() {
           <HomeLogin type='submit' onClick={homeLoginHandler}>
             Login
           </HomeLogin>
-          <HomeSignUp to='/signup' onClick={signupHandler}>
-            Sign up
-          </HomeSignUp>
+          <HomeSignUp onClick={signupHandler}>Sign up</HomeSignUp>
           {errorMsg ? <ErrorMsg>{errorMsg}</ErrorMsg> : ''}
         </div>
         <SocialLoginContainer>
@@ -209,7 +255,7 @@ const HomeLogin = styled.button`
   }
 `;
 
-const HomeSignUp = styled(Link)`
+const HomeSignUp = styled.button`
   border-radius: 12px;
   background: rgba(6, 11, 38, 0.8);
   white-space: nowrap;

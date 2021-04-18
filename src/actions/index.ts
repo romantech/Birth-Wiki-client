@@ -5,6 +5,7 @@ export const SET_CARD_LISTS = 'SET_CARD_LISTS' as const;
 export const SET_USER_INFO = 'SET_USER_INFO';
 export const SET_IS_LOGIN = 'SET_IS_LOGIN';
 export const SET_IS_SIDEBAR = 'SET_IS_SIDEBAR';
+export const SET_IS_SIGNUP = 'SET_IS_SIGNUP';
 
 export const setUserInfo = (userInfo: UserInfo) => {
   return {
@@ -33,10 +34,17 @@ export const setCardLists = () => ({
   type: SET_CARD_LISTS,
   payload: {},
 });
-export const setisSidbar = (isSidebar: boolean) => {
+export const setIsSidbar = (isSidebar: boolean) => {
   return {
     type: SET_IS_SIDEBAR,
     payload: isSidebar,
+  };
+};
+
+export const setIsSignup = (isSignup: boolean) => {
+  return {
+    type: SET_IS_SIGNUP,
+    payload: isSignup,
   };
 };
 export type CounterAction =

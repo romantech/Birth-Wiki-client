@@ -63,6 +63,7 @@ export default {
   ],
   isLogin: false,
   isSidebar: false,
+  isSignup: false,
   userInfo: {
     userEmail: 'test1@naver.com',
     password: '1234qwer',
