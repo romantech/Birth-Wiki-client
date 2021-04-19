@@ -24,6 +24,19 @@ const CreateCard = styled.div`
     padding: 10px;
   }
 
+  .input-file-button {
+    padding: 6px 20px;
+    background-color: #f2f2f2;
+    border-radius: 4px;
+    color: #000;
+    font-weight: 700;
+    cursor: pointer;
+  }
+
+  & .crtCard {
+    margin-top: 20px;
+  }
+
   & .create .drop-zone {
     width: 100%;
     padding: 10px;
@@ -47,11 +60,19 @@ const CreateCard = styled.div`
 
   & .create .card-desc {
     width: 100%;
-    height: 70px;
+    height: auto;
     border: none;
-    border-radius: 10px;
+    border-radius: 4px;
     padding: 13px;
     margin-bottom: 20px;
+  }
+
+  & .createBtn {
+    background: #fff;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 4px;
+    font-weight: 700;
   }
 `;
 
@@ -79,20 +100,21 @@ function CardCreate() {
     <CreateCard>
       <div className='box create'>
         <h2>나의 기록카드 만들기</h2>
-        <form action='https://server.bitrhwiki.com/record/create' method='post'>
+        <form action='https://server.bitrhwiki.com/record/create' method='POST' encType='multipart/form-data'>
           <div className='crtCard'>
             {/* <div className='drop-zone'>
               <Dropzone LayoutComponent={Layout} styles={{ dropzone: { minHeight: 100, maxHeight: 150 } }} />
             </div> */}
-            <span className='crtLeft'>이미지</span>
-            <input type='file' name='imgFile' />
+            <label className='input-file-button' htmlFor='input-file'>
+              이미지 업로드
+            </label>
+            <input type='file' id='input-file' style={{ display: 'none' }} />
           </div>
           <div className='crtCard'>
-            <span className='crtLeft'> 카드 내용</span>
             <input className='card-desc' placeholder='내용을 입력하세요' name='cardDesc' />
           </div>
           <div>
-            <input type='submit' value='카드 생성' className='createbtn' />
+            <input type='submit' value='카드 생성' className='createBtn' />
           </div>
         </form>
       </div>

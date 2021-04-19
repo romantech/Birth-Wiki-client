@@ -2,27 +2,29 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import { Swiper, SwiperSlide } from 'swiper/react'; //@types-swiper도 같이 설치...
 import SwiperCore, { A11y, EffectCoverflow } from 'swiper';
-import Media from 'react-media';
 import CardCreate from './CardCreate';
-
-//redux
-import { useSelector } from 'react-redux';
-import { RootState } from '../store';
 
 // Import Swiper styles
 import 'swiper/swiper.scss'; // npm install node-sass
 import 'swiper/components/navigation/navigation.scss';
 import 'swiper/components/pagination/pagination.scss';
+import { url } from 'node:inspector';
 
 SwiperCore.use([A11y, EffectCoverflow]);
+//data
+const SwiperCard = ({ issue, death, birth, music, culture }: any) => {
+  // const data = Object.entries(props.data);
+  console.log(issue[0]);
+  console.log(death.slice(1, death.length - 1));
+  console.log(birth.slice(1, birth.length - 1));
+  console.log(music[1][1]);
+  console.log(culture);
 
-const SwiperCard = () => {
-  const initData = useSelector((state: RootState) => state.dataReducer.data);
-
-  const [cardInfo, setCardInfo] = useState({
-    cardDesc: '',
-    image_urls: '',
-  });
+  const listDeath = death.slice(1, death.length - 1);
+  const listBirth = birth.slice(1, birth.length - 1);
+  const listCulture = culture[0];
+  console.log(listCulture);
+  const listIssue = issue.slice(1, issue.length - 1);
 
   const CardWrapper = styled.div`
     width: 85vw;
@@ -35,10 +37,11 @@ const SwiperCard = () => {
 
     & .swiper-slide {
       width: 100%;
-      background: #000;
+      height: 275px;
       color: #fff;
       font-size: 0.8rem;
       border-radius: 15px;
+      background-size: cover;
     }
 
     & .swiper-slide-next {
@@ -77,7 +80,7 @@ const SwiperCard = () => {
     }
   `;
 
-  const Slide = styled.div`
+  const SlideCard = styled.div`
     & .box {
       position: relative;
       width: 100%;
@@ -87,7 +90,6 @@ const SwiperCard = () => {
       overflow: hidden;
       border-radius: 15px;
     }
-
     & .imgBx {
       position: absolute;
       top: 0;
@@ -96,7 +98,7 @@ const SwiperCard = () => {
       height: 100%;
     }
 
-    & .imgBx img {
+    & .imgBx > img {
       position: absolute;
       top: 0;
       left: 0;
@@ -104,7 +106,6 @@ const SwiperCard = () => {
       height: 100%;
       object-fit: cover;
     }
-
     & .imgBx:before {
       content: '';
       position: absolute;
@@ -112,12 +113,11 @@ const SwiperCard = () => {
       left: 0;
       width: 100%;
       height: 100%;
-      background: linear-gradient(180deg, #000, #000);
+      background: linear-gradient(180deg, rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5));
       z-index: 1;
       opacity: 0;
       transition: 0.5s;
     }
-
     & .box .content {
       position: absolute;
       top: 0;
@@ -130,7 +130,6 @@ const SwiperCard = () => {
       align-items: felx-end;
       box-sizing: border-box;
     }
-
     & .box .content h2 {
       color: #fff;
       transition: 0.5s;
@@ -139,88 +138,194 @@ const SwiperCard = () => {
       font-size: 20px;
       transform: translateY(200px);
     }
-
     & .box .content p {
       color: #fff;
       transition: 0.5s;
       font-size: 14px;
       transform: translateY(200px);
     }
-
     & .content ul {
       overflow-y: scroll;
       margin: 0;
-      height: 150px;
-
+      padding: 0;
+      height: 170px;
       ::-webkit-scrollbar {
         width: 2px;
+      }
+    }
+
+    & .content ul li:before {
+      content: '';
+      position: absolute;
+      left: 6px;
+      top: 2px;
+      width: 5px;
+      height: 90%;
+      border-radius: 10px;
+      background: #eee;
+    }
+
+    & .content ul li {
+      list-style: none;
+      margin-top: 5px;
+      background: rgba(0, 0, 0, 0.3);
+      color: #fff;
+      border-radius: 5px;
+      padding: 7px 7px 7px 14px;
+      position: relative;
+      font-size: 0.8rem;
+      font-weight: 600;
+      line-height: 0.8rem;
+    }
+    & .content ul li .year {
+      color: red;
+      font-size: 0.9rem;
+    }
+
+    & .content .cultureContent {
+      display: flex;
+      justify-content: center;
+      align-center: center;
+      flex-direction: row;
+    }
+
+    & .content .cultureContent .cultureList {
+      flex: 1;
+      width: 100%;
+      height: auto;
+      background: none;
+
+      & h4 {
+        margin-bottom: 0;
+      }
+
+      &::before {
+        display: none;
+      }
+
+      & img {
+        display: block;
+        object-fit: contain;
+        width: 100%;
+        height: 100%;
+        border-radius: 10px;
       }
     }
   `;
 
   return (
     <CardWrapper>
-      <Media query='(min-width: 700px)'>
-        {(matches) => {
-          return matches ? (
-            <Swiper spaceBetween={30} slidesPerView={3} loop={true} effect='coverflow'>
-              {initData.map((data) => (
-                <SwiperSlide className='SwipierSlide' key={data.id}>
-                  <Slide>
-                    <div className='box'>
-                      <div className='imgBx'>
-                        <img src={data.img} alt='' />
-                      </div>
-                      <div className='content'>
-                        <div>
-                          <h2>{data.title}</h2>
-                          <p>
-                            <ul>
-                              {data.content.map((list) => (
-                                <li key={list}>{list}</li>
-                              ))}
-                            </ul>
-                          </p>
-                        </div>
-                      </div>
-                    </div>
-                  </Slide>
-                </SwiperSlide>
-              ))}{' '}
-              <SwiperSlide className='SwipierSlide'>
-                <Slide>
-                  {/* 기록카드 만들기 component */}
-                  <CardCreate />
-                </Slide>
-              </SwiperSlide>
-            </Swiper>
-          ) : (
-            <Swiper spaceBetween={50} slidesPerView={1} direction='vertical' loop={true}>
-              {initData.map((data) => (
-                <SwiperSlide className='SwipierSlide' key={data.id}>
-                  <Slide>
-                    <div className='box'>
-                      <div className='imgBx'>
-                        <img src={data.img} alt='' />
-                      </div>
-                      <div className='content'>
-                        <div>
-                          <h2>{data.title}</h2>
-                          <ul>
-                            {data.content.map((list) => (
-                              <li key={list}>{list}</li>
-                            ))}
-                          </ul>
-                        </div>
-                      </div>
-                    </div>
-                  </Slide>
-                </SwiperSlide>
-              ))}
-            </Swiper>
-          );
-        }}
-      </Media>
+      <Swiper spaceBetween={30} slidesPerView={3} loop={true} effect='coverflow'>
+        <SwiperSlide className='SwipierSlide'>
+          <SlideCard>
+            <div className='box'>
+              <div className='imgBx'>
+                <img src={`${issue[0]}`} alt='' />
+              </div>
+              <div className='content'>
+                <div>
+                  <h2>이날, 이때 사건들</h2>
+                  <p>
+                    <ul>
+                      {listIssue.map((list: any, i: any) => {
+                        return (
+                          <li key={i}>
+                            <span className='year'>{list[0]}</span> : <span>{list[1]}</span>
+                          </li>
+                        );
+                      })}
+                    </ul>
+                  </p>
+                </div>
+              </div>
+            </div>
+          </SlideCard>
+        </SwiperSlide>
+        <SwiperSlide className='SwipierSlide'>
+          <SlideCard>
+            <div className='box'>
+              <div className='imgBx'>
+                <img src={`${birth[0]}`} alt='' />
+              </div>
+              <div className='content'>
+                <div>
+                  <h2>이날, 이때 태어난 사람들</h2>
+                  <p>
+                    <ul>
+                      {listBirth.map((list: any, i: any) => {
+                        return (
+                          <li key={i}>
+                            <span className='year'>{list[0]}</span> : <span>{list[1]}</span>
+                          </li>
+                        );
+                      })}
+                    </ul>
+                  </p>
+                </div>
+              </div>
+            </div>
+          </SlideCard>
+        </SwiperSlide>
+        <SwiperSlide className='SwipierSlide'>
+          <SlideCard>
+            <div className='box'>
+              <div className='imgBx'>
+                <img src={`${culture[0]}`} alt='' />
+              </div>
+              <div className='content'>
+                <div>
+                  <h2>그달의 문화들</h2>
+                  <p>
+                    <ul className='cultureContent'>
+                      <li className='cultureList'>
+                        <h4>
+                          {music[1][0]}, <br /> {music[1][2]}
+                        </h4>
+                        <span></span>
+                        <img src={`${music[1][1]}`} alt={music[1][0]} />
+                      </li>
+                      <li className='cultureList'>
+                        <h4>{culture[1][0]}</h4>
+                        <img src={`${culture[1][1]}`} alt={culture[1][0]} />
+                      </li>
+                    </ul>
+                  </p>
+                </div>
+              </div>
+            </div>
+          </SlideCard>
+        </SwiperSlide>
+        <SwiperSlide style={{ backgroundImage: `url(${death[0]})` }} className='SwipierSlide'>
+          <SlideCard>
+            <div className='box'>
+              <div className='imgBx'>
+                <img src={`${death[0]}`} alt='' />
+              </div>
+              <div className='content'>
+                <div>
+                  <h2>이날, 이때 돌아가신 사람들</h2>
+                  <p>
+                    <ul>
+                      {listDeath.map((list: any, i: any) => {
+                        return (
+                          <li key={i}>
+                            <span className='year'>{list[0]}</span> : <span>{list[1]}</span>
+                          </li>
+                        );
+                      })}
+                    </ul>
+                  </p>
+                </div>
+              </div>
+            </div>
+          </SlideCard>
+        </SwiperSlide>
+        <SwiperSlide>
+          <SwiperSlide>
+            <CardCreate />
+          </SwiperSlide>
+        </SwiperSlide>
+      </Swiper>
     </CardWrapper>
   );
 };
