@@ -8,7 +8,7 @@ import FavoriteCategories from '../components/FavoriteCategories';
 import FavoriteCardList from '../components/FavoriteCardList';
 import categories from '../utils/categories';
 import PIXABAY_API from '../utils/PIXABAY_API';
-import ProfileCard from '../components/ProfileCard';
+import ProfileCard from '../components/FavoriteProfileCard';
 import { ArrowLeft, ArrowRight } from '../components/ArrowIcon';
 import { FaArrowCircleUp } from 'react-icons/fa';
 
@@ -56,12 +56,12 @@ const FavoritePage = (): JSX.Element => {
     1200: 4,
     922: 3,
     768: 3,
-    576: 2,
+    676: 2,
   };
 
   return (
     <Container>
-      <h1>CATEGORY</h1>
+      <h1 className='Favorite-H1'>CATEGORY</h1>
       <Categories>
         <ScrollMenu
           data={categories.map((category) => (
@@ -78,7 +78,7 @@ const FavoritePage = (): JSX.Element => {
         />
       </Categories>
       <li />
-      <h1>YOUR CARDS</h1>
+      <h1 className='Favorite-H1'>YOUR CARDS</h1>
       <InfiniteScroll
         dataLength={imagesArray.length}
         next={() => setTimeout(() => fetchImages(++pageNumber, 'minimal'), 1500)}
@@ -119,14 +119,14 @@ const Container = styled.div`
 
   @media (max-width: 1200px) {
     padding: 1.6rem 2rem 2rem 1rem;
-    h1 {
+    .Favorite-H1 {
       margin-left: 1rem;
     }
   }
 
   @media (max-width: 922px) {
     padding: 1.6rem 1.8rem 1.8rem 0.9rem;
-    h1 {
+    .Favorite-H1 {
       font-size: 1.8em;
       margin-left: 1rem;
     }
@@ -134,7 +134,7 @@ const Container = styled.div`
 
   @media (max-width: 576px) {
     padding: 0.2rem 1.2rem 1.2rem 0.25rem;
-    h1 {
+    .Favorite-H1 {
       font-size: 1.7em;
       text-align: center;
     }
@@ -198,12 +198,6 @@ const MasLayout = styled.div`
   .masonry-grid_column {
     padding-left: 15px;
     background-clip: padding-box;
-  }
-
-  // TODO 필요시 img 태그 변경
-  .masonry-grid_column > img {
-    background: grey;
-    margin-bottom: 15px;
   }
 `;
 
