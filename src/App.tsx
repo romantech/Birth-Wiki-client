@@ -2,7 +2,6 @@ import React, { useEffect } from 'react';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import './App.css';
 import { useSelector } from 'react-redux';
-import Main from './pages/Main';
 import Nav from './components/Nav';
 import Weather from './components/Weather';
 import { RootState } from './store/index';

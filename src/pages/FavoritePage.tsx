@@ -9,14 +9,26 @@ import FavoriteCardList from '../components/FavoriteCardList';
 import categories from '../utils/categories';
 import PIXABAY_API from '../utils/PIXABAY_API';
 import ProfileCard from '../components/FavoriteProfileCard';
+import { useSelector } from 'react-redux';
+import { RootState } from '../store';
 import { ArrowLeft, ArrowRight } from '../components/ArrowIcon';
 import { FaArrowCircleUp } from 'react-icons/fa';
 
+// 테스트용
 interface FetchImages {
   data: string[];
   id: number;
   webformatURL: string;
   tags: string;
+  imgUrl: string;
+}
+
+export interface CardData {
+  id: number;
+  category: string;
+  title: string;
+  content: string[];
+  img: string;
 }
 
 interface Selected {
@@ -25,6 +37,8 @@ interface Selected {
 
 let pageNumber = 1;
 const FavoritePage = (): JSX.Element => {
+  const { data: cardData } = useSelector((state: RootState) => state.dataReducer);
+
   const [imagesArray, setImagesArray] = useState<FetchImages[]>([]);
   const [totalPages, setTotalPages] = useState(0);
   const [selected, setSelected] = useState<Selected>({ selected: '' });
@@ -97,8 +111,15 @@ const FavoritePage = (): JSX.Element => {
             columnClassName='masonry-grid_column'
           >
             <ProfileCard />
-            {imagesArray.map((item) => (
-              <FavoriteCardList item={item} key={item.id} />
+            {cardData.map((card) => (
+              <FavoriteCardList
+                category={card.category}
+                id={card.id}
+                img={card.img}
+                title={card.title}
+                key={card.id}
+                content={card.content}
+              />
             ))}
           </Masonry>
         </MasLayout>

@@ -7,11 +7,12 @@ import { IconCircle, ShareIcon, HeartIcon } from './FavoriteCardList';
 interface Props {
   showModal: boolean;
   setShowModal: React.Dispatch<React.SetStateAction<boolean>>;
-  imagePath: string;
+  imgPath: string;
   issue: string[];
+  category: string;
 }
 
-const FavoriteModal = ({ showModal, setShowModal, imagePath, issue }: Props): JSX.Element => {
+const FavoriteModal = ({ showModal, setShowModal, imgPath, issue, category }: Props): JSX.Element => {
   const modalRef = useRef<HTMLDivElement>(null);
   const animation = useSpring({
     config: {
@@ -47,11 +48,11 @@ const FavoriteModal = ({ showModal, setShowModal, imagePath, issue }: Props): JS
         <Background ref={modalRef} onClick={closeModal}>
           <animated.div style={animation}>
             <ModalWrapper>
-              <ModalImg src={imagePath} alt='Selected Image' />
+              <ModalImg src={imgPath} alt='Selected Image' />
               <ModalContent>
                 <div>
                   <h1>1984</h1>
-                  <h3>Births</h3>
+                  <h3>{category}</h3>
                 </div>
                 <div>
                   {issue.map((issue) => (
