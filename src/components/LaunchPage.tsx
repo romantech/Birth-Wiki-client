@@ -38,7 +38,7 @@ export default function LaunchPage() {
       <h1>What Happend</h1>
 
       <div>
-        <InputDate type='number' placeholder='입력예시: 19900101' onChange={inputHandler}></InputDate>
+        <InputDate placeholder='입력예시: 19900101' onKeyUp={inputHandler}></InputDate>
       </div>
 
       <h1>on Your BirthDay!</h1>

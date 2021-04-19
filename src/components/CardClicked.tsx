@@ -87,24 +87,6 @@ const CardClicked = ({ showCard, setShowCard }: { showCard: boolean; setShowCard
         <Background ref={cardRef} onClick={closeCard}>
           <animated.div style={animation}>
             <CardWrapper>
-              {/* <Swiper id='controller' onSwiper={setControlledSwiper} loop={true} slidesPerView={1}>
-                <div>
-                  {initData.map((data) => (
-                    <SwiperSlide key={data.id}>
-                      <img
-                        style={{
-                          width: '100%',
-                          height: '100%',
-                          opacity: 0.7,
-                          objectFit: 'cover',
-                        }}
-                        src={data.img}
-                        alt={data.title}
-                      />
-                    </SwiperSlide>
-                  ))}
-                </div>
-              </Swiper> */}
               <Swiper
                 effect='coverflow'
                 controller={{ control: controlledSwiper }}
