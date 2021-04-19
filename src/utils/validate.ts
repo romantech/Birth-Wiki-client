@@ -21,11 +21,11 @@ export const morethanLength = (str: string, n: number) => {
   return str.length >= n;
 };
 
-export const validateKoreanName = (str: string) => {
-  const re = /([^가-힣\x20])/i;
+export const validateNickName = (str: string) => {
+  const re = /[ \{\}\[\]\/?.,;:|\)*~`!^\-_+┼<>@\#$%&\ '\"\\(\=]/gi;
   return !re.test(str) && str.length >= 2;
 };
 
 export const checkAllItems = (email: string, pw1: string, pw2: string, name: string) => {
-  return validateEmail(email) && validatePassword(pw1) && matchPassword(pw1, pw2) && validateKoreanName(name);
+  return validateEmail(email) && validatePassword(pw1) && matchPassword(pw1, pw2) && validateNickName(name);
 };

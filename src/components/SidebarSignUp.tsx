@@ -1,124 +1,255 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import styled from 'styled-components';
-import { MdClose } from 'react-icons/md';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../store/index';
-import { setIsLogin, setUserInfo, setisSidbar } from '../actions/index';
+import { setIsLogin, setUserInfo, setIsSidbar, setIsSignup } from '../actions/index';
 import { useHistory, Link } from 'react-router-dom';
-import {
-  validateEmail,
-  validatePassword,
-  matchPassword,
-  checkAllItems,
-  validateKoreanName,
-} from '../utils/validate';
+import * as ColorIcon from 'react-icons/fc';
+import { validateEmail, validatePassword, matchPassword, validateNickName } from '../utils/validate';
+import axios from 'axios';
 
 function SidebarSignUp() {
-  const userInfo = useSelector((state: RootState) => state.userInfoReducer.userInfo);
-  const sidebar = useSelector((state: RootState) => state.sidebarReducer.isSidebar);
+  const isSidebar = useSelector((state: RootState) => state.sidebarReducer.isSidebar);
   const dispatch = useDispatch();
-  const history = useHistory();
-  const [showModal, setShowModal] = useState(true);
+
+  const [check, setCheck] = useState({
+    userEmail: false,
+    password: false,
+    password2: false,
+    nickName: false,
+  });
+
   const [signUpInfo, setSignUpInfo] = useState({
     userEmail: '',
     password: '',
     password2: '',
-    userNickName: '',
-    profileImage: '' || `${process.env.PUBLIC_URL}/img/profile.png`,
+    nickName: '',
+    profileImage: '',
     errorMsg: '',
   });
 
-  const { userEmail, password, password2, userNickName, profileImage, errorMsg } = signUpInfo;
+  const { password, password2, errorMsg } = signUpInfo;
 
-  const inputHandler = (key: string) => (e: React.ChangeEvent<HTMLInputElement>) => {
+  const inputHandler = async (key: string, e: any) => {
     setSignUpInfo({
       ...signUpInfo,
       [key]: e.target.value,
     });
-  };
-
-  const signUpSubmitHandler = () => {
-    console.log('가입전', userInfo);
-
-    dispatch(
-      setUserInfo({
-        ...userInfo,
-        userEmail: signUpInfo.userEmail,
-        password: signUpInfo.password,
-        userNickName: signUpInfo.userNickName,
-        profileImage: signUpInfo.profileImage,
-        source: 'Home',
-      }),
-    );
-    dispatch(setisSidbar(true));
-    console.log('회원가입 후', userInfo);
-    history.push('/');
-  };
-
-  const inValid = <Far />;
-  const valid = <Fas />;
-  const optional = <i className='far fa-edit' aria-hidden='true' />;
-  const inlineBlockStyle = { display: 'inline-block' };
-  const SigninRef: any = useRef<HTMLDivElement>(null);
-  const closeSignin = (e: React.SyntheticEvent) => {
-    if (SigninRef.current === (e.target as typeof e.target)) {
-      dispatch(setisSidbar(!sidebar));
-      history.goBack();
+    if (key === 'userEmail') {
+      if (validateEmail(e.target.value)) {
+        await setCheck({ ...check, userEmail: true });
+      } else {
+        await setCheck({ ...check, userEmail: false });
+      }
+    } else if (key === 'password') {
+      if (password2.length === 0) {
+        if (validatePassword(e.target.value)) {
+          setCheck({ ...check, password: true });
+        } else {
+          setCheck({ ...check, password: false });
+        }
+      } else if (password2.length > 0) {
+        if (matchPassword(password2, e.target.value)) {
+          if (validatePassword(e.target.value)) {
+            setCheck({ ...check, password: true, password2: true });
+          } else {
+            setCheck({ ...check, password: false, password2: true });
+          }
+        } else {
+          if (validatePassword(e.target.value)) {
+            setCheck({ ...check, password: true, password2: false });
+          } else {
+            setCheck({ ...check, password: false, password2: false });
+          }
+        }
+      }
+    } else if (key === 'password2') {
+      if (matchPassword(password, e.target.value)) {
+        setCheck({ ...check, password2: true });
+      } else {
+        setCheck({ ...check, password2: false });
+      }
+    } else if (key === 'nickName') {
+      if (validateNickName(e.target.value)) {
+        setCheck({ ...check, nickName: true });
+      } else {
+        setCheck({ ...check, nickName: false });
+      }
     }
   };
 
+  const SigninRef: any = useRef<HTMLDivElement>(null);
+  const closeSignin = (e: React.SyntheticEvent) => {
+    if (SigninRef.current === (e.target as typeof e.target)) {
+      dispatch(setIsSidbar(!isSidebar));
+      dispatch(setIsSignup(false));
+    }
+  };
+
+  useEffect(() => {
+    if (check.userEmail) {
+      axios({
+        url: 'https://server.birthwiki.space/user/exist',
+        params: {
+          userEmail: signUpInfo.userEmail,
+        },
+      })
+        .then((res) => {
+          setSignUpInfo({
+            ...signUpInfo,
+            errorMsg: '',
+          });
+        })
+        .catch((err) => {
+          return !err.response
+            ? setSignUpInfo({
+                ...signUpInfo,
+                errorMsg: '❗️ 서버 오류, 잠시 후 다시 시도해주세요',
+              })
+            : setSignUpInfo({
+                ...signUpInfo,
+                errorMsg: '❗️ 이미 가입된 이메일입니다',
+              });
+        });
+    }
+  }, [signUpInfo.userEmail]);
+
+  useEffect(() => {
+    if (check.nickName) {
+      axios({
+        url: 'https://server.birthwiki.space/user/exist',
+        params: {
+          nickName: signUpInfo.nickName,
+        },
+      })
+        .then((res) => {
+          setSignUpInfo({
+            ...signUpInfo,
+            errorMsg: '',
+          });
+        })
+        .catch((err) => {
+          console.log(err);
+          return !err.response
+            ? setSignUpInfo({
+                ...signUpInfo,
+                errorMsg: '❗️ 서버 오류, 잠시 후 다시 시도해주세요',
+              })
+            : setSignUpInfo({
+                ...signUpInfo,
+                errorMsg: '❗️ 이미 사용중인 닉네임입니다',
+              });
+        });
+    }
+  }, [signUpInfo.nickName]);
+
   return (
     <Background ref={SigninRef} onClick={closeSignin}>
-      {showModal ? (
-        <ModalWrapper>
-          <Title>Welcome!</Title>
-          <SubTitle>필수 사항</SubTitle>
-          <SignUpContainer>
-            <InputCatecory>E-mail</InputCatecory>
-            <InputField
-              type='email'
-              value={userEmail}
-              placeholder='수신 가능한 이메일 주소 입력'
-              maxLength={30}
-              onChange={inputHandler('userEmail')}
-            />
-            {validateEmail(userEmail) ? valid : inValid}
-            <InputCatecory>password</InputCatecory>
-            <InputField
-              type='password'
-              value={password}
-              placeholder='숫자와 영문을 포함해 최소 8자리'
-              maxLength={16}
-              onChange={inputHandler('password')}
-            />
-            {validatePassword(password) ? valid : inValid}
-            <InputCatecory>password 확인 </InputCatecory>
-            <InputField
-              type='password'
-              value={password2}
-              maxLength={16}
-              placeholder='위와 동일한 비밀번호 입력'
-              onChange={inputHandler('password2')}
-            />
-            {matchPassword(password, password2) ? valid : inValid}
-            <InputCatecory>닉네임</InputCatecory>
-            <InputField
-              type='text'
-              value={userNickName}
-              maxLength={10}
-              placeholder='한글만 입력 가능합니다'
-              onChange={inputHandler('userNickName')}
-            />
-            <SubTitle>선택사항</SubTitle>
-            <InputCatecory>프로필 이미지 등록</InputCatecory>
-            <InputField type='file' onChange={inputHandler('profileImage')} />
-            {validateKoreanName(userNickName) ? valid : inValid}
-            <SignUpSubmit type='submit' onClick={signUpSubmitHandler}>
-              회원가입
-            </SignUpSubmit>
-          </SignUpContainer>
-        </ModalWrapper>
-      ) : null}
+      <ModalWrapper>
+        <Title>Welcome!</Title>
+        <SubTitle>필수 사항</SubTitle>
+        <iframe name='frAttachFiles' className='invisable'></iframe>
+        {errorMsg ? <div className='alert-box'>{errorMsg}</div> : ''}
+        <SignUpContainer
+          action='https://server.birthwiki.space/user/signup'
+          method='post'
+          target='frAttachFiles'
+          encType='multipart/form-data'
+        >
+          <InputCatecory>E-mail</InputCatecory>
+          <InputField
+            type='email'
+            name='userEmail'
+            placeholder='수신 가능한 이메일 주소 입력'
+            maxLength={30}
+            onKeyUp={(e) => {
+              inputHandler('userEmail', e);
+            }}
+          />
+          {check.userEmail ? (
+            <Valid to='#'>
+              <ColorIcon.FcApproval />
+            </Valid>
+          ) : (
+            <Invalid to='#'>
+              <ColorIcon.FcCancel />
+            </Invalid>
+          )}
+          <InputCatecory>password</InputCatecory>
+          <InputField
+            type='password'
+            name='password'
+            placeholder='숫자와 영문을 포함해 최소 8자리'
+            maxLength={16}
+            onKeyUp={(e) => {
+              inputHandler('password', e);
+            }}
+          />
+          {check.password ? (
+            <Valid to='#'>
+              <ColorIcon.FcApproval />
+            </Valid>
+          ) : (
+            <Invalid to='#'>
+              <ColorIcon.FcCancel />
+            </Invalid>
+          )}
+          <InputCatecory>password 확인 </InputCatecory>
+          <InputField
+            type='password'
+            maxLength={16}
+            placeholder='위와 동일한 비밀번호 입력'
+            onKeyUp={(e) => {
+              inputHandler('password2', e);
+            }}
+          />
+          {check.password2 ? (
+            <Valid to='#'>
+              <ColorIcon.FcApproval />
+            </Valid>
+          ) : (
+            <Invalid to='#'>
+              <ColorIcon.FcCancel />
+            </Invalid>
+          )}
+          <InputCatecory>닉네임</InputCatecory>
+          <InputField
+            type='text'
+            name='nickName'
+            maxLength={10}
+            placeholder='한글, 숫자, 영어를 포함 최소 2자리'
+            onKeyUp={(e) => {
+              inputHandler('nickName', e);
+            }}
+          />
+          {check.nickName ? (
+            <Valid to='#'>
+              <ColorIcon.FcApproval />
+            </Valid>
+          ) : (
+            <Invalid to='#'>
+              <ColorIcon.FcCancel />
+            </Invalid>
+          )}
+          <SubTitle>선택사항</SubTitle>
+          <InputCatecory>프로필 이미지 등록</InputCatecory>
+          <InputField type='file' name='profileImage' />
+
+          {check.userEmail && check.password && check.password2 && check.nickName ? (
+            <SignUpSubmit
+              type='submit'
+              value='회원가입'
+              onClick={() => {
+                setTimeout(() => {
+                  dispatch(setIsSignup(false));
+                }, 10000);
+              }}
+            ></SignUpSubmit>
+          ) : (
+            <SignUpSubmitDiv>회원가입</SignUpSubmitDiv>
+          )}
+        </SignUpContainer>
+      </ModalWrapper>
     </Background>
   );
 }
@@ -138,13 +269,19 @@ const ModalWrapper = styled.div`
   background-color: #15172b;
   border-radius: 20px;
   box-sizing: border-box;
-  height: 660px;
+  height: 680px;
   padding: 20px 25px;
   width: 400px;
   transition: all 0.2s ease-in-out;
   text-decoration: none;
   z-index: 10;
   position: relative;
+  & .invisable {
+    display: none;
+  }
+  & .alert-box {
+    color: #eee;
+  }
 `;
 
 const Title = styled.div`
@@ -159,7 +296,7 @@ const SubTitle = styled.div`
   color: #eee;
   font-family: sans-serif;
   font-size: 20px;
-  font-weight: 600;
+  font-weight: bold;
   margin-top: 15px;
 `;
 
@@ -184,7 +321,7 @@ const InputField = styled.input`
   height: 80%;
   outline: 0;
   padding: 0 20px 0;
-  width: 100%;
+  width: 88%;
   border: none;
   border-bottom: 2px solid #fff;
   background-color: rgba(255, 255, 255, 0);
@@ -194,7 +331,7 @@ const InputField = styled.input`
   }
 `;
 
-const SignUpSubmit = styled.button`
+const SignUpSubmit = styled.input`
   background-color: #08d;
   border-radius: 12px;
   border: 0;
@@ -215,26 +352,33 @@ const SignUpSubmit = styled.button`
     color: #15172b;
   }
 `;
-
-const CloseModalButton = styled(MdClose)`
-  cursor: pointer;
-  top: 20px;
-  right: 20px;
-  width: 32px;
-  height: 32px;
-  padding: 0;
-  z-index: 10;
+const SignUpSubmitDiv = styled.div`
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  background-color: #292929;
+  border-radius: 12px;
+  border: 0;
+  box-sizing: border-box;
   color: #eee;
+  cursor: pointer;
+  font-size: 18px;
+  height: 50px;
+  margin-top: 30px;
+  text-align: center;
+  width: 100%;
+  transition: all 0.2s ease-in-out;
+  text-decoration: none;
 `;
 
-const Fas = styled.span.attrs({
-  'aria-hidden': true,
-})`
-  color: rgb(51, 173, 51);
+const Valid = styled(Link)`
+  font-size: 20px;
+
+  padding: 10px;
 `;
 
-const Far = styled.span.attrs({
-  'aria-hidden': true,
-})`
-  color: rgb(194, 194, 194);
+const Invalid = styled(Link)`
+  font-size: 20px;
+
+  padding: 10px;
 `;
