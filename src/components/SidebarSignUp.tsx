@@ -1,32 +1,24 @@
 import React, { useState, useRef, useEffect } from 'react';
 import styled from 'styled-components';
-import { MdClose } from 'react-icons/md';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../store/index';
 import { setIsLogin, setUserInfo, setIsSidbar, setIsSignup } from '../actions/index';
 import { useHistory, Link } from 'react-router-dom';
 import * as ColorIcon from 'react-icons/fc';
-import {
-  validateEmail,
-  validatePassword,
-  matchPassword,
-  checkAllItems,
-  validateNickName,
-} from '../utils/validate';
+import { validateEmail, validatePassword, matchPassword, validateNickName } from '../utils/validate';
 import axios from 'axios';
 
 function SidebarSignUp() {
-  const userInfo = useSelector((state: RootState) => state.userInfoReducer.userInfo);
-  const sidebar = useSelector((state: RootState) => state.sidebarReducer.isSidebar);
+  const isSidebar = useSelector((state: RootState) => state.sidebarReducer.isSidebar);
   const dispatch = useDispatch();
-  const history = useHistory();
+
   const [check, setCheck] = useState({
     userEmail: false,
     password: false,
     password2: false,
     nickName: false,
   });
-  const [allCheck, setAllCheck] = useState(false);
+
   const [signUpInfo, setSignUpInfo] = useState({
     userEmail: '',
     password: '',
@@ -36,7 +28,7 @@ function SidebarSignUp() {
     errorMsg: '',
   });
 
-  const { userEmail, password, password2, nickName, profileImage, errorMsg } = signUpInfo;
+  const { password, password2, errorMsg } = signUpInfo;
 
   const inputHandler = async (key: string, e: any) => {
     setSignUpInfo({
@@ -89,9 +81,8 @@ function SidebarSignUp() {
   const SigninRef: any = useRef<HTMLDivElement>(null);
   const closeSignin = (e: React.SyntheticEvent) => {
     if (SigninRef.current === (e.target as typeof e.target)) {
-      dispatch(setIsSidbar(!sidebar));
+      dispatch(setIsSidbar(!isSidebar));
       dispatch(setIsSignup(false));
-      history.goBack();
     }
   };
 
@@ -110,10 +101,15 @@ function SidebarSignUp() {
           });
         })
         .catch((err) => {
-          setSignUpInfo({
-            ...signUpInfo,
-            errorMsg: '❗️ 이미 가입된 이메일입니다',
-          });
+          return !err.response
+            ? setSignUpInfo({
+                ...signUpInfo,
+                errorMsg: '❗️ 서버 오류, 잠시 후 다시 시도해주세요',
+              })
+            : setSignUpInfo({
+                ...signUpInfo,
+                errorMsg: '❗️ 이미 가입된 이메일입니다',
+              });
         });
     }
   }, [signUpInfo.userEmail]);
@@ -127,7 +123,6 @@ function SidebarSignUp() {
         },
       })
         .then((res) => {
-          console.log(res.data);
           setSignUpInfo({
             ...signUpInfo,
             errorMsg: '',
@@ -135,10 +130,15 @@ function SidebarSignUp() {
         })
         .catch((err) => {
           console.log(err);
-          setSignUpInfo({
-            ...signUpInfo,
-            errorMsg: '❗️ 이미 사용중인 닉네임입니다',
-          });
+          return !err.response
+            ? setSignUpInfo({
+                ...signUpInfo,
+                errorMsg: '❗️ 서버 오류, 잠시 후 다시 시도해주세요',
+              })
+            : setSignUpInfo({
+                ...signUpInfo,
+                errorMsg: '❗️ 이미 사용중인 닉네임입니다',
+              });
         });
     }
   }, [signUpInfo.nickName]);

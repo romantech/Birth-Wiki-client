@@ -2,9 +2,10 @@ export interface IsLogin {
   isLogin: boolean;
 }
 export interface UserInfo {
+  id?: Number;
   userEmail: string;
-  password: string;
-  userNickName: string;
+  password?: string;
+  nickName?: string;
   profileImage?: string;
   source: string;
   accessToken?: string;

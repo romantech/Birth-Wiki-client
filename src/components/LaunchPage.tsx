@@ -97,7 +97,7 @@ export default function LaunchPage() {
   const birthwikiHandler = () => {
     let selectDate = date.year + '-' + date.month + '-' + date.day;
     if (date.year !== '0' && date.month !== '0' && date.day !== '0') {
-      window.location.href = `https://localhost:3000/weather/${selectDate}`;
+      window.location.href = `https://localhost:3000/main/${selectDate}`;
     } else {
       console.log('모달로 에러메세지 띄우기');
     }

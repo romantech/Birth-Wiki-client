@@ -7,22 +7,23 @@ import { useSelector, useDispatch } from 'react-redux';
 import SidebarLogin from './SidebarLogin';
 import SidebarMypage from './SidebarMypage';
 import { RootState } from '../store/index';
-import { setIsSidbar, setIsLogin, setIsSignup } from '../actions';
+import { setIsSidbar, setIsLogin, setIsSignup, setUserInfo } from '../actions';
 import { FcLike } from 'react-icons/fc';
 import axios from 'axios';
 
-function Nav({ isLogin }: any) {
-  const sidebar = useSelector((state: RootState) => state.sidebarReducer.isSidebar);
+function Nav() {
+  const isLogin = useSelector((state: RootState) => state.loginReducer.isLogin);
+  const isSidebar = useSelector((state: RootState) => state.sidebarReducer.isSidebar);
+  const userInfo = useSelector((state: RootState) => state.userInfoReducer.userInfo);
   const dispatch = useDispatch();
   const showSidebar = () => {
-    dispatch(setIsSidbar(!sidebar));
+    dispatch(setIsSidbar(!isSidebar));
   };
 
   useEffect(() => {
     console.log(localStorage.getItem('source'));
     const url = new URL(window.location.href);
     const AuthorizationCode = url.searchParams.get('code');
-    console.log('AuthorizationCode', AuthorizationCode);
 
     if (AuthorizationCode) {
       axios({
@@ -35,6 +36,7 @@ function Nav({ isLogin }: any) {
         withCredentials: true,
       }).then((res) => {
         console.log(res);
+        dispatch(setUserInfo(res.data.data));
         dispatch(setIsLogin(true));
         //setAt(res.data.data.accessToken)
       });
@@ -48,10 +50,10 @@ function Nav({ isLogin }: any) {
         <FaBars onClick={showSidebar} />
       </SidebarsOpen>
 
-      <Favorite to='myFavorite'>
+      <Favorite to='/myFavorite'>
         <FcLike />
       </Favorite>
-      {sidebar ? (
+      {isSidebar ? (
         <NavSidebar>
           <SidebarsClose to='#'>
             <AiOutlineClose onClick={showSidebar} />

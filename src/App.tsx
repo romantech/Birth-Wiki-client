@@ -8,20 +8,25 @@ import Weather from './components/Weather';
 import { RootState } from './store/index';
 import SidebarEdit from './components/SidebarEdit';
 import FavoritePage from './pages/FavoritePage';
+import LaunchPage from './components/LaunchPage';
+import SidebarSignUp from './components/SidebarSignUp';
 
 function App(): JSX.Element {
-  const isLogin = useSelector((state: RootState) => state.loginReducer.isLogin);
+  const isSignup = useSelector((state: RootState) => state.signupReducer.isSignup);
 
   return (
     <Router>
-      <Nav isLogin={isLogin} />
-
-      <Switch>
-        <Route exact path='/' component={Main} />
-        <Route exact path='/weather/:date' component={Weather} />
-        <Route exact path='/edit' component={SidebarEdit} />
-        <Route exact path='/myFavorite' component={FavoritePage} />
-      </Switch>
+      <Nav />
+      {isSignup ? (
+        <SidebarSignUp />
+      ) : (
+        <Switch>
+          <Route exact path='/' component={LaunchPage} />
+          <Route exact path='/main/:date' component={Weather} />
+          <Route exact path='/edit' component={SidebarEdit} />
+          <Route exact path='/myFavorite' component={FavoritePage} />
+        </Switch>
+      )}
     </Router>
   );
 }

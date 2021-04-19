@@ -14,7 +14,7 @@ import {
 } from '../utils/validate';
 
 function SidebarEdit() {
-  const sidebar = useSelector((state: RootState) => state.sidebarReducer.isSidebar);
+  const isSidebar = useSelector((state: RootState) => state.sidebarReducer.isSidebar);
   const userInfo = useSelector((state: RootState) => state.userInfoReducer.userInfo);
   const dispatch = useDispatch();
   const history = useHistory();
@@ -34,7 +34,7 @@ function SidebarEdit() {
   const EidtRef: any = useRef<HTMLDivElement>(null);
   const closeEidt = (e: React.SyntheticEvent) => {
     if (EidtRef.current === (e.target as typeof e.target)) {
-      dispatch(setIsSidbar(!sidebar));
+      dispatch(setIsSidbar(!isSidebar));
       history.goBack();
     }
   };

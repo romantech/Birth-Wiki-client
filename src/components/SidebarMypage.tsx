@@ -4,6 +4,7 @@ import { useHistory, Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../store/index';
 import { setIsLogin, setUserInfo, setIsSidbar, setIsSignup } from '../actions/index';
+import axios from 'axios';
 
 const MypageContainer = styled.div`
   color: #fff;
@@ -177,18 +178,36 @@ const MyBookMark = styled(Link)`
 
 function SidebarMypage() {
   const userInfo = useSelector((state: RootState) => state.userInfoReducer.userInfo);
+  const { accessToken, source } = userInfo;
+  console.log('source', source);
   const sidebar = useSelector((state: RootState) => state.sidebarReducer.isSidebar);
   const dispatch = useDispatch();
   const [storyclicked, setStoryClicked] = useState(false);
   const [markclicked, setMarkClicked] = useState(false);
+
   const logoutHandler = () => {
-    dispatch(setIsLogin(false));
-    dispatch(setIsSidbar(false));
+    console.log('Logout');
+    const birthwikiServer = 'https://server.birthwiki.space/user/logout';
+    axios({
+      url: birthwikiServer,
+      method: 'POST',
+      headers: {
+        authorization: `Bearer ${accessToken}`,
+      },
+    })
+      .then((res) => {
+        console.log('Logout', res);
+        dispatch(setIsLogin(false));
+        dispatch(setIsSidbar(false));
+      })
+      .catch((error) => console.log('err', error.message));
   };
+
   const editHandler = () => {
     dispatch(setIsSidbar(!sidebar));
     <Link to='/edit' />;
   };
+
   const clickedStoryHandler = () => {
     setStoryClicked(!storyclicked);
   };
@@ -196,14 +215,20 @@ function SidebarMypage() {
   const clickMarkHandler = () => {
     setMarkClicked(!markclicked);
   };
+
   return (
     <MypageContainer>
       Mypage
       <ProfileContainer>
         <Profile>
-          <UserPoto src={userInfo.profileImage}></UserPoto>
+          {userInfo.profileImage ? (
+            <UserPoto src={`https://server.birthwiki.space/${userInfo.profileImage}`}></UserPoto>
+          ) : (
+            <UserPoto src={`${process.env.PUBLIC_URL}img/profile.png`}></UserPoto>
+          )}
+
           <UserInfoContainer>
-            <UserInfo>{userInfo.userNickName}</UserInfo>
+            <UserInfo>{userInfo.nickName}</UserInfo>
             <UserInfo>{userInfo.userEmail}</UserInfo>
           </UserInfoContainer>
         </Profile>
@@ -219,11 +244,7 @@ function SidebarMypage() {
           <p onClick={clickedStoryHandler}> 나만의 기록리스트 </p>
           {storyclicked
             ? userInfo.recordCard.map((data: any) => (
-                <MyStory
-                  to='/'
-                  key={data.id}
-                  // date={data.date}
-                >
+                <MyStory to='/' key={data.id}>
                   {data}
                 </MyStory>
               ))

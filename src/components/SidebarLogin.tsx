@@ -4,16 +4,14 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useHistory, Link } from 'react-router-dom';
 import * as IconName from 'react-icons/fc';
 import axios from 'axios';
-import { validateEmail, validatePassword } from '../utils/validate';
 import { setIsLogin, setUserInfo, setIsSidbar, setIsSignup } from '../actions/index';
 import { RootState } from '../store/index';
-import SidebarSignUp from './SidebarSignUp';
 import 'dotenv/config';
 
 function SidebarLogin() {
-  const state = useSelector((state: RootState) => state.loginReducer.isLogin);
   const userInfo = useSelector((state: RootState) => state.userInfoReducer.userInfo);
-  const sidebar = useSelector((state: RootState) => state.sidebarReducer.isSidebar);
+  const isLogin = useSelector((state: RootState) => state.loginReducer.isLogin);
+  const isSidebar = useSelector((state: RootState) => state.sidebarReducer.isSidebar);
   const isSignup = useSelector((state: RootState) => state.signupReducer.isSignup);
 
   const history = useHistory();
@@ -28,8 +26,8 @@ function SidebarLogin() {
       'scope=https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/userinfo.profile';
     const response_type = 'response_type=code';
     const access_type = 'access_type=offline';
-
     const GOOGLE_URL = `${url}?${client_id}&${redirect_uri}&${scope}&${response_type}&${access_type}`;
+
     window.location.assign(GOOGLE_URL);
   };
   const naverLoginHandler = () => {
@@ -51,23 +49,22 @@ function SidebarLogin() {
     const scope = 'scope=profile';
 
     const KAKAO_URL = `${url}?${client_id}&${redirect_uri}&${response_type}&${scope}`;
-
     window.location.assign(KAKAO_URL);
   };
+
   //input 관련
-  const [userSignInInfo, setUserSignInInfo] = useState({
+  const [loginInfo, setLoginInfo] = useState({
     userEmail: '',
     password: '',
     source: 'home',
-    isLogin: false,
     errorMsg: '',
   });
 
-  const { userEmail, password, errorMsg, source, isLogin } = userSignInInfo;
+  const { userEmail, password, errorMsg, source } = loginInfo;
 
   const inputHandler = (key: string) => (e: React.ChangeEvent<HTMLInputElement>) => {
-    setUserSignInInfo({
-      ...userSignInInfo,
+    setLoginInfo({
+      ...loginInfo,
       [key]: e.target.value,
     });
   };
@@ -75,45 +72,26 @@ function SidebarLogin() {
   const homeLoginHandler = async () => {
     const birthwikiServer = 'https://server.birthwiki.space/user/login';
     if (!userEmail || !password) {
-      return setUserSignInInfo({
-        ...userSignInInfo,
+      return setLoginInfo({
+        ...loginInfo,
         errorMsg: '❗️ 이메일과 비밀번호를 모두 입력하세요',
       });
     }
 
-    if (!validateEmail(userEmail) || !validatePassword(password)) {
-      return setUserSignInInfo({
-        ...userSignInInfo,
-        errorMsg: '❗️ 이메일 혹은 비밀번호가 올바르지 않습니다',
-      });
-    }
-
-    if (userEmail !== userInfo.userEmail || password !== userInfo.password) {
-      return setUserSignInInfo({
-        ...userSignInInfo,
-        errorMsg: '❗️ 이메일 혹은 비밀번호가 올바르지 않습니다',
-      });
-    } else if (userEmail === userInfo.userEmail && password === userInfo.password) {
-      dispatch(setIsLogin(true));
-    }
     try {
       const res = await axios.post(birthwikiServer, { userEmail, password, source });
-      console.log(res);
-      // dispatch(setUserInfo(res.data.data));
-      // setSignInInfo({
-      //   ...singInInfo,
-      //   isLogin: true,
-      // });
-      // setModalOpen(true);
+      console.log(res.data.data);
+      dispatch(setUserInfo(res.data.data));
+      dispatch(setIsLogin(true));
     } catch (error) {
       console.log(error);
       return !error.response
-        ? setUserSignInInfo({
-            ...userSignInInfo,
+        ? setLoginInfo({
+            ...loginInfo,
             errorMsg: '❗️ 서버 오류, 잠시 후 다시 시도해주세요',
           })
-        : setUserSignInInfo({
-            ...userSignInInfo,
+        : setLoginInfo({
+            ...loginInfo,
             errorMsg: '❗️ 이메일 혹은 비밀번호가 일치하지 않습니다',
           });
     }
