@@ -1,7 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import styled, { css } from 'styled-components';
 import { FiHeart, FiShare } from 'react-icons/fi';
 import FavoriteModal from '../components/FavoriteModal';
+import FavoriteShareModal from '../components/FavoriteShareModal';
 
 const dummyIssue = [
   '1월 17일 - 다국적군, 이라크에 공격을 개시하다. (걸프전 발발)',
@@ -27,11 +28,31 @@ interface Props {
 }
 
 const FavoriteCardList = ({ item }: Props): JSX.Element => {
+  const shareRef = useRef<HTMLDivElement>(null);
   const { webformatURL, tags } = item;
   const [showModal, setShowModal] = useState(false);
+  const [shareModal, setShareModal] = useState(false);
+  const [xyPosition, setXYPosition] = useState({
+    pageX: 0,
+    pageY: 0,
+  });
 
   const openModal = () => {
     setShowModal((prev) => !prev);
+  };
+
+  const openShareModal = (e: { pageX: number; pageY: number }) => {
+    // const clientRect = e.target.getBoundingClientRect();
+    // const relativeTop = clientRect.top;
+    // const scrolledTopLength = window.pageYOffset;
+    // const absoluteTop = scrolledTopLength + relativeTop;
+
+    // console.log(shareRef.current.getBoundingClientRect());
+    setShareModal((prev) => !prev);
+    setXYPosition({
+      pageX: e.pageX,
+      pageY: e.pageY,
+    });
   };
 
   return (
@@ -48,7 +69,7 @@ const FavoriteCardList = ({ item }: Props): JSX.Element => {
               <IconCircle>
                 <HeartIcon />
               </IconCircle>
-              <IconCircle>
+              <IconCircle onClick={openShareModal} ref={shareRef}>
                 <ShareIcon />
               </IconCircle>
             </IconWrapper>
@@ -61,6 +82,11 @@ const FavoriteCardList = ({ item }: Props): JSX.Element => {
           </FlipCardBack>
         </FlipCardInner>
       </FlipCard>
+      <FavoriteShareModal
+        shareModal={shareModal}
+        setShareModal={setShareModal}
+        xyPosition={xyPosition}
+      ></FavoriteShareModal>
       <FavoriteModal
         imagePath={webformatURL}
         showModal={showModal}
