@@ -5,6 +5,7 @@ import DatePicker from 'react-datepicker';
 
 export default function LaunchPage() {
   const [date, setDate] = useState({ year: '0', month: '0', day: '0' });
+  const [warning, setWarning] = useState(false);
 
   let curNow = new Date();
   let curDay = curNow.getDate();
@@ -16,86 +17,80 @@ export default function LaunchPage() {
   });
 
   const pressHandler = (e: any, here: string, next: string) => {
-    if (here === 'year' && String(e.target.value).length > 4) {
-      e.target.value = 2021;
-      setDate({ ...date, year: '2021' });
-      document.getElementById(next)!.focus();
-    } else if (here === 'year' && String(e.target.value).length === 4) {
-      if (curYear < Number(e.target.value)) {
-        e.target.value = String(curYear);
-      }
+    setWarning(false);
+    let numValue = Number(e.target.value);
+
+    if (here === 'year') {
+      e.target.value = numValue > curYear ? String(curYear) : String(numValue);
       setDate({ ...date, year: e.target.value });
-      document.getElementById(next)!.focus();
+      if (e.target.value.length === 4) {
+        document.getElementById(next)!.focus();
+      }
     }
 
     if (here === 'month') {
       if (date.year === String(curYear)) {
-        if (curMonth < Number(e.target.value)) {
-          e.target.value = String(curMonth);
-          document.getElementById(next)!.focus();
-        }
-        if (e.target.value > 1) {
-          setDate({ ...date, month: String(curMonth) });
-          document.getElementById(next)!.focus();
-        }
+        e.target.value = numValue > curMonth ? String(curMonth) : String(numValue);
       } else {
-        if (e.target.value > 12) {
-          e.target.value = 12;
-          setDate({ ...date, month: '12' });
-          document.getElementById(next)!.focus();
-        } else if (e.target.value > 1) {
-          setDate({ ...date, month: e.target.value });
-          document.getElementById(next)!.focus();
-        }
+        e.target.value = numValue > 12 ? '12' : String(numValue);
+      }
+      setDate({ ...date, month: e.target.value });
+
+      if (Number(e.target.value) > 1) {
+        document.getElementById(next)!.focus();
       }
     }
 
     if (here === 'day') {
+      let lastDate: number = new Date(Number(date.year), Number(date.month), 0).getDate();
+
       if (date.year === String(curYear) && date.month === String(curMonth)) {
-        if (curDay <= Number(e.target.value)) {
-          e.target.value = curDay - 1;
-        }
-        setDate({ ...date, day: String(curDay - 1) });
-      }
-      let lastDate = new Date(Number(date.year), Number(date.month), 0).getDate();
-      if (e.target.value > lastDate) {
-        e.target.value = lastDate;
-        setDate({ ...date, day: String(lastDate) });
+        e.target.value = numValue >= curDay ? String(curDay - 1) : String(numValue);
       } else {
-        setDate({ ...date, day: e.target.value });
+        e.target.value = numValue > lastDate ? String(lastDate) : String(numValue);
       }
+      setDate({ ...date, day: e.target.value });
     }
   };
 
   const blurHandler = (e: any, here: string, next: string) => {
+    let numValue = Number(e.target.value);
+
     if (here === 'year') {
-      console.log('year');
+      e.target.value = numValue > curYear ? String(curYear) : String(numValue);
       setDate({ ...date, year: e.target.value });
-    } else if (here === 'month') {
-      console.log('month');
-      if (Number(e.target.value) === 0 || Number(e.target.value) === 1) {
-        setDate({ ...date, month: '1' });
+    }
+
+    if (here === 'month') {
+      if (date.year === String(curYear)) {
+        e.target.value = numValue > curMonth ? String(curMonth) : String(numValue);
+      } else {
+        e.target.value = numValue > 12 ? '12' : String(numValue);
       }
-    } else if (here === 'day') {
-      console.log('day');
+      setDate({ ...date, month: e.target.value });
+    }
+
+    if (here === 'day') {
+      let lastDate: number = new Date(Number(date.year), Number(date.month), 0).getDate();
+
+      if (date.year === String(curYear) && date.month === String(curMonth)) {
+        e.target.value = numValue >= curDay ? String(curDay - 1) : String(numValue);
+      } else {
+        e.target.value = numValue > lastDate ? String(lastDate) : String(numValue);
+      }
       setDate({ ...date, day: e.target.value });
     }
   };
 
   const enterHandler = (e: any, here: string, next: string) => {
     if (e.key === 'Enter') {
-      if (here === 'year') {
-        setDate({ ...date, year: e.target.value });
+      if (here !== 'day') {
         document.getElementById(next)!.focus();
-      } else if (here === 'month') {
-        setDate({ ...date, month: e.target.value });
-        document.getElementById(next)!.focus();
-      } else if (here === 'day') {
-        setDate({ ...date, day: e.target.value });
-        let selectDate = date.year + '-' + date.month + '-' + date.day;
-        console.log(selectDate);
-        //페이지 이동하는 함수
+      } else {
+        //birthwikiHandler();
+        //포커스 날리기
       }
+      console.log(date.year + '-' + date.month + '-' + date.day);
     }
   };
 
@@ -104,7 +99,7 @@ export default function LaunchPage() {
     if (date.year !== '0' && date.month !== '0' && date.day !== '0') {
       window.location.href = `https://localhost:3000/main/${selectDate}`;
     } else {
-      alert(`${date.year}년 ${date.month}월 ${date.day}일 확인 후 다시 입력해주세요`);
+      setWarning(true);
     }
   };
 
@@ -164,6 +159,7 @@ export default function LaunchPage() {
       </InputContiner>
 
       <BirthwikiBtn onClick={birthwikiHandler}>Birth Wiki!</BirthwikiBtn>
+      {warning ? <div>날짜 제대로 입력하셈</div> : null}
     </LaunchScreen>
   );
 }
