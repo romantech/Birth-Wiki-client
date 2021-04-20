@@ -13,10 +13,11 @@ import SidebarSignUp from './components/SidebarSignUp';
 
 function App(): JSX.Element {
   const isSignup = useSelector((state: RootState) => state.signupReducer.isSignup);
+  const isLogin = useSelector((state: RootState) => state.loginReducer.isLogin);
 
   return (
     <Router>
-      <Nav />
+      <Nav isLogin={isLogin} />
       {isSignup ? (
         <SidebarSignUp />
       ) : (

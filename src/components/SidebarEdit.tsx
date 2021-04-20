@@ -38,6 +38,7 @@ function SidebarEdit() {
       history.goBack();
     }
   };
+
   return (
     <Background ref={EidtRef} onClick={closeEidt}>
       <ModalWrapper>

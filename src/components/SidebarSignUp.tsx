@@ -9,7 +9,7 @@ import { validateEmail, validatePassword, matchPassword, validateNickName } from
 import axios from 'axios';
 
 function SidebarSignUp() {
-  const sidebar = useSelector((state: RootState) => state.sidebarReducer.isSidebar);
+  const isSidebar = useSelector((state: RootState) => state.sidebarReducer.isSidebar);
   const dispatch = useDispatch();
 
   const [check, setCheck] = useState({
@@ -81,7 +81,7 @@ function SidebarSignUp() {
   const SigninRef: any = useRef<HTMLDivElement>(null);
   const closeSignin = (e: React.SyntheticEvent) => {
     if (SigninRef.current === (e.target as typeof e.target)) {
-      dispatch(setIsSidbar(!sidebar));
+      dispatch(setIsSidbar(!isSidebar));
       dispatch(setIsSignup(false));
     }
   };
