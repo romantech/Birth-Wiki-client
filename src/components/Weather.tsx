@@ -21,7 +21,6 @@ const Weather: React.FC = ({ match }: any) => {
   const [weather, setWeather] = useState(clear);
   const [text, setText] = useState('화창한');
   const [showCard, setShowCard] = useState(false);
-  const initData = useSelector((state: RootState) => state.dataReducer.data);
   const [data, setData] = useState(null);
   const [weatherData, setWeatherData] = useState(null);
 
@@ -38,8 +37,8 @@ const Weather: React.FC = ({ match }: any) => {
       }).then((response) => {
         setData(response.data.data);
         console.log(response.data.data);
-        setWeatherData(response.data.data.weatherCard[0]);
-        console.log(response.data.data.weatherCard[0]);
+        // setWeatherData(response.data.data.weatherCard[0]);
+        // console.log(response.data.data.weatherCard[0]);
       });
     };
     fetchData();
@@ -59,6 +58,7 @@ const Weather: React.FC = ({ match }: any) => {
       setWeather(cloud);
       setText('안개 끼는');
     }
+    // 햇무리 / 달무리 / 채운 / 우박 / 진눈깨비 / 눈 / 뇌전 / 비 / 안개 / 맑음
   }, [weatherData]);
 
   const Background = styled.div`
@@ -140,7 +140,6 @@ const Weather: React.FC = ({ match }: any) => {
       setShowCard(false);
     }
   };
-
   return (
     <>
       {data ? (

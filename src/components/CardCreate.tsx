@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
-import Dropzone, { IDropzoneProps, ILayoutProps } from 'react-dropzone-uploader';
 
 const CreateCard = styled.div`
   border-radius: 10px;
@@ -74,44 +73,32 @@ const CreateCard = styled.div`
     border-radius: 4px;
     font-weight: 700;
   }
+
+  & .invisable {
+    display: none;
+  }
 `;
-
-const Layout = ({
-  input,
-  previews,
-  submitButton,
-  dropzoneProps,
-  files,
-  extra: { maxFiles },
-}: ILayoutProps) => {
-  return (
-    <div>
-      {previews}
-
-      <div {...dropzoneProps}>{files.length < maxFiles && input}</div>
-
-      {files.length > 0 && submitButton}
-    </div>
-  );
-};
 
 function CardCreate() {
   return (
     <CreateCard>
       <div className='box create'>
         <h2>나의 기록카드 만들기</h2>
-        <form action='https://server.bitrhwiki.com/record/create' method='POST' encType='multipart/form-data'>
+        <iframe name='frAttachFiles' className='invisable'></iframe>
+        <form
+          target='frAttachFiles'
+          action='https://server.bitrhwiki.com/record/create'
+          method='POST'
+          encType='multipart/form-data'
+        >
           <div className='crtCard'>
-            {/* <div className='drop-zone'>
-              <Dropzone LayoutComponent={Layout} styles={{ dropzone: { minHeight: 100, maxHeight: 150 } }} />
-            </div> */}
             <label className='input-file-button' htmlFor='input-file'>
               이미지 업로드
             </label>
-            <input type='file' id='input-file' style={{ display: 'none' }} />
+            <input type='file' name='cardImage' id='input-file' />
           </div>
           <div className='crtCard'>
-            <input className='card-desc' placeholder='내용을 입력하세요' name='cardDesc' />
+            <input className='card-desc' name='cardDesc' placeholder='내용을 입력하세요' />
           </div>
           <div>
             <input type='submit' value='카드 생성' className='createBtn' />
