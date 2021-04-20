@@ -189,7 +189,7 @@ const SwiperCard = ({ issue, death, birth, music, culture }: any) => {
     & .content .cultureContent {
       display: flex;
       justify-content: center;
-      align-center: center;
+      align-content: center;
       flex-direction: row;
     }
 

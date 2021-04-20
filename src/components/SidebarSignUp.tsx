@@ -9,7 +9,7 @@ import { validateEmail, validatePassword, matchPassword, validateNickName } from
 import axios from 'axios';
 
 function SidebarSignUp() {
-  const isSidebar = useSelector((state: RootState) => state.sidebarReducer.isSidebar);
+  const sidebar = useSelector((state: RootState) => state.sidebarReducer.isSidebar);
   const dispatch = useDispatch();
 
   const [check, setCheck] = useState({
@@ -81,12 +81,12 @@ function SidebarSignUp() {
   const SigninRef: any = useRef<HTMLDivElement>(null);
   const closeSignin = (e: React.SyntheticEvent) => {
     if (SigninRef.current === (e.target as typeof e.target)) {
-      dispatch(setIsSidbar(!isSidebar));
+      dispatch(setIsSidbar(!sidebar));
       dispatch(setIsSignup(false));
     }
   };
 
-  useEffect(() => {
+  const checkedEmail = () => {
     if (check.userEmail) {
       axios({
         url: 'https://server.birthwiki.space/user/exist',
@@ -112,9 +112,8 @@ function SidebarSignUp() {
               });
         });
     }
-  }, [signUpInfo.userEmail]);
-
-  useEffect(() => {
+  };
+  const checkedNickName = () => {
     if (check.nickName) {
       axios({
         url: 'https://server.birthwiki.space/user/exist',
@@ -141,7 +140,7 @@ function SidebarSignUp() {
               });
         });
     }
-  }, [signUpInfo.nickName]);
+  };
 
   return (
     <Background ref={SigninRef} onClick={closeSignin}>
@@ -165,6 +164,7 @@ function SidebarSignUp() {
             onKeyUp={(e) => {
               inputHandler('userEmail', e);
             }}
+            onBlur={checkedEmail}
           />
           {check.userEmail ? (
             <Valid to='#'>
@@ -221,6 +221,7 @@ function SidebarSignUp() {
             onKeyUp={(e) => {
               inputHandler('nickName', e);
             }}
+            onBlur={checkedNickName}
           />
           {check.nickName ? (
             <Valid to='#'>

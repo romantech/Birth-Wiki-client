@@ -40,54 +40,53 @@ function SidebarEdit() {
   };
   return (
     <Background ref={EidtRef} onClick={closeEidt}>
-      {showModal ? (
-        <ModalWrapper>
-          <Title>회원 정보 수정</Title>
-          <SubTitle> 수정 사항을 입력하세요 </SubTitle>
-          <EditContainer>
-            <InputCatecory>프로필 변경</InputCatecory>
-            <InputField type='file' onChange={inputHandler('profileImage')} />
-            <InputCatecory>닉네임</InputCatecory>
-            <InputField
-              type='text'
-              value={editUserInfo.userNickName}
-              maxLength={10}
-              placeholder='한글만 입력 가능합니다'
-              onChange={inputHandler('userNickName')}
-            />
-            {validateNickName(editUserInfo.userNickName) ? (
-              <Valid to='#'>
-                <ColorIcon.FcApproval />
-              </Valid>
-            ) : (
-              <Invalid to='#'>
-                <ColorIcon.FcCancel />
-              </Invalid>
-            )}
-            <InputCatecory>password</InputCatecory>
-            <InputField
-              type='password'
-              placeholder='숫자와 영문을 포함해 최소 8자리'
-              maxLength={16}
-              onChange={inputHandler('password')}
-            />
-            {validatePassword(editUserInfo.password) ? (
-              <Valid to='#'>
-                <ColorIcon.FcApproval />
-              </Valid>
-            ) : (
-              <Invalid to='#'>
-                <ColorIcon.FcCancel />
-              </Invalid>
-            )}
-            <InputCatecory>password 확인 </InputCatecory>
-            <InputField
-              type='password'
-              maxLength={16}
-              placeholder='위와 동일한 비밀번호 입력'
-              onChange={inputHandler('password2')}
-            />
-            {/* {matchPassword(editUserInfo.password, editUserInfo.password2) ? (
+      <ModalWrapper>
+        <Title>회원 정보 수정</Title>
+        <SubTitle> 수정 사항을 입력하세요 </SubTitle>
+        <EditContainer>
+          <InputCatecory>프로필 변경</InputCatecory>
+          <InputField type='file' onChange={inputHandler('profileImage')} />
+          <InputCatecory>닉네임</InputCatecory>
+          <InputField
+            type='text'
+            value={editUserInfo.userNickName}
+            maxLength={10}
+            placeholder='한글만 입력 가능합니다'
+            onChange={inputHandler('userNickName')}
+          />
+          {validateNickName(editUserInfo.userNickName) ? (
+            <Valid to='#'>
+              <ColorIcon.FcApproval />
+            </Valid>
+          ) : (
+            <Invalid to='#'>
+              <ColorIcon.FcCancel />
+            </Invalid>
+          )}
+          <InputCatecory>password</InputCatecory>
+          <InputField
+            type='password'
+            placeholder='숫자와 영문을 포함해 최소 8자리'
+            maxLength={16}
+            onChange={inputHandler('password')}
+          />
+          {validatePassword(editUserInfo.password) ? (
+            <Valid to='#'>
+              <ColorIcon.FcApproval />
+            </Valid>
+          ) : (
+            <Invalid to='#'>
+              <ColorIcon.FcCancel />
+            </Invalid>
+          )}
+          <InputCatecory>password 확인 </InputCatecory>
+          <InputField
+            type='password'
+            maxLength={16}
+            placeholder='위와 동일한 비밀번호 입력'
+            onChange={inputHandler('password2')}
+          />
+          {/* {matchPassword(editUserInfo.password, editUserInfo.password2) ? (
               <Valid to='#'>
                 <ColorIcon.FcApproval />
               </Valid>
@@ -96,12 +95,11 @@ function SidebarEdit() {
                 <ColorIcon.FcCancel />
               </Invalid>
             )} */}
-            <EditSubmit type='submit' onClick={editSubmitHandler}>
-              수정
-            </EditSubmit>
-          </EditContainer>
-        </ModalWrapper>
-      ) : null}
+          <EditSubmit type='submit' onClick={editSubmitHandler}>
+            수정
+          </EditSubmit>
+        </EditContainer>
+      </ModalWrapper>
     </Background>
   );
 }

@@ -83,9 +83,9 @@ function SidebarLogin() {
       console.log(res.data.data);
       dispatch(setUserInfo(res.data.data));
       dispatch(setIsLogin(true));
-    } catch (error) {
-      console.log(error);
-      return !error.response
+    } catch (err) {
+      console.log(err);
+      return !err.response
         ? setLoginInfo({
             ...loginInfo,
             errorMsg: '❗️ 서버 오류, 잠시 후 다시 시도해주세요',
