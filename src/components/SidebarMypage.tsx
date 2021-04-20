@@ -222,7 +222,7 @@ function SidebarMypage() {
       <ProfileContainer>
         <Profile>
           {userInfo.profileImage ? (
-            <UserPoto src={`https://server.birthwiki.space/${userInfo.profileImage}`}></UserPoto>
+            <UserPoto src={`${userInfo.profileImage}`}></UserPoto>
           ) : (
             <UserPoto src={`${process.env.PUBLIC_URL}img/profile.png`}></UserPoto>
           )}

@@ -41,7 +41,7 @@ function Nav() {
         //setAt(res.data.data.accessToken)
       });
     }
-  });
+  }, []);
 
   return (
     <Navbar>
