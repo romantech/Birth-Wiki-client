@@ -150,10 +150,10 @@ const Card = (props: any) => {
       ){/* swiper_Modal */}
       {showCard ? (
         <CardBg ref={cardRef} onClick={closeCard}>
-          <SwiperCard issue={issue} music={music} culture={culture} birth={birth} death={death} />
-          {/* <animated.div style={animation}>
+          {/* <SwiperCard issue={issue} music={music} culture={culture} birth={birth} death={death} /> */}
+          <animated.div style={animation}>
             <SwiperCard issue={issue} music={music} culture={culture} birth={birth} death={death} />
-          </animated.div> */}
+          </animated.div>
         </CardBg>
       ) : null}
       {/* swiper_Modal */}
