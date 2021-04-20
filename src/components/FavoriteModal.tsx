@@ -52,12 +52,12 @@ const FavoriteModal = ({ showModal, setShowModal, imgPath, issue, category, date
               <ModalImg src={imgPath} alt='Selected Image' />
               <ModalContent>
                 <div>
-                  <h1>{date}</h1>
+                  <h1>{date.split('-')[0] + '월' + ' ' + date.split('-')[1] + '일'}</h1>
                   <h3>{category}</h3>
                 </div>
                 <div>
-                  {issue.map((issue) => (
-                    <p key={issue.split('-')[0].trim()}>{issue}</p>
+                  {issue.map((issue, index) => (
+                    <p key={index}>{issue}</p>
                   ))}
                 </div>
                 <IconWrapper>

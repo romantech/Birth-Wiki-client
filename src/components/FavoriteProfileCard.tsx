@@ -33,7 +33,6 @@ const ProfileImg = styled.img.attrs<ImgPath>(({ imgPath }) => ({
 `;
 
 const ProfileCard = ({ ...props }: UserProfileCard): JSX.Element => {
-  console.log(props);
   return (
     <CardWrapper>
       <ProfileImg imgPath={props.profileImage} />

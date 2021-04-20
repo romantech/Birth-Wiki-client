@@ -24,7 +24,7 @@ const FavoriteShareModal = ({ shareModal, setShareModal, xyPosition }: Props) =>
       {shareModal ? (
         <animated.div style={animation}>
           <ModalWrapper xyPosition={xyPosition} onMouseLeave={() => setShareModal((prev) => !prev)}>
-            in development...
+            🚀 in development...
           </ModalWrapper>
         </animated.div>
       ) : null}

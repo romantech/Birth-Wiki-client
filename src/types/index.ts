@@ -13,12 +13,13 @@ export interface UserInfo {
   recordCard?: Array<string>;
 }
 
-export interface GeneralCard {
+export interface LikeCards {
   id: number;
   date: string;
   category: string;
   contents: string[];
   image: string;
+  mediaCategory: string[];
 }
 
 export interface UserProfileCard {

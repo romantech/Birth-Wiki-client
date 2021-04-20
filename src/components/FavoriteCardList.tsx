@@ -3,7 +3,7 @@ import styled, { css } from 'styled-components';
 import { FiHeart, FiShare } from 'react-icons/fi';
 import FavoriteModal from '../components/FavoriteModal';
 import FavoriteShareModal from '../components/FavoriteShareModal';
-import { GeneralCard } from '../types/index';
+import { LikeCards } from '../types/index';
 import getVerticalImg from '../utils/resizeImage';
 
 interface Props {
@@ -13,7 +13,13 @@ interface Props {
   };
 }
 
-const FavoriteCardList = ({ category, image: imgPath, contents, date }: GeneralCard): JSX.Element => {
+const FavoriteCardList = ({
+  category,
+  image: imgPath,
+  contents,
+  date,
+  mediaCategory,
+}: LikeCards): JSX.Element => {
   const shareRef = useRef<HTMLDivElement>(null);
 
   // const { webformatURL, tags } = item;
@@ -41,16 +47,15 @@ const FavoriteCardList = ({ category, image: imgPath, contents, date }: GeneralC
     });
   };
 
-  const reSizedImg = getVerticalImg(imgPath);
+  imgPath.includes('unsplash') ? (imgPath = getVerticalImg(imgPath)) : imgPath;
 
   return (
     <>
       <FlipCard>
-        <FlipCardInner imgPath={reSizedImg}>
+        <FlipCardInner imgPath={imgPath}>
           <FlipCardFront>
-            {/* <CardYear>1984</CardYear> */}
             <CategoryName>{category}</CategoryName>
-            <img src={reSizedImg} alt={category} />
+            <img src={imgPath} alt={category} />
           </FlipCardFront>
           <FlipCardBack>
             <IconWrapper>
@@ -61,10 +66,10 @@ const FavoriteCardList = ({ category, image: imgPath, contents, date }: GeneralC
                 <ShareIcon />
               </IconCircle>
             </IconWrapper>
-            <h2>{date}</h2>
+            <h2>{date.split('-')[0] + '월' + date.split('-')[1] + '일'}</h2>
             <li />
-            {contents.map((issue) => (
-              <p key={issue.split('-')[0].trim()}>{issue}</p>
+            {contents.map((issue, index) => (
+              <p key={index}>{issue}</p>
             ))}
             <ModalView onClick={openModal}>크게보기</ModalView>
           </FlipCardBack>
@@ -76,7 +81,7 @@ const FavoriteCardList = ({ category, image: imgPath, contents, date }: GeneralC
         xyPosition={xyPosition}
       ></FavoriteShareModal>
       <FavoriteModal
-        imgPath={reSizedImg}
+        imgPath={imgPath}
         showModal={showModal}
         setShowModal={setShowModal}
         issue={contents}
