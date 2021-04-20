@@ -1,5 +1,9 @@
 export default [
   {
+    categoryName: 'ALL',
+    imagePath: '/img/all.jpg',
+  },
+  {
     categoryName: 'MOVIE',
     imagePath: '/img/movie.jpg',
   },

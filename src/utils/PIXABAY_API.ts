@@ -16,6 +16,14 @@ const PIXABAY_API = axios.create({
 
 export default PIXABAY_API;
 
+// interface FetchImages {
+//   data: string[];
+//   id: number;
+//   webformatURL: string;
+//   tags: string;
+//   imgUrl: string;
+// }
+
 // let pageNumber = 1;
 
 // interface FetchImages {

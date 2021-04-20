@@ -93,6 +93,123 @@ export default {
         date: '5-9',
         image:
           'https://images.unsplash.com/photo-1611699674202-be830f4c0cc2?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwyMjM3NzB8MHwxfHNlYXJjaHwxMzR8fGJhYnl8ZW58MHx8fHwxNjE4NTg2ODI1&ixlib=rb-1.2.1&q=80&w=1080',
+        category: 'deaths',
+        contents: [
+          '1월 17일 - 노르웨이의 국왕 올라프 5세.',
+          '1월 30일 - 미국의 물리학자 존 바딘.',
+          '2월 20일 - 캐나다의 정치철학자 유진 포시.',
+          '4월 16일 - 영국의 영화 감독 데이비드 린.',
+          '4월 26일 - 대한민국의 열사이자 학생운동가 강경대.',
+        ],
+      },
+      {
+        id: 280,
+        date: '4-3',
+        image:
+          'https://images.unsplash.com/photo-1453090927415-5f45085b65c0?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwyMjM3NzB8MHwxfHNlYXJjaHw5N3x8bmV3c3xlbnwwfHx8fDE2MTg1ODY4MjM&ixlib=rb-1.2.1&q=80&w=1080',
+        category: 'movie',
+        contents: [
+          '1월 2일 - 대한민국의 전 가수 유지.',
+          '1월 11일 - 대한민국의 가수 효린 (씨스타).',
+          '1월 17일 - 대한민국의 가수 기섭 (유키스).',
+          '2월 24일 - 대한민국의 배우 나혜미.',
+          '4월 2일 - 대한민국의 프로게이머 김상욱.',
+          '8월 5일 - 오스트리아의 축구 선수 안드레아스 바이만.',
+        ],
+      },
+      {
+        id: 389,
+        date: '5-9',
+        image:
+          'https://images.unsplash.com/photo-1611699674202-be830f4c0cc2?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwyMjM3NzB8MHwxfHNlYXJjaHwxMzR8fGJhYnl8ZW58MHx8fHwxNjE4NTg2ODI1&ixlib=rb-1.2.1&q=80&w=1080',
+        category: 'deaths',
+        contents: [
+          '1월 17일 - 노르웨이의 국왕 올라프 5세.',
+          '1월 30일 - 미국의 물리학자 존 바딘.',
+          '2월 20일 - 캐나다의 정치철학자 유진 포시.',
+          '4월 16일 - 영국의 영화 감독 데이비드 린.',
+          '4월 26일 - 대한민국의 열사이자 학생운동가 강경대.',
+        ],
+      },
+      {
+        id: 280,
+        date: '4-3',
+        image:
+          'https://images.unsplash.com/photo-1453090927415-5f45085b65c0?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwyMjM3NzB8MHwxfHNlYXJjaHw5N3x8bmV3c3xlbnwwfHx8fDE2MTg1ODY4MjM&ixlib=rb-1.2.1&q=80&w=1080',
+        category: 'movie',
+        contents: [
+          '1월 2일 - 대한민국의 전 가수 유지.',
+          '1월 11일 - 대한민국의 가수 효린 (씨스타).',
+          '1월 17일 - 대한민국의 가수 기섭 (유키스).',
+          '2월 24일 - 대한민국의 배우 나혜미.',
+          '4월 2일 - 대한민국의 프로게이머 김상욱.',
+          '8월 5일 - 오스트리아의 축구 선수 안드레아스 바이만.',
+        ],
+      },
+      {
+        id: 389,
+        date: '5-9',
+        image:
+          'https://images.unsplash.com/photo-1611699674202-be830f4c0cc2?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwyMjM3NzB8MHwxfHNlYXJjaHwxMzR8fGJhYnl8ZW58MHx8fHwxNjE4NTg2ODI1&ixlib=rb-1.2.1&q=80&w=1080',
+        category: 'deaths',
+        contents: [
+          '1월 17일 - 노르웨이의 국왕 올라프 5세.',
+          '1월 30일 - 미국의 물리학자 존 바딘.',
+          '2월 20일 - 캐나다의 정치철학자 유진 포시.',
+          '4월 16일 - 영국의 영화 감독 데이비드 린.',
+          '4월 26일 - 대한민국의 열사이자 학생운동가 강경대.',
+        ],
+      },
+      {
+        id: 280,
+        date: '4-3',
+        image:
+          'https://images.unsplash.com/photo-1453090927415-5f45085b65c0?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwyMjM3NzB8MHwxfHNlYXJjaHw5N3x8bmV3c3xlbnwwfHx8fDE2MTg1ODY4MjM&ixlib=rb-1.2.1&q=80&w=1080',
+        category: 'births',
+        contents: [
+          '1월 2일 - 대한민국의 전 가수 유지.',
+          '1월 11일 - 대한민국의 가수 효린 (씨스타).',
+          '1월 17일 - 대한민국의 가수 기섭 (유키스).',
+          '2월 24일 - 대한민국의 배우 나혜미.',
+          '4월 2일 - 대한민국의 프로게이머 김상욱.',
+          '8월 5일 - 오스트리아의 축구 선수 안드레아스 바이만.',
+        ],
+      },
+      {
+        id: 389,
+        date: '5-9',
+        image:
+          'https://images.unsplash.com/photo-1611699674202-be830f4c0cc2?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwyMjM3NzB8MHwxfHNlYXJjaHwxMzR8fGJhYnl8ZW58MHx8fHwxNjE4NTg2ODI1&ixlib=rb-1.2.1&q=80&w=1080',
+        category: 'deaths',
+        contents: [
+          '1월 17일 - 노르웨이의 국왕 올라프 5세.',
+          '1월 30일 - 미국의 물리학자 존 바딘.',
+          '2월 20일 - 캐나다의 정치철학자 유진 포시.',
+          '4월 16일 - 영국의 영화 감독 데이비드 린.',
+          '4월 26일 - 대한민국의 열사이자 학생운동가 강경대.',
+        ],
+      },
+      {
+        id: 280,
+        date: '4-3',
+        image:
+          'https://images.unsplash.com/photo-1453090927415-5f45085b65c0?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwyMjM3NzB8MHwxfHNlYXJjaHw5N3x8bmV3c3xlbnwwfHx8fDE2MTg1ODY4MjM&ixlib=rb-1.2.1&q=80&w=1080',
+        category: 'deaths',
+        contents: [
+          '1월 2일 - 대한민국의 전 가수 유지.',
+          '1월 11일 - 대한민국의 가수 효린 (씨스타).',
+          '1월 17일 - 대한민국의 가수 기섭 (유키스).',
+          '2월 24일 - 대한민국의 배우 나혜미.',
+          '4월 2일 - 대한민국의 프로게이머 김상욱.',
+          '8월 5일 - 오스트리아의 축구 선수 안드레아스 바이만.',
+        ],
+      },
+
+      {
+        id: 389,
+        date: '5-9',
+        image:
+          'https://images.unsplash.com/photo-1611699674202-be830f4c0cc2?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwyMjM3NzB8MHwxfHNlYXJjaHwxMzR8fGJhYnl8ZW58MHx8fHwxNjE4NTg2ODI1&ixlib=rb-1.2.1&q=80&w=1080',
         category: 'birth',
         contents: [
           '1월 17일 - 노르웨이의 국왕 올라프 5세.',

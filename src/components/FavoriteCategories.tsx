@@ -1,5 +1,48 @@
 import React from 'react';
 import styled from 'styled-components';
+import { LikeCards } from '../types';
+
+interface Props {
+  category: {
+    categoryName: string;
+    imagePath: string;
+  };
+  selected: string;
+  generalCategory: LikeCards[];
+  setFilteredArray: React.Dispatch<React.SetStateAction<LikeCards[]>>;
+  setRenderArray: React.Dispatch<React.SetStateAction<LikeCards[]>>;
+}
+
+const FavoriteCategories = ({
+  category,
+  selected,
+  setFilteredArray,
+  generalCategory,
+  setRenderArray,
+}: Props): JSX.Element => {
+  const { imagePath, categoryName } = category;
+
+  const handleClick = (categoryName: string) => {
+    setRenderArray([]);
+    if (categoryName.toLowerCase() === 'all') {
+      return setFilteredArray(generalCategory);
+    } else {
+      setFilteredArray(generalCategory.filter((el) => el.category === categoryName.toLowerCase()));
+    }
+  };
+
+  return (
+    <Wrapper>
+      <Category
+        className={`menu-item ${selected ? 'active' : ''}`}
+        imagePath={imagePath}
+        onClick={() => handleClick(categoryName)}
+      >
+        {categoryName}
+      </Category>
+    </Wrapper>
+  );
+};
 
 const Wrapper = styled.div`
   /* min-width: 20%;
@@ -68,25 +111,5 @@ const Category = styled.button<{ imagePath: string }>`
     font-size: 1.2rem;
   }
 `;
-
-interface Props {
-  category: {
-    categoryName: string;
-    imagePath: string;
-  };
-  selected: string;
-}
-
-const FavoriteCategories = ({ category, selected }: Props): JSX.Element => {
-  const { imagePath, categoryName } = category;
-
-  return (
-    <Wrapper>
-      <Category className={`menu-item ${selected ? 'active' : ''}`} imagePath={imagePath}>
-        {categoryName}
-      </Category>
-    </Wrapper>
-  );
-};
 
 export default FavoriteCategories;

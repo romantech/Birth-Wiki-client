@@ -7,22 +7,12 @@ import ScrollMenu from 'react-horizontal-scrolling-menu';
 import FavoriteCategories from '../components/FavoriteCategories';
 import FavoriteCardList from '../components/FavoriteCardList';
 import categories from '../utils/categories';
-import PIXABAY_API from '../utils/PIXABAY_API';
 import ProfileCard from '../components/FavoriteProfileCard';
 import { useSelector } from 'react-redux';
 import { RootState } from '../store';
 import { LikeCards } from '../types/index';
 import { ArrowLeft, ArrowRight } from '../components/ArrowIcon';
 import { FaArrowCircleUp } from 'react-icons/fa';
-
-// 테스트용
-interface FetchImages {
-  data: string[];
-  id: number;
-  webformatURL: string;
-  tags: string;
-  imgUrl: string;
-}
 
 interface Selected {
   selected: string | number | null;
@@ -40,9 +30,8 @@ const FavoritePage = (): JSX.Element => {
     (el: { category: string }) => el.category === 'music' || el.category === 'movie',
   );
 
-  console.log(generalCategory);
-
-  const [imagesArray, setImagesArray] = useState<LikeCards[]>([]);
+  const [renderArray, setRenderArray] = useState<LikeCards[]>([]);
+  const [filteredArray, setFilteredArray] = useState<LikeCards[]>(generalCategory);
   const [selected, setSelected] = useState<Selected>({ selected: '' });
 
   const onSelect = (key: string | number | null) => {
@@ -50,17 +39,25 @@ const FavoritePage = (): JSX.Element => {
   };
 
   const getLikeCards = (start: number, end: number) => {
-    const sliced = generalCategory.slice(start, end);
+    const sliced = filteredArray.slice(start, end);
     sliceStart = sliceEnd;
     sliceEnd += 11;
-    setImagesArray(imagesArray.concat(...sliced));
+    if (sliced.length) {
+      setRenderArray(renderArray.concat(sliced));
+    }
   };
 
   useEffect(() => {
-    if (!imagesArray.length) {
+    if (renderArray.length === 0) {
+      sliceStart = 0;
+      sliceEnd = 11;
       getLikeCards(sliceStart, sliceEnd);
     }
-  });
+    return () => {
+      sliceStart = 0;
+      sliceEnd = 11;
+    };
+  }, [renderArray]);
 
   const breakPoints = {
     default: 6,
@@ -81,6 +78,9 @@ const FavoritePage = (): JSX.Element => {
               selected={(selected as unknown) as string}
               category={category}
               key={category.categoryName}
+              setFilteredArray={setFilteredArray}
+              generalCategory={generalCategory}
+              setRenderArray={setRenderArray}
             />
           ))}
           arrowLeft={ArrowLeft}
@@ -92,9 +92,9 @@ const FavoritePage = (): JSX.Element => {
       <li />
       <h1 className='Favorite-H1'>YOUR CARDS</h1>
       <InfiniteScroll
-        dataLength={imagesArray.length}
+        dataLength={renderArray.length}
         next={() => setTimeout(() => getLikeCards(sliceStart, sliceEnd), 1500)}
-        hasMore={imagesArray.length < generalCategory.length}
+        hasMore={renderArray.length < filteredArray.length}
         loader={<Loader />}
         endMessage={
           <p style={{ textAlign: 'center' }}>
@@ -113,7 +113,7 @@ const FavoritePage = (): JSX.Element => {
               likeCards={userInfo.likeCards.length}
               profileImage={userInfo.profileImage}
             />
-            {imagesArray.map((card, index) => (
+            {renderArray.map((card, index) => (
               <FavoriteCardList
                 id={card.id}
                 date={card.date}
