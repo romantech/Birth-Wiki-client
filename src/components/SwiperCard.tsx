@@ -1,8 +1,13 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import { Swiper, SwiperSlide } from 'swiper/react'; //@types-swiper도 같이 설치...
-import SwiperCore, { A11y, EffectCoverflow } from 'swiper';
+import SwiperCore, { A11y, EffectCoverflow, Navigation } from 'swiper';
 import CardCreate from './CardCreate';
+import { FaBars } from 'react-icons/fa';
+import { FcLike } from 'react-icons/fc';
+
+import { useSelector, useDispatch } from 'react-redux';
+import { RootState } from '../store/index';
 
 // Import Swiper styles
 import 'swiper/swiper.scss'; // npm install node-sass
@@ -10,21 +15,20 @@ import 'swiper/components/navigation/navigation.scss';
 import 'swiper/components/pagination/pagination.scss';
 import { url } from 'node:inspector';
 
-SwiperCore.use([A11y, EffectCoverflow]);
+SwiperCore.use([A11y, EffectCoverflow, Navigation]);
 //data
+
 const SwiperCard = ({ issue, death, birth, music, culture }: any) => {
   // const data = Object.entries(props.data);
-  console.log(issue[0]);
-  console.log(death.slice(1, death.length - 1));
-  console.log(birth.slice(1, birth.length - 1));
-  console.log(music[1][1]);
-  console.log(culture);
+  // console.log(issue[0]);
+  // console.log(death.slice(1, death.length - 1));
+  // console.log(birth.slice(1, birth.length - 1));
+  // console.log(music[1][1]);
+  // console.log(culture);
+  console.log(music.world.poster);
+  console.log(culture.world.poster);
 
-  const listDeath = death.slice(1, death.length - 1);
-  const listBirth = birth.slice(1, birth.length - 1);
-  const listCulture = culture[0];
-  console.log(listCulture);
-  const listIssue = issue.slice(1, issue.length - 1);
+  const isLogin = useSelector((state: RootState) => state.loginReducer.isLogin);
 
   const CardWrapper = styled.div`
     width: 85vw;
@@ -185,7 +189,7 @@ const SwiperCard = ({ issue, death, birth, music, culture }: any) => {
     & .content .cultureContent {
       display: flex;
       justify-content: center;
-      align-center: center;
+      align-content: center;
       flex-direction: row;
     }
 
@@ -215,19 +219,27 @@ const SwiperCard = ({ issue, death, birth, music, culture }: any) => {
 
   return (
     <CardWrapper>
-      <Swiper spaceBetween={30} slidesPerView={3} loop={true} effect='coverflow'>
+      <Swiper
+        spaceBetween={30}
+        slidesPerView={3}
+        loop={true}
+        onSwiper={(swiper) => console.log(swiper)}
+        effect='coverflow'
+        navigation
+      >
         <SwiperSlide className='SwipierSlide'>
           <SlideCard>
             <div className='box'>
+              <FcLike />
               <div className='imgBx'>
-                <img src={`${issue[0]}`} alt='' />
+                <img src={`${issue.image}`} alt='' />
               </div>
               <div className='content'>
                 <div>
                   <h2>이날, 이때 사건들</h2>
                   <p>
                     <ul>
-                      {listIssue.map((list: any, i: any) => {
+                      {issue.contents.map((list: any, i: any) => {
                         return (
                           <li key={i}>
                             <span className='year'>{list[0]}</span> : <span>{list[1]}</span>
@@ -245,14 +257,14 @@ const SwiperCard = ({ issue, death, birth, music, culture }: any) => {
           <SlideCard>
             <div className='box'>
               <div className='imgBx'>
-                <img src={`${birth[0]}`} alt='' />
+                <img src={`${birth.image}`} alt='' />
               </div>
               <div className='content'>
                 <div>
                   <h2>이날, 이때 태어난 사람들</h2>
                   <p>
                     <ul>
-                      {listBirth.map((list: any, i: any) => {
+                      {birth.contents.map((list: any, i: any) => {
                         return (
                           <li key={i}>
                             <span className='year'>{list[0]}</span> : <span>{list[1]}</span>
@@ -270,7 +282,7 @@ const SwiperCard = ({ issue, death, birth, music, culture }: any) => {
           <SlideCard>
             <div className='box'>
               <div className='imgBx'>
-                <img src={`${culture[0]}`} alt='' />
+                <img src={`${culture.image}`} alt='' />
               </div>
               <div className='content'>
                 <div>
@@ -279,14 +291,14 @@ const SwiperCard = ({ issue, death, birth, music, culture }: any) => {
                     <ul className='cultureContent'>
                       <li className='cultureList'>
                         <h4>
-                          {music[1][0]}, <br /> {music[1][2]}
+                          {music.world.title}, <br /> {music.world.singer}
                         </h4>
                         <span></span>
-                        <img src={`${music[1][1]}`} alt={music[1][0]} />
+                        <img src={`${music.world.poster}`} alt={music.world.title} />
                       </li>
                       <li className='cultureList'>
-                        <h4>{culture[1][0]}</h4>
-                        <img src={`${culture[1][1]}`} alt={culture[1][0]} />
+                        <h4>{culture.world.title}</h4>
+                        <img src={`${culture.world.poster}`} alt={`${culture.world.title}`} />
                       </li>
                     </ul>
                   </p>
@@ -295,18 +307,18 @@ const SwiperCard = ({ issue, death, birth, music, culture }: any) => {
             </div>
           </SlideCard>
         </SwiperSlide>
-        <SwiperSlide style={{ backgroundImage: `url(${death[0]})` }} className='SwipierSlide'>
+        <SwiperSlide className='SwipierSlide'>
           <SlideCard>
             <div className='box'>
               <div className='imgBx'>
-                <img src={`${death[0]}`} alt='' />
+                <img src={`${death.image}`} alt='' />
               </div>
               <div className='content'>
                 <div>
                   <h2>이날, 이때 돌아가신 사람들</h2>
                   <p>
                     <ul>
-                      {listDeath.map((list: any, i: any) => {
+                      {death.contents.map((list: any, i: any) => {
                         return (
                           <li key={i}>
                             <span className='year'>{list[0]}</span> : <span>{list[1]}</span>
@@ -320,11 +332,13 @@ const SwiperCard = ({ issue, death, birth, music, culture }: any) => {
             </div>
           </SlideCard>
         </SwiperSlide>
-        <SwiperSlide>
+        {isLogin ? (
           <SwiperSlide>
-            <CardCreate />
+            <SwiperSlide>
+              <CardCreate />
+            </SwiperSlide>
           </SwiperSlide>
-        </SwiperSlide>
+        ) : null}
       </Swiper>
     </CardWrapper>
   );
