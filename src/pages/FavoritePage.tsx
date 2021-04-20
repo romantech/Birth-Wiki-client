@@ -11,6 +11,7 @@ import PIXABAY_API from '../utils/PIXABAY_API';
 import ProfileCard from '../components/FavoriteProfileCard';
 import { useSelector } from 'react-redux';
 import { RootState } from '../store';
+import { GeneralCard } from '../types/index';
 import { ArrowLeft, ArrowRight } from '../components/ArrowIcon';
 import { FaArrowCircleUp } from 'react-icons/fa';
 
@@ -23,21 +24,17 @@ interface FetchImages {
   imgUrl: string;
 }
 
-export interface CardData {
-  id: number;
-  category: string;
-  title: string;
-  content: string[];
-  img: string;
-}
-
 interface Selected {
   selected: string | number | null;
 }
 
 let pageNumber = 1;
 const FavoritePage = (): JSX.Element => {
-  const { data: cardData } = useSelector((state: RootState) => state.dataReducer);
+  const { userInfo } = useSelector((state: RootState) => state.userInfoReducer);
+  const { likeCards } = userInfo;
+  const GeneralCategory = likeCards.filter(
+    (el: { category: string }) => el.category !== 'music' && el.category !== 'movie',
+  );
 
   const [imagesArray, setImagesArray] = useState<FetchImages[]>([]);
   const [totalPages, setTotalPages] = useState(0);
@@ -110,15 +107,19 @@ const FavoritePage = (): JSX.Element => {
             className='masonry-grid'
             columnClassName='masonry-grid_column'
           >
-            <ProfileCard />
-            {cardData.map((card) => (
+            <ProfileCard
+              userNickName={userInfo.userNickName}
+              likeCards={userInfo.likeCards.length}
+              profileImage={userInfo.profileImage}
+            />
+            {GeneralCategory.map((card: GeneralCard) => (
               <FavoriteCardList
-                category={card.category}
                 id={card.id}
-                img={card.img}
-                title={card.title}
+                date={card.date}
+                category={card.category}
+                image={card.image}
                 key={card.id}
-                content={card.content}
+                contents={card.contents}
               />
             ))}
           </Masonry>

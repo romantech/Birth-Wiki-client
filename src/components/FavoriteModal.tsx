@@ -10,9 +10,10 @@ interface Props {
   imgPath: string;
   issue: string[];
   category: string;
+  date: string;
 }
 
-const FavoriteModal = ({ showModal, setShowModal, imgPath, issue, category }: Props): JSX.Element => {
+const FavoriteModal = ({ showModal, setShowModal, imgPath, issue, category, date }: Props): JSX.Element => {
   const modalRef = useRef<HTMLDivElement>(null);
   const animation = useSpring({
     config: {
@@ -51,7 +52,7 @@ const FavoriteModal = ({ showModal, setShowModal, imgPath, issue, category }: Pr
               <ModalImg src={imgPath} alt='Selected Image' />
               <ModalContent>
                 <div>
-                  <h1>1984</h1>
+                  <h1>{date}</h1>
                   <h3>{category}</h3>
                 </div>
                 <div>

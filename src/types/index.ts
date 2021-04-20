@@ -13,4 +13,18 @@ export interface UserInfo {
   recordCard?: Array<string>;
 }
 
+export interface GeneralCard {
+  id: number;
+  date: string;
+  category: string;
+  contents: string[];
+  image: string;
+}
+
+export interface UserProfileCard {
+  userNickName: string;
+  likeCards: Array<string>;
+  profileImage: string;
+}
+
 export type BirthwikiType = UserInfo | IsLogin;

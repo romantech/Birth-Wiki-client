@@ -67,21 +67,84 @@ export default {
   userInfo: {
     userEmail: 'test1@naver.com',
     password: '1234qwer',
-    userNickName: 'test',
+    userNickName: 'TestUser',
     profileImage: `${process.env.PUBLIC_URL}/img/profile.png`,
     source: 'home',
     accessToken: '',
-    likeCard: ['1999-08-02', '1993-01-12', '1994-01-14'],
-    recordCard: [
+    likeCards: [
       {
-        date: '1999-01-01',
-        img: '',
-        text: '',
+        id: 280,
+        date: '4-3',
+        image:
+          'https://images.unsplash.com/photo-1453090927415-5f45085b65c0?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwyMjM3NzB8MHwxfHNlYXJjaHw5N3x8bmV3c3xlbnwwfHx8fDE2MTg1ODY4MjM&ixlib=rb-1.2.1&q=80&w=1080',
+        category: 'issue',
+        contents: [
+          '1월 2일 - 대한민국의 전 가수 유지.',
+          '1월 11일 - 대한민국의 가수 효린 (씨스타).',
+          '1월 17일 - 대한민국의 가수 기섭 (유키스).',
+          '2월 24일 - 대한민국의 배우 나혜미.',
+          '4월 2일 - 대한민국의 프로게이머 김상욱.',
+          '8월 5일 - 오스트리아의 축구 선수 안드레아스 바이만.',
+        ],
+      },
+
+      {
+        id: 389,
+        date: '5-9',
+        image:
+          'https://images.unsplash.com/photo-1611699674202-be830f4c0cc2?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwyMjM3NzB8MHwxfHNlYXJjaHwxMzR8fGJhYnl8ZW58MHx8fHwxNjE4NTg2ODI1&ixlib=rb-1.2.1&q=80&w=1080',
+        category: 'birth',
+        contents: [
+          '1월 17일 - 노르웨이의 국왕 올라프 5세.',
+          '1월 30일 - 미국의 물리학자 존 바딘.',
+          '2월 20일 - 캐나다의 정치철학자 유진 포시.',
+          '4월 16일 - 영국의 영화 감독 데이비드 린.',
+          '4월 26일 - 대한민국의 열사이자 학생운동가 강경대.',
+        ],
       },
       {
-        date: '1999-08-02',
-        img: '',
-        text: '',
+        id: 5924,
+        date: '2015-12',
+        image:
+          'https://images.unsplash.com/photo-1567771736278-1f625771edab?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwyMjM3NzN8MHwxfHNlYXJjaHwxNzg0fHxtdXNpY3xlbnwwfHx8fDE2MTg2MzQyODA&ixlib=rb-1.2.1&q=80&w=1080',
+        category: 'music',
+        world: {
+          title: 'See You Again',
+          poster: 'https://charts-static.billboard.com/img/2015/03/wiz-khalifa-b1e-155x155.jpg',
+          singer: 'Wiz Khalifa Featuring Charlie Puth',
+        },
+        korea: {
+          title: 'LOSER',
+          poster: 'https://image.bugsm.co.kr/album/images/original/5010/501044.jpg?version=20190821040258.0',
+          singer: '빅뱅',
+        },
+      },
+      {
+        id: 8821,
+        date: '2012-12',
+        image:
+          'https://images.unsplash.com/photo-1537730218081-0f3bcaee807c?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwyMjM3NzN8MHwxfHNlYXJjaHwxNzg0fHxtb3ZpZSUyMG5pZ2h0fGVufDB8fHx8MTYxODU4Njg5OQ&ixlib=rb-1.2.1&q=80&w=1080',
+        category: 'movie',
+        world: {
+          title: 'Platoon',
+          poster: 'https://www.themoviedb.org/t/p/w600_and_h900_bestv2/m3mmFkPQKvPZq5exmh0bDuXlD9T.jpg',
+        },
+      },
+    ],
+    recordCard: [
+      {
+        id: 1,
+        date: '2014-4-8',
+        cardImage: '',
+        cardDesc: '기록합니다1',
+        privacy: false,
+      },
+      {
+        id: 2,
+        date: '2002-4-8',
+        cardImage: '',
+        cardDesc: '기록합니다2',
+        privacy: false,
       },
     ],
   },

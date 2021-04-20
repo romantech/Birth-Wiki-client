@@ -3,7 +3,8 @@ import styled, { css } from 'styled-components';
 import { FiHeart, FiShare } from 'react-icons/fi';
 import FavoriteModal from '../components/FavoriteModal';
 import FavoriteShareModal from '../components/FavoriteShareModal';
-import { CardData } from '../pages/FavoritePage';
+import { GeneralCard } from '../types/index';
+import getVerticalImg from '../utils/resizeImage';
 
 interface Props {
   item: {
@@ -12,9 +13,8 @@ interface Props {
   };
 }
 
-const FavoriteCardList = ({ category, img: imgPath, title, content }: CardData): JSX.Element => {
+const FavoriteCardList = ({ category, image: imgPath, contents, date }: GeneralCard): JSX.Element => {
   const shareRef = useRef<HTMLDivElement>(null);
-  console.log(shareRef.current?.offsetWidth);
 
   // const { webformatURL, tags } = item;
   const [showModal, setShowModal] = useState(false);
@@ -41,14 +41,16 @@ const FavoriteCardList = ({ category, img: imgPath, title, content }: CardData):
     });
   };
 
+  const reSizedImg = getVerticalImg(imgPath);
+
   return (
     <>
       <FlipCard>
-        <FlipCardInner imgPath={imgPath}>
+        <FlipCardInner imgPath={reSizedImg}>
           <FlipCardFront>
             {/* <CardYear>1984</CardYear> */}
             <CategoryName>{category}</CategoryName>
-            <img src={imgPath} alt={category} />
+            <img src={reSizedImg} alt={category} />
           </FlipCardFront>
           <FlipCardBack>
             <IconWrapper>
@@ -59,9 +61,9 @@ const FavoriteCardList = ({ category, img: imgPath, title, content }: CardData):
                 <ShareIcon />
               </IconCircle>
             </IconWrapper>
-            <h2>1984</h2>
+            <h2>{date}</h2>
             <li />
-            {content.map((issue) => (
+            {contents.map((issue) => (
               <p key={issue.split('-')[0].trim()}>{issue}</p>
             ))}
             <ModalView onClick={openModal}>크게보기</ModalView>
@@ -74,11 +76,12 @@ const FavoriteCardList = ({ category, img: imgPath, title, content }: CardData):
         xyPosition={xyPosition}
       ></FavoriteShareModal>
       <FavoriteModal
-        imgPath={imgPath}
+        imgPath={reSizedImg}
         showModal={showModal}
         setShowModal={setShowModal}
-        issue={content}
+        issue={contents}
         category={category}
+        date={date}
       />
     </>
   );
@@ -176,7 +179,7 @@ const FlipCardFront = styled.div`
 
   img {
     width: 100%;
-    height: 100%;
+    object-fit: cover;
     border-radius: 20px;
     filter: contrast(0.8);
   }
