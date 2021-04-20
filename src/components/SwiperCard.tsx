@@ -3,8 +3,7 @@ import styled from 'styled-components';
 import { Swiper, SwiperSlide } from 'swiper/react'; //@types-swiper도 같이 설치...
 import SwiperCore, { A11y, EffectCoverflow, Navigation } from 'swiper';
 import CardCreate from './CardCreate';
-import { FaBars } from 'react-icons/fa';
-import { FcLike } from 'react-icons/fc';
+import FavoriteButton from './FavoriteButton';
 
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from '../store/index';
@@ -18,15 +17,14 @@ import { url } from 'node:inspector';
 SwiperCore.use([A11y, EffectCoverflow, Navigation]);
 //data
 
-const SwiperCard = ({ issue, death, birth, music, culture }: any) => {
-  // const data = Object.entries(props.data);
-  // console.log(issue[0]);
-  // console.log(death.slice(1, death.length - 1));
-  // console.log(birth.slice(1, birth.length - 1));
-  // console.log(music[1][1]);
-  // console.log(culture);
-  console.log(music.world.poster);
-  console.log(culture.world.poster);
+const SwiperCard = (props: any) => {
+  // { issue, death, birth, music, culture }
+  const data = props;
+  const issue = props.issue;
+  const death = props.death;
+  const birth = props.birth;
+  const music = props.music;
+  const culture = props.culture;
 
   const isLogin = useSelector((state: RootState) => state.loginReducer.isLogin);
 
@@ -219,23 +217,16 @@ const SwiperCard = ({ issue, death, birth, music, culture }: any) => {
 
   return (
     <CardWrapper>
-      <Swiper
-        spaceBetween={30}
-        slidesPerView={3}
-        loop={true}
-        onSwiper={(swiper) => console.log(swiper)}
-        effect='coverflow'
-        navigation
-      >
+      <Swiper spaceBetween={30} slidesPerView={3} loop={true} effect='coverflow' navigation>
         <SwiperSlide className='SwipierSlide'>
           <SlideCard>
             <div className='box'>
-              <FcLike />
               <div className='imgBx'>
                 <img src={`${issue.image}`} alt='' />
               </div>
               <div className='content'>
                 <div>
+                  <FavoriteButton cardData={issue} />
                   <h2>이날, 이때 사건들</h2>
                   <p>
                     <ul>
@@ -261,6 +252,7 @@ const SwiperCard = ({ issue, death, birth, music, culture }: any) => {
               </div>
               <div className='content'>
                 <div>
+                  <FavoriteButton cardData={birth} />
                   <h2>이날, 이때 태어난 사람들</h2>
                   <p>
                     <ul>
@@ -286,6 +278,7 @@ const SwiperCard = ({ issue, death, birth, music, culture }: any) => {
               </div>
               <div className='content'>
                 <div>
+                  <FavoriteButton cardData={culture} />
                   <h2>그달의 문화들</h2>
                   <p>
                     <ul className='cultureContent'>
@@ -315,6 +308,7 @@ const SwiperCard = ({ issue, death, birth, music, culture }: any) => {
               </div>
               <div className='content'>
                 <div>
+                  <FavoriteButton cardData={death} />
                   <h2>이날, 이때 돌아가신 사람들</h2>
                   <p>
                     <ul>
