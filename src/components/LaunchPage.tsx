@@ -12,7 +12,7 @@ export default function LaunchPage() {
   let curYear = curNow.getFullYear();
 
   useEffect(() => {
-    console.log(date);
+    console.log('date', date);
   });
 
   const pressHandler = (e: any, here: string, next: string) => {
@@ -22,7 +22,7 @@ export default function LaunchPage() {
       document.getElementById(next)!.focus();
     } else if (here === 'year' && String(e.target.value).length === 4) {
       if (curYear < Number(e.target.value)) {
-        e.target.value = curYear;
+        e.target.value = String(curYear);
       }
       setDate({ ...date, year: e.target.value });
       document.getElementById(next)!.focus();
@@ -31,7 +31,8 @@ export default function LaunchPage() {
     if (here === 'month') {
       if (date.year === String(curYear)) {
         if (curMonth < Number(e.target.value)) {
-          e.target.value = curMonth;
+          e.target.value = String(curMonth);
+          document.getElementById(next)!.focus();
         }
         if (e.target.value > 1) {
           setDate({ ...date, month: String(curMonth) });
@@ -68,12 +69,15 @@ export default function LaunchPage() {
 
   const blurHandler = (e: any, here: string, next: string) => {
     if (here === 'year') {
+      console.log('year');
       setDate({ ...date, year: e.target.value });
     } else if (here === 'month') {
+      console.log('month');
       if (Number(e.target.value) === 0 || Number(e.target.value) === 1) {
         setDate({ ...date, month: '1' });
       }
     } else if (here === 'day') {
+      console.log('day');
       setDate({ ...date, day: e.target.value });
     }
   };
@@ -87,6 +91,7 @@ export default function LaunchPage() {
         setDate({ ...date, month: e.target.value });
         document.getElementById(next)!.focus();
       } else if (here === 'day') {
+        setDate({ ...date, day: e.target.value });
         let selectDate = date.year + '-' + date.month + '-' + date.day;
         console.log(selectDate);
         //페이지 이동하는 함수
@@ -99,7 +104,7 @@ export default function LaunchPage() {
     if (date.year !== '0' && date.month !== '0' && date.day !== '0') {
       window.location.href = `https://localhost:3000/main/${selectDate}`;
     } else {
-      console.log('모달로 에러메세지 띄우기');
+      alert(`${date.year}년 ${date.month}월 ${date.day}일 확인 후 다시 입력해주세요`);
     }
   };
 
@@ -107,11 +112,12 @@ export default function LaunchPage() {
     <LaunchScreen>
       <h1>What Happend</h1>
       <h1>on Your BirthDay!</h1>
-
-      <form>
+      <InputContiner>
         <InputDate
           type='number'
           id='year'
+          min='1'
+          max={curYear}
           onKeyUp={(e) => {
             pressHandler(e, 'year', 'month');
           }}
@@ -127,6 +133,7 @@ export default function LaunchPage() {
           type='number'
           id='month'
           max='12'
+          min='1'
           onKeyUp={(e) => {
             pressHandler(e, 'month', 'day');
           }}
@@ -141,6 +148,8 @@ export default function LaunchPage() {
         <InputDate
           type='number'
           id='day'
+          min='1'
+          max='31'
           onKeyUp={(e) => {
             pressHandler(e, 'day', '');
           }}
@@ -152,7 +161,7 @@ export default function LaunchPage() {
           }}
         ></InputDate>{' '}
         일
-      </form>
+      </InputContiner>
 
       <BirthwikiBtn onClick={birthwikiHandler}>Birth Wiki!</BirthwikiBtn>
     </LaunchScreen>
@@ -182,13 +191,28 @@ const LaunchScreen = styled.div`
     }
   }
 `;
+
+const InputContiner = styled.form`
+  display: flex;
+  justify-content: space-between;
+  margin: 15px;
+  padding: 5px;
+`;
+
 const InputDate = styled.input`
-  width: 266px;
+  box-sizing: border-box;
+  color: #060b26;
+  outline: 0;
+  padding: 0 20px 0;
+  border: none;
+  border-bottom: 2px solid #060b26;
+  background-color: rgba(255, 255, 255, 0);
+  margin: 5px;
+  width: 100px;
   height: 30px;
   font-size: 1.7rem;
-  padding: 0.5rem;
-  margin: 0.4rem;
   text-align: center;
+  ::-webkit-inner-spin-button,
   ::-webkit-inner-spin-button {
     -webkit-appearance: none;
     margin: 0;
