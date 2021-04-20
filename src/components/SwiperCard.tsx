@@ -187,7 +187,7 @@ const SwiperCard = (props: any) => {
     & .content .cultureContent {
       display: flex;
       justify-content: center;
-      align-items: center;
+      align-content: center;
       flex-direction: row;
     }
 
@@ -217,14 +217,7 @@ const SwiperCard = (props: any) => {
 
   return (
     <CardWrapper>
-      <Swiper
-        spaceBetween={30}
-        slidesPerView={3}
-        loop={true}
-        onSwiper={(swiper) => console.log(swiper)}
-        effect='coverflow'
-        navigation
-      >
+      <Swiper spaceBetween={30} slidesPerView={3} loop={true} effect='coverflow' navigation>
         <SwiperSlide className='SwipierSlide'>
           <SlideCard>
             <div className='box'>

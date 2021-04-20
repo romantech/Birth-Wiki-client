@@ -41,7 +41,7 @@ const CreateCard = styled.div`
     padding: 10px;
     display: flex;
     align-items: center;
-    justifiy-content: center;
+    justify-content: center;
     text-align: center;
     overflow: hidden;
     font-size: 16px;

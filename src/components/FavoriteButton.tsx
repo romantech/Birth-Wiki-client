@@ -1,6 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import Axios from 'axios';
+import { useSelector, useDispatch } from 'react-redux';
+import { RootState } from '../store/index';
+import { setUserInfo } from '../actions/index';
 
 import { FcLike } from 'react-icons/fc';
 import { FaRegHeart } from 'react-icons/fa';
@@ -8,29 +11,73 @@ import { FaRegHeart } from 'react-icons/fa';
 function FavoriteButton(props: any) {
   const [isLikeAdd, setIsLikeAdd] = useState(false);
   const [getCardData, setGetCardData] = useState(null);
+  const isLogin = useSelector((state: RootState) => state.loginReducer.isLogin);
+  const userInfo = useSelector((state: RootState) => state.userInfoReducer.userInfo);
 
-  const likeAddHandler = () => {
+  const dispatch = useDispatch();
+
+  console.log(props.cardData);
+
+  const likeAddHandler = async () => {
     setIsLikeAdd(!isLikeAdd);
     if (!isLikeAdd) {
-      setGetCardData(props.cardData);
+      let addLikeCard;
+      if (userInfo.likeCards) {
+        addLikeCard = Object.assign({}, userInfo, {
+          likeCards: [...userInfo.likeCards, props.cardData],
+        });
+      } else {
+        addLikeCard = Object.assign({}, userInfo, {
+          likeCards: [props.cardData],
+        });
+      }
+      dispatch(setUserInfo(addLikeCard));
+      await Axios({
+        url: 'https://server.birthwiki.space/like',
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        data: {
+          action: 'like',
+          nickName: userInfo.nickName,
+          cardId: props.cardData.id,
+          category: props.cardData.category,
+          accessToken: `Bearer ${userInfo.accessToken}`,
+        },
+      });
     } else {
-      setGetCardData(null);
+      let newCard = userInfo.likeCards;
+      newCard = newCard.filter((card: any) => {
+        if (card.id !== props.cardData.id || card.category !== props.cardData.category) {
+          return card;
+        }
+      });
+      const cancelLikeCard = Object.assign({}, userInfo, {
+        likeCards: newCard,
+      });
+      dispatch(setUserInfo(cancelLikeCard));
+      await Axios({
+        url: 'https://server.birthwiki.space/like',
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        data: {
+          action: 'cancel',
+          nickName: userInfo.nickName,
+          cardId: props.cardData.id,
+          category: props.cardData.category,
+          accessToken: `Bearer ${userInfo.accessToken}`,
+        },
+      });
     }
   };
 
-  console.log(getCardData);
-
   useEffect(() => {
-    const cardId = getCardData;
-    const fovorite = async () => {
-      await Axios({
-        url: 'https://server.birthwiki.space/data/action',
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        data: {},
+    if (userInfo.likeCards) {
+      userInfo.likeCards.forEach((card: any) => {
+        if (card.id === props.cardData.id && card.category === props.cardData.category) {
+          setIsLikeAdd(true);
+        }
       });
-    };
-    fovorite();
+    }
   }, []);
 
   const FavoriteBtn = styled.div`
@@ -45,7 +92,13 @@ function FavoriteButton(props: any) {
     cursor: pointer;
   `;
 
-  return <FavoriteBtn onClick={likeAddHandler}>{isLikeAdd ? <FcLike /> : <FaRegHeart />}</FavoriteBtn>;
+  return (
+    <div>
+      {isLogin ? (
+        <FavoriteBtn onClick={likeAddHandler}>{isLikeAdd ? <FcLike /> : <FaRegHeart />}</FavoriteBtn>
+      ) : null}
+    </div>
+  );
 }
 
 export default FavoriteButton;
