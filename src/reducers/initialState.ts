@@ -65,24 +65,12 @@ export default {
   isSidebar: false,
   isSignup: false,
   userInfo: {
-    userEmail: 'test1@naver.com',
-    password: '1234qwer',
-    userNickName: 'test',
-    profileImage: `${process.env.PUBLIC_URL}/img/profile.png`,
-    source: 'home',
-    accessToken: '',
-    likeCard: ['1999-08-02', '1993-01-12', '1994-01-14'],
-    recordCard: [
-      {
-        date: '1999-01-01',
-        img: '',
-        text: '',
-      },
-      {
-        date: '1999-08-02',
-        img: '',
-        text: '',
-      },
-    ],
+    userEmail: null,
+    nickName: null,
+    profileImage: null,
+    source: null,
+    accessToken: null,
+    likeCards: null,
+    recordCards: null,
   },
 };
