@@ -35,6 +35,10 @@ const Card = (props: any) => {
     color: #fff;
     cursor: pointer;
 
+    @media only screen and (width: 500px) {
+      display: none;
+    }
+
     & h2 {
       font-size: 3.2vh;
       display: block;
@@ -95,12 +99,13 @@ const Card = (props: any) => {
 
   return (
     <CardLists>
+      (
       <CardContents
         onClick={() => {
           //클릭시 모달 on
           openCard();
         }}
-        style={{ backgroundImage: `url(${issue[0]})` }}
+        style={{ backgroundImage: `url(${issue.image})` }}
       >
         <h2>문화</h2>
       </CardContents>
@@ -109,7 +114,7 @@ const Card = (props: any) => {
           //클릭시 모달 on
           openCard();
         }}
-        style={{ backgroundImage: `url(${culture[0]})` }}
+        style={{ backgroundImage: `url(${culture.image})` }}
       >
         <h2>이슈</h2>
       </CardContents>
@@ -118,7 +123,7 @@ const Card = (props: any) => {
           //클릭시 모달 on
           openCard();
         }}
-        style={{ backgroundImage: `url(${birth[0]})` }}
+        style={{ backgroundImage: `url(${birth.image})` }}
       >
         <h2>탄생</h2>
       </CardContents>
@@ -127,11 +132,10 @@ const Card = (props: any) => {
           //클릭시 모달 on
           openCard();
         }}
-        style={{ backgroundImage: `url(${death[0]})` }}
+        style={{ backgroundImage: `url(${death.image})` }}
       >
         <h2>사망</h2>
       </CardContents>
-
       <CardContents
         onClick={() => {
           //클릭시 모달 on
@@ -143,14 +147,16 @@ const Card = (props: any) => {
       >
         <h2>기록카드 작성</h2>
       </CardContents>
+      ){/* swiper_Modal */}
       {showCard ? (
         <CardBg ref={cardRef} onClick={closeCard}>
-          <animated.div style={animation}>
+          <SwiperCard issue={issue} music={music} culture={culture} birth={birth} death={death} />
+          {/* <animated.div style={animation}>
             <SwiperCard issue={issue} music={music} culture={culture} birth={birth} death={death} />
-            {/* {issue={issue} music={music} culture={culture} birth={birth} death={death}} */}
-          </animated.div>
+          </animated.div> */}
         </CardBg>
       ) : null}
+      {/* swiper_Modal */}
     </CardLists>
   );
 };
