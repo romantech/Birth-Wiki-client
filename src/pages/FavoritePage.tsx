@@ -10,7 +10,7 @@ import categories from '../utils/categories';
 import ProfileCard from '../components/FavoriteProfileCard';
 import { useSelector } from 'react-redux';
 import { RootState } from '../store';
-import { LikeCards } from '../types/index';
+import { LikeCardsGeneral } from '../types/index';
 import { ArrowLeft, ArrowRight } from '../components/ArrowIcon';
 import { FaArrowCircleUp } from 'react-icons/fa';
 import SidebarLogin from '../components/SidebarLogin';
@@ -25,15 +25,21 @@ const FavoritePage = (): JSX.Element => {
   const isLogin = useSelector((state: RootState) => state.loginReducer.isLogin);
   const { userInfo } = useSelector((state: RootState) => state.userInfoReducer);
   const { likeCards } = userInfo;
-  let generalCategory = likeCards.filter(
-    (el: { category: string }) => el.category !== 'music' && el.category !== 'movie',
-  );
-  const mediaCategory = likeCards.filter(
-    (el: { category: string }) => el.category === 'music' || el.category === 'movie',
-  );
 
-  const [renderArray, setRenderArray] = useState<LikeCards[]>([]);
-  const [filteredArray, setFilteredArray] = useState<LikeCards[]>(generalCategory);
+  // let generalCategory: LikeCardsGeneral[] = [];
+  // let mediaCategory: LikeCardsMedia[] = [];
+
+  // if (likeCards !== null) {
+  //   generalCategory = likeCards.filter(
+  //     (el: { category: string }) => el.category !== 'music' && el.category !== 'movie',
+  //   );
+  //   mediaCategory = likeCards.filter(
+  //     (el: { category: string }) => el.category === 'music' || el.category === 'movie',
+  //   );
+  // }
+
+  const [renderArray, setRenderArray] = useState<LikeCardsGeneral[]>([]);
+  const [filteredArray, setFilteredArray] = useState<LikeCardsGeneral[]>(likeCards !== null ? likeCards : []);
   const [selected, setSelected] = useState<Selected>({ selected: '' });
 
   const onSelect = (key: string | number | null) => {
@@ -81,7 +87,7 @@ const FavoritePage = (): JSX.Element => {
               category={category}
               key={category.categoryName}
               setFilteredArray={setFilteredArray}
-              generalCategory={generalCategory}
+              likeCards={likeCards}
               setRenderArray={setRenderArray}
             />
           ))}
@@ -111,8 +117,8 @@ const FavoritePage = (): JSX.Element => {
             columnClassName='masonry-grid_column'
           >
             <ProfileCard
-              userNickName={userInfo.userNickName}
-              likeCards={userInfo.likeCards.length}
+              nickName={userInfo.nickName}
+              likeCards={userInfo.likeCards !== null ? userInfo.likeCards.length : 0}
               profileImage={userInfo.profileImage}
             />
             {renderArray.map((card, index) => (
@@ -120,10 +126,11 @@ const FavoritePage = (): JSX.Element => {
                 id={card.id}
                 date={card.date}
                 category={card.category}
-                image={card.image}
-                key={index}
                 contents={card.contents}
-                mediaCategory={mediaCategory}
+                image={card.image}
+                korea={card.korea}
+                world={card.world}
+                key={index}
               />
             ))}
           </Masonry>
@@ -180,6 +187,10 @@ const Container = styled.div`
 
 const Categories = styled.div`
   margin: auto auto 50px 15px;
+
+  .menu-item-wrapper {
+    outline: none;
+  }
 
   .menu-item {
     user-select: none;

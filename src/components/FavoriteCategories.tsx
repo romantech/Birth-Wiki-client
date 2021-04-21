@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import { LikeCards } from '../types';
+import { LikeCardsGeneral } from '../types';
 
 interface Props {
   category: {
@@ -8,16 +8,16 @@ interface Props {
     imagePath: string;
   };
   selected: string;
-  generalCategory: LikeCards[];
-  setFilteredArray: React.Dispatch<React.SetStateAction<LikeCards[]>>;
-  setRenderArray: React.Dispatch<React.SetStateAction<LikeCards[]>>;
+  likeCards: LikeCardsGeneral[];
+  setFilteredArray: React.Dispatch<React.SetStateAction<LikeCardsGeneral[]>>;
+  setRenderArray: React.Dispatch<React.SetStateAction<LikeCardsGeneral[]>>;
 }
 
 const FavoriteCategories = ({
   category,
   selected,
   setFilteredArray,
-  generalCategory,
+  likeCards,
   setRenderArray,
 }: Props): JSX.Element => {
   const { imagePath, categoryName } = category;
@@ -25,9 +25,9 @@ const FavoriteCategories = ({
   const handleClick = (categoryName: string) => {
     setRenderArray([]);
     if (categoryName.toLowerCase() === 'all') {
-      return setFilteredArray(generalCategory);
+      return setFilteredArray(likeCards);
     } else {
-      setFilteredArray(generalCategory.filter((el) => el.category === categoryName.toLowerCase()));
+      setFilteredArray(likeCards.filter((el) => el.category === categoryName.toLowerCase()));
     }
   };
 
