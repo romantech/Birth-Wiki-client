@@ -6,11 +6,12 @@ import InfiniteScroll from 'react-infinite-scroll-component';
 import ScrollMenu from 'react-horizontal-scrolling-menu';
 import FavoriteCategories from '../components/FavoriteCategories';
 import FavoriteCardList from '../components/FavoriteCardList';
+import FavoriteCardListMedia from '../components/FavoriteCardListMedia';
 import categories from '../utils/categories';
 import ProfileCard from '../components/FavoriteProfileCard';
 import { useSelector } from 'react-redux';
 import { RootState } from '../store';
-import { LikeCards } from '../types/index';
+import { LikeCardsGeneral, LikeCardsMedia } from '../types/index';
 import { ArrowLeft, ArrowRight } from '../components/ArrowIcon';
 import { FaArrowCircleUp } from 'react-icons/fa';
 
@@ -24,8 +25,8 @@ const FavoritePage = (): JSX.Element => {
   const { userInfo } = useSelector((state: RootState) => state.userInfoReducer);
   const { likeCards } = userInfo;
 
-  let generalCategory: LikeCards[] = [];
-  let mediaCategory: LikeCards[] = [];
+  let generalCategory: LikeCardsGeneral[] = [];
+  let mediaCategory: LikeCardsMedia[] = [];
 
   if (likeCards !== null) {
     generalCategory = likeCards.filter(
@@ -36,8 +37,8 @@ const FavoritePage = (): JSX.Element => {
     );
   }
 
-  const [renderArray, setRenderArray] = useState<LikeCards[]>([]);
-  const [filteredArray, setFilteredArray] = useState<LikeCards[]>(generalCategory);
+  const [renderArray, setRenderArray] = useState<LikeCardsGeneral[]>([]);
+  const [filteredArray, setFilteredArray] = useState<LikeCardsGeneral[]>(generalCategory);
   const [selected, setSelected] = useState<Selected>({ selected: '' });
 
   const onSelect = (key: string | number | null) => {
@@ -116,7 +117,7 @@ const FavoritePage = (): JSX.Element => {
           >
             <ProfileCard
               nickName={userInfo.nickName}
-              likeCards={userInfo.likeCards !== null ? userInfo.likeCards : 0}
+              likeCards={userInfo.likeCards !== null ? userInfo.likeCards.length : 0}
               profileImage={userInfo.profileImage}
             />
             {renderArray.map((card, index) => (
@@ -178,6 +179,10 @@ const Container = styled.div`
 
 const Categories = styled.div`
   margin: auto auto 50px 15px;
+
+  .menu-item-wrapper {
+    outline: none;
+  }
 
   .menu-item {
     user-select: none;

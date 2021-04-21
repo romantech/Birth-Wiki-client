@@ -3,10 +3,10 @@ import styled, { css } from 'styled-components';
 import { FiHeart, FiShare } from 'react-icons/fi';
 import FavoriteModal from '../components/FavoriteModal';
 import FavoriteShareModal from '../components/FavoriteShareModal';
-import { LikeCardsGeneral } from '../types/index';
+import { LikeCardsMedia } from '../types/index';
 import getVerticalImg from '../utils/resizeImage';
 
-const FavoriteCardList = ({ category, image: imgPath, contents, date }: LikeCardsGeneral): JSX.Element => {
+const FavoriteCardListMedia = ({ category, image: imgPath, date }: LikeCardsMedia): JSX.Element => {
   const shareRef = useRef<HTMLDivElement>(null);
 
   // const { webformatURL, tags } = item;
@@ -55,9 +55,9 @@ const FavoriteCardList = ({ category, image: imgPath, contents, date }: LikeCard
             </IconWrapper>
             <h2>{date.split('-')[0] + '월' + date.split('-')[1] + '일'}</h2>
             <li />
-            {contents.map((issue, index) => (
+            {/* {contents.map((issue, index) => (
               <p key={index}>{`${issue[0]} - ${issue[1]}`}</p>
-            ))}
+            ))} */}
             <ModalView onClick={openModal}>크게보기</ModalView>
           </FlipCardBack>
         </FlipCardInner>
@@ -67,14 +67,14 @@ const FavoriteCardList = ({ category, image: imgPath, contents, date }: LikeCard
         setShareModal={setShareModal}
         xyPosition={xyPosition}
       ></FavoriteShareModal>
-      <FavoriteModal
+      {/* <FavoriteModal
         imgPath={imgPath}
         showModal={showModal}
         setShowModal={setShowModal}
-        issue={contents}
+        // issue={contents}
         category={category}
         date={date}
-      />
+      /> */}
     </>
   );
 };
@@ -270,4 +270,4 @@ const FlipCard = styled.div`
   }
 `;
 
-export default FavoriteCardList;
+export default FavoriteCardListMedia;
