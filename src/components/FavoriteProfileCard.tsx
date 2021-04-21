@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
+import { UserProfileCard } from '../types/index';
 import styled from 'styled-components';
 
 const CardWrapper = styled.div`
@@ -19,29 +20,30 @@ const CardWrapper = styled.div`
   }
 `;
 
-const ProfileImg = styled.img.attrs({
-  src: `${process.env.PUBLIC_URL}/img/profile.png`,
-})`
+interface ImgPath {
+  imgPath?: string;
+}
+
+const ProfileImg = styled.img.attrs<ImgPath>(({ imgPath }) => ({
+  src: imgPath || `${process.env.PUBLIC_URL}/img/profile.png`,
+}))<ImgPath>`
   display: block;
   max-width: 150px;
   max-height: 150px;
 `;
 
-const ProfileCard = (): JSX.Element => {
-  const userId = 'DummyUser';
-  const favoriteCards = 52;
-
+const ProfileCard = ({ ...props }: UserProfileCard): JSX.Element => {
   return (
     <CardWrapper>
-      <ProfileImg />
+      <ProfileImg imgPath={props.profileImage} />
       <div>
         <span>
           Hello
-          <b>{` ${userId}`}</b>
+          <b>{` ${props.userNickName}`}</b>
         </span>
         <span>
-          You Pinned
-          <b>{` ${favoriteCards}`}</b> cards
+          You have
+          <b>{` ${props.likeCards}`}</b> cards
         </span>
       </div>
     </CardWrapper>

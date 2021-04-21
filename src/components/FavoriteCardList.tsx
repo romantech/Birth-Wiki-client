@@ -3,22 +3,8 @@ import styled, { css } from 'styled-components';
 import { FiHeart, FiShare } from 'react-icons/fi';
 import FavoriteModal from '../components/FavoriteModal';
 import FavoriteShareModal from '../components/FavoriteShareModal';
-
-const dummyIssue = [
-  '1월 17일 - 다국적군, 이라크에 공격을 개시하다. (걸프전 발발)',
-  '2월 27일 - 걸프전 종전. 쿠웨이트 해방.',
-  '2월 20일 - 현대자동차에서 2세대 뉴쏘나타를 출시하다.',
-  '3월 5일 - 제1호 태풍 샤론이 발생 하였다.',
-  '3월 11일 - KBS 라디오 서울 폐국',
-  '3월 20일 - SBS 라디오 방송 개국.',
-  '4월 3일 - 대한민국, 화성연쇄살인사건이 마지막 열 번째 사건이 발생하다.',
-  '5월 7일 - 현대자동차에서 4도어 뉴엑셀을 출시하다',
-  '6월 3일 - 대우자동차(한국GM의 전신)에서 프린스 시판',
-  '6월 12일 - 보리스 옐친이 러시아의 대통령으로 당선되다.',
-  '6월 20일 - 지방선거 광역의회 의원 선거',
-  '8월 6일 - 팀 버너스리가 월드 와이드 웹을 공개하다',
-  '9월 25일 - 현대정공(현대모비스의 전신)에서 갤로퍼 시판.',
-];
+import { LikeCards } from '../types/index';
+import getVerticalImg from '../utils/resizeImage';
 
 interface Props {
   item: {
@@ -27,9 +13,16 @@ interface Props {
   };
 }
 
-const FavoriteCardList = ({ item }: Props): JSX.Element => {
+const FavoriteCardList = ({
+  category,
+  image: imgPath,
+  contents,
+  date,
+  mediaCategory,
+}: LikeCards): JSX.Element => {
   const shareRef = useRef<HTMLDivElement>(null);
-  const { webformatURL, tags } = item;
+
+  // const { webformatURL, tags } = item;
   const [showModal, setShowModal] = useState(false);
   const [shareModal, setShareModal] = useState(false);
   const [xyPosition, setXYPosition] = useState({
@@ -47,7 +40,6 @@ const FavoriteCardList = ({ item }: Props): JSX.Element => {
     // const scrolledTopLength = window.pageYOffset;
     // const absoluteTop = scrolledTopLength + relativeTop;
 
-    // console.log(shareRef.current.getBoundingClientRect());
     setShareModal((prev) => !prev);
     setXYPosition({
       pageX: e.pageX,
@@ -55,14 +47,15 @@ const FavoriteCardList = ({ item }: Props): JSX.Element => {
     });
   };
 
+  imgPath.includes('unsplash') ? (imgPath = getVerticalImg(imgPath)) : imgPath;
+
   return (
     <>
       <FlipCard>
-        <FlipCardInner imagePath={webformatURL}>
+        <FlipCardInner imgPath={imgPath}>
           <FlipCardFront>
-            {/* <CardYear>1984</CardYear> */}
-            <CategoryName>Births</CategoryName>
-            <img src={webformatURL} alt={tags} />
+            <CategoryName>{category}</CategoryName>
+            <img src={imgPath} alt={category} />
           </FlipCardFront>
           <FlipCardBack>
             <IconWrapper>
@@ -73,10 +66,10 @@ const FavoriteCardList = ({ item }: Props): JSX.Element => {
                 <ShareIcon />
               </IconCircle>
             </IconWrapper>
-            <h2>1984</h2>
+            <h2>{date.split('-')[0] + '월' + date.split('-')[1] + '일'}</h2>
             <li />
-            {dummyIssue.map((issue) => (
-              <p key={issue.split('-')[0].trim()}>{issue}</p>
+            {contents.map((issue, index) => (
+              <p key={index}>{issue}</p>
             ))}
             <ModalView onClick={openModal}>크게보기</ModalView>
           </FlipCardBack>
@@ -88,10 +81,12 @@ const FavoriteCardList = ({ item }: Props): JSX.Element => {
         xyPosition={xyPosition}
       ></FavoriteShareModal>
       <FavoriteModal
-        imagePath={webformatURL}
+        imgPath={imgPath}
         showModal={showModal}
         setShowModal={setShowModal}
-        issue={dummyIssue}
+        issue={contents}
+        category={category}
+        date={date}
       />
     </>
   );
@@ -189,7 +184,7 @@ const FlipCardFront = styled.div`
 
   img {
     width: 100%;
-    height: 100%;
+    object-fit: cover;
     border-radius: 20px;
     filter: contrast(0.8);
   }
@@ -223,14 +218,14 @@ const FlipCardBack = styled.div`
   }
 `;
 
-const FlipCardInner = styled.div<{ imagePath: string }>`
+const FlipCardInner = styled.div<{ imgPath: string }>`
   width: 100%;
   height: 100%;
   transition: transform 0.6s;
   transform-style: preserve-3d;
   transition-timing-function: ease-in-out;
   ${(props) =>
-    !props.imagePath &&
+    !props.imgPath &&
     css`
       background: lightgray;
       border-radius: 20px;
@@ -247,7 +242,7 @@ const FlipCardInner = styled.div<{ imagePath: string }>`
     width: 100%;
     height: 100%;
     border-radius: 20px;
-    background: linear-gradient(rgba(0, 0, 0, 0.83), rgba(0, 0, 0, 0.83)), url(${(props) => props.imagePath});
+    background: linear-gradient(rgba(0, 0, 0, 0.83), rgba(0, 0, 0, 0.83)), url(${(props) => props.imgPath});
     background-repeat: no-repeat;
     background-size: cover;
     /* background: #313131; */

@@ -1,5 +1,9 @@
 export default [
   {
+    categoryName: 'ALL',
+    imagePath: '/img/all.jpg',
+  },
+  {
     categoryName: 'MOVIE',
     imagePath: '/img/movie.jpg',
   },
@@ -8,7 +12,7 @@ export default [
     imagePath: '/img/music.jpg',
   },
   {
-    categoryName: 'EVENTS',
+    categoryName: 'ISSUE',
     imagePath: '/img/events.jpg',
   },
   {
@@ -20,11 +24,7 @@ export default [
     imagePath: '/img/deaths.jpg',
   },
   {
-    categoryName: 'CULTURE',
-    imagePath: '/img/culture.jpg',
-  },
-  {
-    categoryName: 'HOLIDAYS',
-    imagePath: '/img/holidays.jpg',
+    categoryName: 'MYCARDS',
+    imagePath: '/img/mycards.jpg',
   },
 ];
