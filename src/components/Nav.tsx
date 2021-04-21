@@ -56,6 +56,7 @@ function Nav({ isLogin }: any) {
       <Favorite to='/myFavorite'>
         <FcLike />
       </Favorite>
+
       {isSidebar ? (
         <NavSidebar>
           <SidebarsClose to='#'>

@@ -9,8 +9,8 @@ export interface UserInfo {
   profileImage?: string;
   source: string;
   accessToken?: string;
-  likeCard?: Array<string>;
-  recordCard?: Array<string>;
+  likeCards?: Array<string>;
+  recordCards?: Array<string>;
 }
 
 export interface LikeCardsGeneral {

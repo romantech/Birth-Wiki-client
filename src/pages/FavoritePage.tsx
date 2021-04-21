@@ -13,6 +13,7 @@ import { RootState } from '../store';
 import { LikeCardsGeneral } from '../types/index';
 import { ArrowLeft, ArrowRight } from '../components/ArrowIcon';
 import { FaArrowCircleUp } from 'react-icons/fa';
+import SidebarLogin from '../components/SidebarLogin';
 
 interface Selected {
   selected: string | number | null;
@@ -21,6 +22,7 @@ interface Selected {
 let sliceStart = 0;
 let sliceEnd = 11;
 const FavoritePage = (): JSX.Element => {
+  const isLogin = useSelector((state: RootState) => state.loginReducer.isLogin);
   const { userInfo } = useSelector((state: RootState) => state.userInfoReducer);
   const { likeCards } = userInfo;
 
@@ -74,7 +76,7 @@ const FavoritePage = (): JSX.Element => {
     676: 2,
   };
 
-  return (
+  return isLogin ? (
     <Container>
       <h1 className='Favorite-H1'>CATEGORY</h1>
       <Categories>
@@ -136,6 +138,11 @@ const FavoritePage = (): JSX.Element => {
         <ScrollIcon onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })} />
       </InfiniteScroll>
     </Container>
+  ) : (
+    <div>
+      로그인을 하세요
+      <SidebarLogin />
+    </div>
   );
 };
 
@@ -246,6 +253,10 @@ const Loader = styled.img.attrs({
   margin-right: auto;
   height: 100px;
   width: 100px;
+`;
+
+const Modal = styled.div`
+  background-color: rgba(6, 11, 38, 0.8);
 `;
 
 export default FavoritePage;
