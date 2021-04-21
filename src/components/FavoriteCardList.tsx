@@ -6,7 +6,12 @@ import FavoriteShareModal from '../components/FavoriteShareModal';
 import { LikeCardsGeneral } from '../types/index';
 import getVerticalImg from '../utils/resizeImage';
 
-const FavoriteCardList = ({ ...props }: LikeCardsGeneral): JSX.Element => {
+interface SetFilteredArray extends LikeCardsGeneral {
+  setFilteredArray: React.Dispatch<React.SetStateAction<LikeCardsGeneral[]>>;
+  filteredArray: LikeCardsGeneral[];
+}
+
+const FavoriteCardList = ({ ...props }: SetFilteredArray): JSX.Element => {
   const shareRef = useRef<HTMLDivElement>(null);
   const contents = props.contents !== null ? props.contents : [];
   const category = props.category;
@@ -17,6 +22,8 @@ const FavoriteCardList = ({ ...props }: LikeCardsGeneral): JSX.Element => {
     pageX: 0,
     pageY: 0,
   });
+
+  console.log(props.filteredArray);
 
   const openModal = () => {
     setShowModal((prev) => !prev);
@@ -35,6 +42,21 @@ const FavoriteCardList = ({ ...props }: LikeCardsGeneral): JSX.Element => {
     });
   };
 
+  const setUnlike = () => {
+    const confirm: boolean = window.confirm('좋아요를 취소하시겠습니까?');
+    console.log(confirm);
+    if (confirm) {
+      const setLiked = props.filteredArray.map((el) => {
+        if (el.id === props.id) {
+          el.like = false;
+          return el;
+        }
+        return el;
+      });
+      props.setFilteredArray(setLiked);
+    }
+  };
+
   props.image.includes('unsplash') ? (props.image = getVerticalImg(props.image)) : props.image;
 
   return (
@@ -47,7 +69,7 @@ const FavoriteCardList = ({ ...props }: LikeCardsGeneral): JSX.Element => {
           </FlipCardFront>
           <FlipCardBackGeneral>
             <IconWrapper>
-              <IconCircle>
+              <IconCircle onClick={setUnlike}>
                 <HeartIcon />
               </IconCircle>
               <IconCircle onClick={openShareModal} ref={shareRef}>

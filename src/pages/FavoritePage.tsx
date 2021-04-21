@@ -27,7 +27,9 @@ const FavoritePage = (): JSX.Element => {
   const { likeCards } = userInfo;
 
   const [renderArray, setRenderArray] = useState<LikeCardsGeneral[]>([]);
-  const [filteredArray, setFilteredArray] = useState<LikeCardsGeneral[]>(likeCards !== null ? likeCards : []);
+  const [filteredArray, setFilteredArray] = useState<LikeCardsGeneral[]>(
+    likeCards !== null ? likeCards.filter((el: { like: boolean }) => el.like === true) : [],
+  );
   const [selected, setSelected] = useState<Selected>({ selected: '' });
 
   const onSelect = (key: string | number | null) => {
@@ -49,7 +51,7 @@ const FavoritePage = (): JSX.Element => {
       sliceEnd = 11;
       getLikeCards(sliceStart, sliceEnd);
     }
-  }, [renderArray]);
+  }, [renderArray, filteredArray]);
 
   const breakPoints = {
     default: 6,
@@ -105,19 +107,25 @@ const FavoritePage = (): JSX.Element => {
               likeCards={userInfo.likeCards !== null ? userInfo.likeCards.length : 0}
               profileImage={userInfo.profileImage}
             />
-            {renderArray.map((card, index) => (
-              <FavoriteCardList
-                id={card.id}
-                like={card.like}
-                date={card.date}
-                category={card.category}
-                contents={card.contents}
-                image={card.image}
-                korea={card.korea}
-                world={card.world}
-                key={index}
-              />
-            ))}
+            {renderArray.map((card, index) => {
+              if (card.like === true) {
+                return (
+                  <FavoriteCardList
+                    id={card.id}
+                    like={card.like}
+                    date={card.date}
+                    category={card.category}
+                    contents={card.contents}
+                    image={card.image}
+                    korea={card.korea}
+                    world={card.world}
+                    key={index}
+                    setFilteredArray={setFilteredArray}
+                    filteredArray={filteredArray}
+                  />
+                );
+              }
+            })}
           </Masonry>
         </MasLayout>
         <ScrollIcon onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })} />
