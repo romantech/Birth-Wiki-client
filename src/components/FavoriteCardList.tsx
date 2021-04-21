@@ -90,6 +90,7 @@ const FavoriteCardList = ({ ...props }: LikeCardsGeneral): JSX.Element => {
       ></FavoriteShareModal>
       <FavoriteModal
         id={props.id}
+        like={props.like}
         image={props.image}
         showModal={showModal}
         setShowModal={setShowModal}

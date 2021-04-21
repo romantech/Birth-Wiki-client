@@ -26,18 +26,6 @@ const FavoritePage = (): JSX.Element => {
   const { userInfo } = useSelector((state: RootState) => state.userInfoReducer);
   const { likeCards } = userInfo;
 
-  // let generalCategory: LikeCardsGeneral[] = [];
-  // let mediaCategory: LikeCardsMedia[] = [];
-
-  // if (likeCards !== null) {
-  //   generalCategory = likeCards.filter(
-  //     (el: { category: string }) => el.category !== 'music' && el.category !== 'movie',
-  //   );
-  //   mediaCategory = likeCards.filter(
-  //     (el: { category: string }) => el.category === 'music' || el.category === 'movie',
-  //   );
-  // }
-
   const [renderArray, setRenderArray] = useState<LikeCardsGeneral[]>([]);
   const [filteredArray, setFilteredArray] = useState<LikeCardsGeneral[]>(likeCards !== null ? likeCards : []);
   const [selected, setSelected] = useState<Selected>({ selected: '' });
@@ -124,6 +112,7 @@ const FavoritePage = (): JSX.Element => {
             {renderArray.map((card, index) => (
               <FavoriteCardList
                 id={card.id}
+                like={card.like}
                 date={card.date}
                 category={card.category}
                 contents={card.contents}
