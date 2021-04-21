@@ -60,7 +60,7 @@ const UserInfo = styled.div`
   overflow: auto;
 `;
 
-const UserInfoEdit = styled(Link)`
+const UserInfoEdit = styled.button`
   border-radius: 50px;
   background: rgba(6, 11, 38, 0.8);
   white-space: nowrap;
@@ -178,7 +178,7 @@ const MyBookMark = styled(Link)`
 
 function SidebarMypage() {
   const userInfo = useSelector((state: RootState) => state.userInfoReducer.userInfo);
-  const { accessToken, source } = userInfo;
+  const { accessToken, source, profileImage, nickName, userEmail } = userInfo;
   console.log('source', source);
   const sidebar = useSelector((state: RootState) => state.sidebarReducer.isSidebar);
   const dispatch = useDispatch();
@@ -191,6 +191,9 @@ function SidebarMypage() {
     axios({
       url: birthwikiServer,
       method: 'POST',
+      data: {
+        source: source,
+      },
       headers: {
         authorization: `Bearer ${accessToken}`,
       },
@@ -204,8 +207,8 @@ function SidebarMypage() {
   };
 
   const editHandler = () => {
-    dispatch(setIsSidbar(!sidebar));
-    <Link to='/edit' />;
+    dispatch(setIsSidbar(false));
+    dispatch(setIsSignup(true));
   };
 
   const clickedStoryHandler = () => {
@@ -221,20 +224,18 @@ function SidebarMypage() {
       Mypage
       <ProfileContainer>
         <Profile>
-          {userInfo.profileImage ? (
-            <UserPoto src={`https://server.birthwiki.space/${userInfo.profileImage}`}></UserPoto>
+          {profileImage ? (
+            <UserPoto src={`${profileImage}`}></UserPoto>
           ) : (
-            <UserPoto src={`${process.env.PUBLIC_URL}img/profile.png`}></UserPoto>
+            <UserPoto src={`${process.env.PUBLIC_URL}/img/profile.png`}></UserPoto>
           )}
 
           <UserInfoContainer>
-            <UserInfo>{userInfo.nickName}</UserInfo>
-            <UserInfo>{userInfo.userEmail}</UserInfo>
+            <UserInfo>{nickName}</UserInfo>
+            <UserInfo>{userEmail}</UserInfo>
           </UserInfoContainer>
         </Profile>
-        <UserInfoEdit to='/edit' onClick={editHandler}>
-          Edit
-        </UserInfoEdit>
+        <UserInfoEdit onClick={editHandler}>Edit</UserInfoEdit>
         <Logout type='submit' onClick={logoutHandler}>
           Logout
         </Logout>
