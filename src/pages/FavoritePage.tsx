@@ -36,10 +36,10 @@ const FavoritePage = (): JSX.Element => {
 
   const getLikeCards = (start: number, end: number) => {
     const sliced = filteredArray.slice(start, end);
-    sliceStart = sliceEnd;
-    sliceEnd += 11;
     if (sliced.length) {
-      setRenderArray(renderArray.concat(sliced));
+      setRenderArray(renderArray.concat(...sliced));
+      sliceStart = sliceEnd;
+      sliceEnd = sliceEnd + 11;
     }
   };
 
@@ -49,10 +49,6 @@ const FavoritePage = (): JSX.Element => {
       sliceEnd = 11;
       getLikeCards(sliceStart, sliceEnd);
     }
-    return () => {
-      sliceStart = 0;
-      sliceEnd = 11;
-    };
   }, [renderArray]);
 
   const breakPoints = {

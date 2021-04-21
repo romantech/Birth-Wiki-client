@@ -1,6 +1,6 @@
 import React, { useRef, useEffect, useCallback } from 'react';
 import { useSpring, animated } from 'react-spring';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import { MdClose } from 'react-icons/md';
 import { LikeCardsGeneral } from '../types/index';
 import { IconCircle, ShareIcon, HeartIcon } from './FavoriteCardList';
@@ -50,7 +50,7 @@ const FavoriteModal = ({ showModal, setShowModal, ...props }: Props): JSX.Elemen
           <animated.div style={animation}>
             <ModalWrapper>
               <ModalImg src={props.image} alt='Selected Image' />
-              <ModalContent>
+              <ModalContent category={category}>
                 <div>
                   {category !== 'music' && category !== 'movie' ? (
                     <h1>{`${props.date.split('-')[0]}월 ${props.date.split('-')[1]}일`}</h1>
@@ -66,13 +66,31 @@ const FavoriteModal = ({ showModal, setShowModal, ...props }: Props): JSX.Elemen
                     props.contents?.map((issue, index) => <p key={index}>{`${issue[0]} - ${issue[1]}`}</p>)
                   ) : category === 'movie' ? (
                     <>
-                      <h3 style={{ marginBottom: '-10px' }}>한국 1위 영화</h3>
-                      <p>{props.korea === undefined ? '정보가 없습니다' : props.korea?.title}</p>
-                      <h3 style={{ marginBottom: '-10px' }}>해외 1위 영화</h3>
-                      <p>{props.world === undefined ? '정보가 없습니다' : props.world?.title}</p>
+                      <h4 style={{ marginBottom: '-10px' }}>한국 1위 영화</h4>
+                      <p style={{ textAlign: 'center' }}>
+                        {props.korea === undefined ? '정보가 없습니다 😢' : props.korea?.title}
+                      </p>
+                      <h4 style={{ marginBottom: '-10px' }}>해외 1위 영화</h4>
+                      <p style={{ textAlign: 'center' }}>
+                        {props.world === undefined ? '정보가 없습니다 😢' : props.world?.title}
+                      </p>
                     </>
                   ) : (
-                    ''
+                    <>
+                      <h4 style={{ marginBottom: '-10px' }}>한국 1위 음악</h4>
+                      <p style={{ textAlign: 'center' }}>
+                        {props.korea === undefined ? '정보가 없습니다 😢' : `<${props.korea?.title}>`}
+                        <br />
+                        {props.korea === undefined ? '' : `— ${props.korea?.singer}`}
+                      </p>
+
+                      <h4 style={{ marginBottom: '-10px' }}>해외 1위 음악</h4>
+                      <p style={{ textAlign: 'center' }}>
+                        {props.world === undefined ? '정보가 없습니다 😢' : `<${props.world?.title}>`}
+                        <br />
+                        {props.world === undefined ? '' : `— ${props.world?.singer}`}
+                      </p>
+                    </>
                   )}
                 </div>
                 <IconWrapper>
@@ -82,12 +100,12 @@ const FavoriteModal = ({ showModal, setShowModal, ...props }: Props): JSX.Elemen
                   <IconCircle className='icon-circle second' primary>
                     <ShareIcon style={{ fontSize: '1.2rem' }} />
                   </IconCircle>
-                  <IconCircle className='icon-circle third' primary>
-                    <MdClose
-                      aria-label='Close Modal'
-                      onClick={() => setShowModal((prev) => !prev)}
-                      style={{ fontSize: '1.4rem' }}
-                    />
+                  <IconCircle
+                    className='icon-circle third'
+                    primary
+                    onClick={() => setShowModal((prev) => !prev)}
+                  >
+                    <MdClose aria-label='Close Modal' style={{ fontSize: '1.4rem' }} />
                   </IconCircle>
                 </IconWrapper>
               </ModalContent>
@@ -154,6 +172,8 @@ const ModalWrapper = styled.div`
   }
 `;
 
+const MediaImageWrapper = styled.div<{ korea: string; world: string }>``;
+
 const ModalImg = styled.img`
   width: 100%;
   height: 100%;
@@ -171,7 +191,7 @@ const ModalImg = styled.img`
   }
 `;
 
-const ModalContent = styled.div`
+const ModalContent = styled.div<{ category: string }>`
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -195,9 +215,14 @@ const ModalContent = styled.div`
   }
 
   h1,
-  h3 {
+  h3,
+  h4 {
     text-align: center;
     text-transform: uppercase;
+  }
+
+  h4 {
+    font-size: 1.2rem;
   }
 
   h3:after {
@@ -207,6 +232,18 @@ const ModalContent = styled.div`
     width: 150px;
     margin: 20px 0 30px 0;
   }
+
+  ${(props) =>
+    (props.category === 'music' || props.category === 'movie') &&
+    css`
+      h3:after {
+        content: '';
+        display: block;
+        border-bottom: 2px solid black;
+        width: 220px;
+        margin: 20px 0 30px 0;
+      }
+    `}
 
   h1 {
     margin-bottom: -30px;

@@ -70,14 +70,27 @@ const FavoriteCardList = ({ ...props }: LikeCardsGeneral): JSX.Element => {
             ) : category === 'movie' ? (
               <>
                 <h3 style={{ marginBottom: '-10px' }}>한국 1위 영화</h3>
-                <p>{props.korea === undefined ? '정보가 없습니다' : props.korea?.title}</p>
+                <p>{props.korea === undefined ? '정보가 없습니다 😢' : `<${props.korea?.title}>`}</p>
                 <h3 style={{ marginBottom: '-10px' }}>해외 1위 영화</h3>
                 <p style={{ marginBottom: '20px' }}>
-                  {props.world === undefined ? '정보가 없습니다' : props.world?.title}
+                  {props.world === undefined ? '정보가 없습니다 😢' : `<${props.world?.title}>`}
                 </p>
               </>
             ) : (
-              ''
+              <>
+                <h3 style={{ marginBottom: '-10px' }}>한국 1위 음악</h3>
+                <p>
+                  {props.korea === undefined ? '정보가 없습니다 😢' : `<${props.korea?.title}>`}
+                  <br />
+                  {props.korea === undefined ? '' : `— ${props.korea?.singer}`}
+                </p>
+                <h3 style={{ marginBottom: '-10px' }}>해외 1위 음악</h3>
+                <p style={{ marginBottom: '20px' }}>
+                  {props.world === undefined ? '정보가 없습니다 😢' : `<${props.world?.title}>`}
+                  <br />
+                  {props.world === undefined ? '' : `— ${props.world?.singer}`}
+                </p>
+              </>
             )}
             <ModalView onClick={openModal}>크게보기</ModalView>
           </FlipCardBackGeneral>
