@@ -85,7 +85,7 @@ const FavoritePage = (): JSX.Element => {
       <h1 className='Favorite-H1'>YOUR CARDS</h1>
       <InfiniteScroll
         dataLength={renderArray.length}
-        next={() => setTimeout(() => getLikeCards(sliceStart, sliceEnd), 1500)}
+        next={() => setTimeout(() => getLikeCards(sliceStart, sliceEnd), 1200)}
         hasMore={renderArray.length < filteredArray.length}
         loader={<Loader />}
         endMessage={

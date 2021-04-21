@@ -68,11 +68,11 @@ const FavoriteModal = ({ showModal, setShowModal, ...props }: Props): JSX.Elemen
                     <>
                       <h4 style={{ marginBottom: '-10px' }}>한국 1위 영화</h4>
                       <p style={{ textAlign: 'center' }}>
-                        {props.korea === undefined ? '정보가 없습니다 😢' : props.korea?.title}
+                        {props.korea === undefined ? '정보가 없습니다 😢' : `<${props.korea?.title}>`}
                       </p>
                       <h4 style={{ marginBottom: '-10px' }}>해외 1위 영화</h4>
                       <p style={{ textAlign: 'center' }}>
-                        {props.world === undefined ? '정보가 없습니다 😢' : props.world?.title}
+                        {props.world === undefined ? '정보가 없습니다 😢' : `<${props.world?.title}>`}
                       </p>
                     </>
                   ) : (

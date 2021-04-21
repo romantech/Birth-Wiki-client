@@ -6,7 +6,7 @@ const CardWrapper = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin-bottom: 15px;
+  margin-bottom: 20px;
   font-size: 1.1rem;
 
   & > img {
@@ -42,8 +42,7 @@ const ProfileCard = ({ ...props }: UserProfileCard): JSX.Element => {
           <b>{` ${props.nickName}`}</b>
         </span>
         <span>
-          You have
-          <b>{` ${props.likeCards}`}</b> cards
+          You have <b>{` ${props.likeCards}`}</b> cards
         </span>
       </div>
     </CardWrapper>

@@ -11,7 +11,6 @@ const FavoriteCardList = ({ ...props }: LikeCardsGeneral): JSX.Element => {
   const contents = props.contents !== null ? props.contents : [];
   const category = props.category;
 
-  // const { webformatURL, tags } = item;
   const [showModal, setShowModal] = useState(false);
   const [shareModal, setShareModal] = useState(false);
   const [xyPosition, setXYPosition] = useState({
