@@ -20,11 +20,11 @@ SwiperCore.use([A11y, EffectCoverflow, Navigation]);
 const SwiperCard = (props: any) => {
   // { issue, death, birth, music, culture }
   const data = props;
-  const issue = props.issue;
-  const death = props.death;
-  const birth = props.birth;
-  const music = props.music;
-  const culture = props.culture;
+  const issue = data.issue;
+  const death = data.death;
+  const birth = data.birth;
+  const music = data.music;
+  const culture = data.culture;
 
   const isLogin = useSelector((state: RootState) => state.loginReducer.isLogin);
 
