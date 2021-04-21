@@ -224,8 +224,6 @@ function SidebarMypage() {
 
   return (
     <MypageContainer>
-      {console.log(likeCards[0].category)}
-      {console.log(likeCards[0].date)}
       Mypage
       <ProfileContainer>
         <Profile>
