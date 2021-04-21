@@ -23,7 +23,7 @@ let sliceEnd = 11;
 const FavoritePage = (): JSX.Element => {
   const { userInfo } = useSelector((state: RootState) => state.userInfoReducer);
   const { likeCards } = userInfo;
-  const generalCategory = likeCards.filter(
+  let generalCategory = likeCards.filter(
     (el: { category: string }) => el.category !== 'music' && el.category !== 'movie',
   );
   const mediaCategory = likeCards.filter(

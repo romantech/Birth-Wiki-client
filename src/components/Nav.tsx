@@ -11,8 +11,7 @@ import { setIsSidbar, setIsLogin, setIsSignup, setUserInfo } from '../actions';
 import { FcLike } from 'react-icons/fc';
 import axios from 'axios';
 
-function Nav() {
-  const isLogin = useSelector((state: RootState) => state.loginReducer.isLogin);
+function Nav({ isLogin }: any) {
   const isSidebar = useSelector((state: RootState) => state.sidebarReducer.isSidebar);
   const userInfo = useSelector((state: RootState) => state.userInfoReducer.userInfo);
   const dispatch = useDispatch();
@@ -41,11 +40,15 @@ function Nav() {
         //setAt(res.data.data.accessToken)
       });
     }
-  });
+  }, []);
+
+  const clickHandler = () => {
+    window.location.replace('/');
+  };
 
   return (
     <Navbar>
-      <Home to='/'>BirthWiki</Home>
+      <Home onClick={clickHandler}>BirthWiki</Home>
       <SidebarsOpen to='#'>
         <FaBars onClick={showSidebar} />
       </SidebarsOpen>
@@ -82,11 +85,15 @@ const Navbar = styled.nav`
   }
 `;
 
-const Home = styled(Link)`
+const Home = styled.button`
+  background: #060b26;
   display: flex;
   align-items: center;
   font-size: 30px;
   margin: 10px 30px;
+  outline: none;
+  border: none;
+  cursor: pointer;
   text-decoration: none;
   color: #fff;
   font-weight: bold;

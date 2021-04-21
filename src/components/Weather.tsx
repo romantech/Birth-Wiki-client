@@ -36,7 +36,7 @@ const Weather: React.FC = ({ match }: any) => {
         data: { date: `${selectedDate2.split('/')[2]}` },
       }).then((response) => {
         setData(response.data.data);
-        console.log(response.data.data);
+        console.log(response.data.data.issueCard);
         // setWeatherData(response.data.data.weatherCard[0]);
         // console.log(response.data.data.weatherCard[0]);
       });
