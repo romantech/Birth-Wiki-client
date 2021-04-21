@@ -15,8 +15,6 @@ function FavoriteButton(props: any) {
 
   const dispatch = useDispatch();
 
-  console.log(props.cardData);
-
   const likeAddHandler = async () => {
     setIsLikeAdd(!isLikeAdd);
     if (!isLikeAdd) {
