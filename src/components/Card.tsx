@@ -99,7 +99,6 @@ const Card = (props: any) => {
 
   return (
     <CardLists>
-      (
       <CardContents
         onClick={() => {
           //클릭시 모달 on
@@ -147,13 +146,12 @@ const Card = (props: any) => {
       >
         <h2>기록카드 작성</h2>
       </CardContents>
-      ){/* swiper_Modal */}
+      {/* swiper_Modal */}
       {showCard ? (
         <CardBg ref={cardRef} onClick={closeCard}>
-          <SwiperCard issue={issue} music={music} culture={culture} birth={birth} death={death} />
-          {/* <animated.div style={animation}>
+          <animated.div style={animation}>
             <SwiperCard issue={issue} music={music} culture={culture} birth={birth} death={death} />
-          </animated.div> */}
+          </animated.div>
         </CardBg>
       ) : null}
       {/* swiper_Modal */}
