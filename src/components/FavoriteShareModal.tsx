@@ -12,7 +12,24 @@ interface Props {
 }
 
 const FavoriteShareModal = ({ shareModal, setShareModal, xyPosition }: Props) => {
-  return <>{shareModal ? <ModalWrapper xyPosition={xyPosition}>in development...</ModalWrapper> : null}</>;
+  const animation = useSpring({
+    config: {
+      duration: 250,
+    },
+    opacity: shareModal ? 1 : 0,
+  });
+
+  return (
+    <>
+      {shareModal ? (
+        <animated.div style={animation}>
+          <ModalWrapper xyPosition={xyPosition} onMouseLeave={() => setShareModal((prev) => !prev)}>
+            🚀 in development...
+          </ModalWrapper>
+        </animated.div>
+      ) : null}
+    </>
+  );
 };
 
 const ModalWrapper = styled.div<{ xyPosition: { pageY: number; pageX: number } }>`

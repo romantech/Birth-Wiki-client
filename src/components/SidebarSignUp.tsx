@@ -9,13 +9,20 @@ import { validateEmail, validatePassword, matchPassword, validateNickName } from
 import axios from 'axios';
 
 function SidebarSignUp() {
-  const sidebar = useSelector((state: RootState) => state.sidebarReducer.isSidebar);
+  const isLogin = useSelector((state: RootState) => state.loginReducer.isLogin);
+  const userInfo = useSelector((state: RootState) => state.userInfoReducer.userInfo);
+  const isSidebar = useSelector((state: RootState) => state.sidebarReducer.isSidebar);
   const dispatch = useDispatch();
 
   const [check, setCheck] = useState({
     userEmail: false,
     password: false,
     password2: false,
+    nickName: false,
+  });
+
+  const [duple, setduple] = useState({
+    userEmail: false,
     nickName: false,
   });
 
@@ -35,53 +42,46 @@ function SidebarSignUp() {
       ...signUpInfo,
       [key]: e.target.value,
     });
+
     if (key === 'userEmail') {
-      if (validateEmail(e.target.value)) {
-        await setCheck({ ...check, userEmail: true });
-      } else {
-        await setCheck({ ...check, userEmail: false });
-      }
-    } else if (key === 'password') {
+      validateEmail(e.target.value)
+        ? await setCheck({ ...check, userEmail: true })
+        : await setCheck({ ...check, userEmail: false });
+    }
+
+    if (key === 'password') {
       if (password2.length === 0) {
-        if (validatePassword(e.target.value)) {
-          setCheck({ ...check, password: true });
+        validatePassword(e.target.value)
+          ? setCheck({ ...check, password: true })
+          : setCheck({ ...check, password: false });
+      } else {
+        if (!validatePassword(e.target.value)) {
+          setCheck({ ...check, password: false, password2: false });
         } else {
-          setCheck({ ...check, password: false });
-        }
-      } else if (password2.length > 0) {
-        if (matchPassword(password2, e.target.value)) {
-          if (validatePassword(e.target.value)) {
-            setCheck({ ...check, password: true, password2: true });
-          } else {
-            setCheck({ ...check, password: false, password2: true });
-          }
-        } else {
-          if (validatePassword(e.target.value)) {
-            setCheck({ ...check, password: true, password2: false });
-          } else {
-            setCheck({ ...check, password: false, password2: false });
-          }
+          matchPassword(password2, e.target.value)
+            ? setCheck({ ...check, password: true, password2: true })
+            : setCheck({ ...check, password: true, password2: false });
         }
       }
-    } else if (key === 'password2') {
-      if (matchPassword(password, e.target.value)) {
-        setCheck({ ...check, password2: true });
-      } else {
-        setCheck({ ...check, password2: false });
-      }
-    } else if (key === 'nickName') {
-      if (validateNickName(e.target.value)) {
-        setCheck({ ...check, nickName: true });
-      } else {
-        setCheck({ ...check, nickName: false });
-      }
+    }
+
+    if (key === 'password2') {
+      matchPassword(password, e.target.value)
+        ? setCheck({ ...check, password2: true })
+        : setCheck({ ...check, password2: false });
+    }
+
+    if (key === 'nickName') {
+      validateNickName(e.target.value)
+        ? setCheck({ ...check, nickName: true })
+        : setCheck({ ...check, nickName: false });
     }
   };
 
   const SigninRef: any = useRef<HTMLDivElement>(null);
   const closeSignin = (e: React.SyntheticEvent) => {
     if (SigninRef.current === (e.target as typeof e.target)) {
-      dispatch(setIsSidbar(!sidebar));
+      dispatch(setIsSidbar(!isSidebar));
       dispatch(setIsSignup(false));
     }
   };
@@ -99,8 +99,10 @@ function SidebarSignUp() {
             ...signUpInfo,
             errorMsg: '',
           });
+          setduple({ ...duple, userEmail: true });
         })
         .catch((err) => {
+          setduple({ ...duple, userEmail: false });
           return !err.response
             ? setSignUpInfo({
                 ...signUpInfo,
@@ -126,9 +128,10 @@ function SidebarSignUp() {
             ...signUpInfo,
             errorMsg: '',
           });
+          setduple({ ...duple, userEmail: true });
         })
         .catch((err) => {
-          console.log(err);
+          setduple({ ...duple, userEmail: false });
           return !err.response
             ? setSignUpInfo({
                 ...signUpInfo,
@@ -144,10 +147,24 @@ function SidebarSignUp() {
 
   return (
     <Background ref={SigninRef} onClick={closeSignin}>
-      <ModalWrapper>
+      <SignUpWrapper>
         <Title>Welcome!</Title>
         <SubTitle>필수 사항</SubTitle>
-        <iframe name='frAttachFiles' className='invisable'></iframe>
+        <iframe
+          name='frAttachFiles'
+          className='invisable'
+          onLoad={async () => {
+            dispatch(setIsSignup(false));
+            const birthwikiServer = 'https://server.birthwiki.space/user/login';
+            const res = await axios.post(birthwikiServer, {
+              userEmail: signUpInfo.userEmail,
+              password: signUpInfo.password,
+              source: 'home',
+            });
+            dispatch(setUserInfo(res.data.data));
+            dispatch(setIsLogin(true));
+          }}
+        ></iframe>
         {errorMsg ? <div className='alert-box'>{errorMsg}</div> : ''}
         <SignUpContainer
           action='https://server.birthwiki.space/user/signup'
@@ -156,17 +173,25 @@ function SidebarSignUp() {
           encType='multipart/form-data'
         >
           <InputCatecory>E-mail</InputCatecory>
-          <InputField
+          <SignUpInput
+            className='email'
             type='email'
             name='userEmail'
             placeholder='수신 가능한 이메일 주소 입력'
             maxLength={30}
             onKeyUp={(e) => {
               inputHandler('userEmail', e);
+              checkedEmail();
             }}
-            onBlur={checkedEmail}
           />
-          {check.userEmail ? (
+          {check.userEmail && duple.userEmail ? (
+            <TestDiv>사용 가능</TestDiv>
+          ) : check.userEmail ? (
+            <TestDiv>이미 사용 중인 이메일입니다</TestDiv>
+          ) : (
+            <TestDiv>올바른 이메일을 입력해주세요</TestDiv>
+          )}
+          {/* {check.userEmail ? (
             <Valid to='#'>
               <ColorIcon.FcApproval />
             </Valid>
@@ -174,46 +199,9 @@ function SidebarSignUp() {
             <Invalid to='#'>
               <ColorIcon.FcCancel />
             </Invalid>
-          )}
-          <InputCatecory>password</InputCatecory>
-          <InputField
-            type='password'
-            name='password'
-            placeholder='숫자와 영문을 포함해 최소 8자리'
-            maxLength={16}
-            onKeyUp={(e) => {
-              inputHandler('password', e);
-            }}
-          />
-          {check.password ? (
-            <Valid to='#'>
-              <ColorIcon.FcApproval />
-            </Valid>
-          ) : (
-            <Invalid to='#'>
-              <ColorIcon.FcCancel />
-            </Invalid>
-          )}
-          <InputCatecory>password 확인 </InputCatecory>
-          <InputField
-            type='password'
-            maxLength={16}
-            placeholder='위와 동일한 비밀번호 입력'
-            onKeyUp={(e) => {
-              inputHandler('password2', e);
-            }}
-          />
-          {check.password2 ? (
-            <Valid to='#'>
-              <ColorIcon.FcApproval />
-            </Valid>
-          ) : (
-            <Invalid to='#'>
-              <ColorIcon.FcCancel />
-            </Invalid>
-          )}
+          )} */}
           <InputCatecory>닉네임</InputCatecory>
-          <InputField
+          <SignUpInput
             type='text'
             name='nickName'
             maxLength={10}
@@ -232,30 +220,64 @@ function SidebarSignUp() {
               <ColorIcon.FcCancel />
             </Invalid>
           )}
+          <InputCatecory>password</InputCatecory>
+          <SignUpInput
+            type='password'
+            name='password'
+            placeholder='숫자와 영문을 포함해 최소 8자리'
+            maxLength={16}
+            onKeyUp={(e) => {
+              inputHandler('password', e);
+            }}
+          />
+          {check.password ? (
+            <Valid to='#'>
+              <ColorIcon.FcApproval />
+            </Valid>
+          ) : (
+            <Invalid to='#'>
+              <ColorIcon.FcCancel />
+            </Invalid>
+          )}
+          <InputCatecory>password 확인 </InputCatecory>
+          <SignUpInput
+            type='password'
+            maxLength={16}
+            placeholder='위와 동일한 비밀번호 입력'
+            onKeyUp={(e) => {
+              inputHandler('password2', e);
+            }}
+          />
+          {check.password2 ? (
+            <Valid to='#'>
+              <ColorIcon.FcApproval />
+            </Valid>
+          ) : (
+            <Invalid to='#'>
+              <ColorIcon.FcCancel />
+            </Invalid>
+          )}
+
           <SubTitle>선택사항</SubTitle>
           <InputCatecory>프로필 이미지 등록</InputCatecory>
-          <InputField type='file' name='profileImage' />
+          <SignUpInput type='file' name='profileImage' accept='image/*' />
 
           {check.userEmail && check.password && check.password2 && check.nickName ? (
-            <SignUpSubmit
-              type='submit'
-              value='회원가입'
-              onClick={() => {
-                setTimeout(() => {
-                  dispatch(setIsSignup(false));
-                }, 10000);
-              }}
-            ></SignUpSubmit>
+            <SignUpSubmit type='submit' value='회원가입'></SignUpSubmit>
           ) : (
-            <SignUpSubmitDiv>회원가입</SignUpSubmitDiv>
+            <SubmitDiv>회원가입</SubmitDiv>
           )}
         </SignUpContainer>
-      </ModalWrapper>
+      </SignUpWrapper>
     </Background>
   );
 }
 
 export default SidebarSignUp;
+
+const TestDiv = styled.div`
+  color: white;
+`;
 
 const Background = styled.div`
   background: rgb(245, 245, 245);
@@ -266,7 +288,7 @@ const Background = styled.div`
   align-items: center;
 `;
 
-const ModalWrapper = styled.div`
+const SignUpWrapper = styled.div`
   background-color: #15172b;
   border-radius: 20px;
   box-sizing: border-box;
@@ -282,6 +304,28 @@ const ModalWrapper = styled.div`
   }
   & .alert-box {
     color: #eee;
+  }
+`;
+
+const EditWrapper = styled.div`
+  background-color: #0e6973;
+  border-radius: 20px;
+  box-sizing: border-box;
+  height: 580px;
+  padding: 20px 25px;
+  width: 400px;
+  transition: all 0.2s ease-in-out;
+  text-decoration: none;
+  z-index: 10;
+  position: relative;
+  & .invisable {
+    display: none;
+  }
+  & .alert-box {
+    color: #eee;
+  }
+  & .access {
+    display: none;
   }
 `;
 
@@ -306,6 +350,11 @@ const SignUpContainer = styled.form`
   position: relative;
   width: 100%;
 `;
+const EditContainer = styled.form`
+  height: 50px;
+  position: relative;
+  width: 100%;
+`;
 
 const InputCatecory = styled.div`
   width: 90%;
@@ -315,7 +364,7 @@ const InputCatecory = styled.div`
   color: #eee;
 `;
 
-const InputField = styled.input`
+const SignUpInput = styled.input`
   box-sizing: border-box;
   color: #eee;
   font-size: 15px;
@@ -328,6 +377,27 @@ const InputField = styled.input`
   background-color: rgba(255, 255, 255, 0);
   ::placeholder {
     color: #87ceea;
+    font-style: italic;
+  }
+
+  & .email {
+    width: 50%;
+  }
+`;
+
+const EditInput = styled.input`
+  box-sizing: border-box;
+  color: #eee;
+  font-size: 15px;
+  height: 80%;
+  outline: 0;
+  padding: 4px 20px 0;
+  width: 88%;
+  border: none;
+  border-bottom: 2px solid #fff;
+  background-color: rgba(255, 255, 255, 0.1);
+  ::placeholder {
+    color: #8fbc8f;
     font-style: italic;
   }
 `;
@@ -353,7 +423,30 @@ const SignUpSubmit = styled.input`
     color: #15172b;
   }
 `;
-const SignUpSubmitDiv = styled.div`
+
+const EditSubmit = styled.input`
+  background-color: #e4fff7;
+  border-radius: 12px;
+  border: 0;
+  box-sizing: border-box;
+  color: #000;
+  cursor: pointer;
+  font-size: 18px;
+  height: 50px;
+  margin-top: 33px;
+  text-align: center;
+  width: 100%;
+  transition: all 0.2s ease-in-out;
+  text-decoration: none;
+
+  &:hover {
+    transition: all 0.2s ease-in-out;
+    background-color: #04bfbf;
+    color: #15172b;
+  }
+`;
+
+const SubmitDiv = styled.div`
   display: flex;
   justify-content: center;
   flex-direction: column;

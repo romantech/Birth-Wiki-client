@@ -10,7 +10,6 @@ import { FaRegHeart } from 'react-icons/fa';
 
 function FavoriteButton(props: any) {
   const [isLikeAdd, setIsLikeAdd] = useState(false);
-  const [getCardData, setGetCardData] = useState(null);
   const isLogin = useSelector((state: RootState) => state.loginReducer.isLogin);
   const userInfo = useSelector((state: RootState) => state.userInfoReducer.userInfo);
 

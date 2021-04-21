@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { useHistory, Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../store/index';
-import { setIsLogin, setUserInfo, setIsSidbar, setIsSignup } from '../actions/index';
+import { setIsLogin, setUserInfo, setIsSidbar, setIsEdit } from '../actions/index';
 import axios from 'axios';
 
 const MypageContainer = styled.div`
@@ -60,7 +60,7 @@ const UserInfo = styled.div`
   overflow: auto;
 `;
 
-const UserInfoEdit = styled(Link)`
+const UserInfoEdit = styled.button`
   border-radius: 50px;
   background: rgba(6, 11, 38, 0.8);
   white-space: nowrap;
@@ -178,8 +178,7 @@ const MyBookMark = styled(Link)`
 
 function SidebarMypage() {
   const userInfo = useSelector((state: RootState) => state.userInfoReducer.userInfo);
-  const { accessToken, source } = userInfo;
-  console.log('source', source);
+  const { accessToken, source, profileImage, nickName, userEmail } = userInfo;
   const sidebar = useSelector((state: RootState) => state.sidebarReducer.isSidebar);
   const dispatch = useDispatch();
   const [storyclicked, setStoryClicked] = useState(false);
@@ -191,6 +190,9 @@ function SidebarMypage() {
     axios({
       url: birthwikiServer,
       method: 'POST',
+      data: {
+        source: source,
+      },
       headers: {
         authorization: `Bearer ${accessToken}`,
       },
@@ -204,8 +206,8 @@ function SidebarMypage() {
   };
 
   const editHandler = () => {
-    dispatch(setIsSidbar(!sidebar));
-    <Link to='/edit' />;
+    dispatch(setIsSidbar(false));
+    dispatch(setIsEdit(true));
   };
 
   const clickedStoryHandler = () => {
@@ -221,20 +223,18 @@ function SidebarMypage() {
       Mypage
       <ProfileContainer>
         <Profile>
-          {userInfo.profileImage ? (
-            <UserPoto src={`${userInfo.profileImage}`}></UserPoto>
+          {profileImage ? (
+            <UserPoto src={`${profileImage}`}></UserPoto>
           ) : (
-            <UserPoto src={`${process.env.PUBLIC_URL}img/profile.png`}></UserPoto>
+            <UserPoto src={`${process.env.PUBLIC_URL}/img/profile.png`}></UserPoto>
           )}
 
           <UserInfoContainer>
-            <UserInfo>{userInfo.nickName}</UserInfo>
-            <UserInfo>{userInfo.userEmail}</UserInfo>
+            <UserInfo>{nickName}</UserInfo>
+            <UserInfo>{userEmail}</UserInfo>
           </UserInfoContainer>
         </Profile>
-        <UserInfoEdit to='/edit' onClick={editHandler}>
-          Edit
-        </UserInfoEdit>
+        <UserInfoEdit onClick={editHandler}>Edit</UserInfoEdit>
         <Logout type='submit' onClick={logoutHandler}>
           Logout
         </Logout>

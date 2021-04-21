@@ -10,12 +10,6 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 function SidebarLogin() {
-  const userInfo = useSelector((state: RootState) => state.userInfoReducer.userInfo);
-  const isLogin = useSelector((state: RootState) => state.loginReducer.isLogin);
-  const isSidebar = useSelector((state: RootState) => state.sidebarReducer.isSidebar);
-  const isSignup = useSelector((state: RootState) => state.signupReducer.isSignup);
-
-  const history = useHistory();
   const dispatch = useDispatch();
 
   const googleLoginHandler = () => {
@@ -64,13 +58,16 @@ function SidebarLogin() {
   const { userEmail, password, errorMsg, source } = loginInfo;
 
   const inputHandler = (key: string) => (e: React.ChangeEvent<HTMLInputElement>) => {
+    localStorage.setItem('source', 'home');
     setLoginInfo({
       ...loginInfo,
       [key]: e.target.value,
+      source: 'home',
     });
   };
 
   const homeLoginHandler = async () => {
+    localStorage.setItem('source', 'home');
     const birthwikiServer = 'https://server.birthwiki.space/user/login';
     if (!userEmail || !password) {
       return setLoginInfo({

@@ -6,6 +6,7 @@ export const SET_USER_INFO = 'SET_USER_INFO';
 export const SET_IS_LOGIN = 'SET_IS_LOGIN';
 export const SET_IS_SIDEBAR = 'SET_IS_SIDEBAR';
 export const SET_IS_SIGNUP = 'SET_IS_SIGNUP';
+export const SET_IS_EDIT = 'SET_IS_EDIT';
 
 export const setUserInfo = (userInfo: UserInfo) => {
   return {
@@ -47,6 +48,14 @@ export const setIsSignup = (isSignup: boolean) => {
     payload: isSignup,
   };
 };
+
+export const setIsEdit = (isEdit: boolean) => {
+  return {
+    type: SET_IS_EDIT,
+    payload: isEdit,
+  };
+};
+
 export type CounterAction =
   | ReturnType<typeof createRecord>
   | ReturnType<typeof removeRecord>
