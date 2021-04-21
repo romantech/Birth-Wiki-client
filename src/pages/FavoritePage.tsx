@@ -23,12 +23,18 @@ let sliceEnd = 11;
 const FavoritePage = (): JSX.Element => {
   const { userInfo } = useSelector((state: RootState) => state.userInfoReducer);
   const { likeCards } = userInfo;
-  let generalCategory = likeCards.filter(
-    (el: { category: string }) => el.category !== 'music' && el.category !== 'movie',
-  );
-  const mediaCategory = likeCards.filter(
-    (el: { category: string }) => el.category === 'music' || el.category === 'movie',
-  );
+
+  let generalCategory: LikeCards[] = [];
+  let mediaCategory: LikeCards[] = [];
+
+  if (likeCards !== null) {
+    generalCategory = likeCards.filter(
+      (el: { category: string }) => el.category !== 'music' && el.category !== 'movie',
+    );
+    mediaCategory = likeCards.filter(
+      (el: { category: string }) => el.category === 'music' || el.category === 'movie',
+    );
+  }
 
   const [renderArray, setRenderArray] = useState<LikeCards[]>([]);
   const [filteredArray, setFilteredArray] = useState<LikeCards[]>(generalCategory);
@@ -109,8 +115,8 @@ const FavoritePage = (): JSX.Element => {
             columnClassName='masonry-grid_column'
           >
             <ProfileCard
-              userNickName={userInfo.userNickName}
-              likeCards={userInfo.likeCards.length}
+              nickName={userInfo.nickName}
+              likeCards={userInfo.likeCards !== null ? userInfo.likeCards : 0}
               profileImage={userInfo.profileImage}
             />
             {renderArray.map((card, index) => (
@@ -121,7 +127,6 @@ const FavoritePage = (): JSX.Element => {
                 image={card.image}
                 key={index}
                 contents={card.contents}
-                mediaCategory={mediaCategory}
               />
             ))}
           </Masonry>

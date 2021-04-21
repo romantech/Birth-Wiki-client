@@ -6,20 +6,7 @@ import FavoriteShareModal from '../components/FavoriteShareModal';
 import { LikeCards } from '../types/index';
 import getVerticalImg from '../utils/resizeImage';
 
-interface Props {
-  item: {
-    webformatURL: string;
-    tags: string;
-  };
-}
-
-const FavoriteCardList = ({
-  category,
-  image: imgPath,
-  contents,
-  date,
-  mediaCategory,
-}: LikeCards): JSX.Element => {
+const FavoriteCardList = ({ category, image: imgPath, contents, date }: LikeCards): JSX.Element => {
   const shareRef = useRef<HTMLDivElement>(null);
 
   // const { webformatURL, tags } = item;
@@ -29,6 +16,8 @@ const FavoriteCardList = ({
     pageX: 0,
     pageY: 0,
   });
+
+  console.log(contents);
 
   const openModal = () => {
     setShowModal((prev) => !prev);
@@ -69,7 +58,7 @@ const FavoriteCardList = ({
             <h2>{date.split('-')[0] + '월' + date.split('-')[1] + '일'}</h2>
             <li />
             {contents.map((issue, index) => (
-              <p key={index}>{issue}</p>
+              <p key={index}>{`${issue[0]} - ${issue[1]}`}</p>
             ))}
             <ModalView onClick={openModal}>크게보기</ModalView>
           </FlipCardBack>

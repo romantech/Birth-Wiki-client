@@ -39,7 +39,7 @@ const ProfileCard = ({ ...props }: UserProfileCard): JSX.Element => {
       <div>
         <span>
           Hello
-          <b>{` ${props.userNickName}`}</b>
+          <b>{` ${props.nickName}`}</b>
         </span>
         <span>
           You have

@@ -57,7 +57,7 @@ const FavoriteModal = ({ showModal, setShowModal, imgPath, issue, category, date
                 </div>
                 <div>
                   {issue.map((issue, index) => (
-                    <p key={index}>{issue}</p>
+                    <p key={index}>{`${issue[0]} - ${issue[1]}`}</p>
                   ))}
                 </div>
                 <IconWrapper>

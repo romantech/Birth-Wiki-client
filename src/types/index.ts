@@ -19,11 +19,10 @@ export interface LikeCards {
   category: string;
   contents: string[];
   image: string;
-  mediaCategory: string[];
 }
 
 export interface UserProfileCard {
-  userNickName: string;
+  nickName: string;
   likeCards: Array<string>;
   profileImage: string;
 }
