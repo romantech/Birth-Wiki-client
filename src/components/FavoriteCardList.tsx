@@ -3,6 +3,7 @@ import styled, { css } from 'styled-components';
 import { FiHeart, FiShare } from 'react-icons/fi';
 import FavoriteModal from '../components/FavoriteModal';
 import FavoriteShareModal from '../components/FavoriteShareModal';
+import UnlikeConfirmModal from '../components/UnlikeConfirmModal';
 import { LikeCardsGeneral } from '../types/index';
 import getVerticalImg from '../utils/resizeImage';
 
@@ -16,6 +17,7 @@ const FavoriteCardList = ({ ...props }: SetFilteredArray): JSX.Element => {
   const contents = props.contents !== null ? props.contents : [];
   const category = props.category;
 
+  const [unLikeModal, setUnlikeModal] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [shareModal, setShareModal] = useState(false);
   const [xyPosition, setXYPosition] = useState({
@@ -43,18 +45,18 @@ const FavoriteCardList = ({ ...props }: SetFilteredArray): JSX.Element => {
   };
 
   const setUnlike = () => {
-    const confirm: boolean = window.confirm('좋아요를 취소하시겠습니까?');
-    console.log(confirm);
-    if (confirm) {
-      const setLiked = props.filteredArray.map((el) => {
-        if (el.id === props.id) {
-          el.like = false;
-          return el;
-        }
-        return el;
-      });
-      props.setFilteredArray(setLiked);
-    }
+    // const confirm: boolean = window.confirm('좋아요를 취소하시겠습니까?');
+    // console.log(confirm);
+    // if (confirm) {
+    //   const setLiked = props.filteredArray.map((el) => {
+    //     if (el.id === props.id) {
+    //       el.like = false;
+    //       return el;
+    //     }
+    //     return el;
+    //   });
+    //   props.setFilteredArray(setLiked);
+    // }
   };
 
   props.image.includes('unsplash') ? (props.image = getVerticalImg(props.image)) : props.image;
@@ -69,7 +71,7 @@ const FavoriteCardList = ({ ...props }: SetFilteredArray): JSX.Element => {
           </FlipCardFront>
           <FlipCardBackGeneral>
             <IconWrapper>
-              <IconCircle onClick={setUnlike}>
+              <IconCircle onClick={() => setUnlikeModal((prev) => !prev)}>
                 <HeartIcon />
               </IconCircle>
               <IconCircle onClick={openShareModal} ref={shareRef}>
@@ -77,7 +79,7 @@ const FavoriteCardList = ({ ...props }: SetFilteredArray): JSX.Element => {
               </IconCircle>
             </IconWrapper>
             {category !== 'music' && category !== 'movie' ? (
-              <h2>{`${props.date.split('-')[0]}월 ${props.date.split('-')[1]}일`}</h2>
+              <h2>{`${props.date.split('-')[0]}월${props.date.split('-')[1]}일`}</h2>
             ) : (
               <>
                 <h2>{`${props.date.split('-')[0]}년`}</h2>
@@ -133,6 +135,13 @@ const FavoriteCardList = ({ ...props }: SetFilteredArray): JSX.Element => {
         date={props.date}
         korea={props.korea}
         world={props.world}
+      />
+      <UnlikeConfirmModal
+        id={props.id}
+        unLikeModal={unLikeModal}
+        filteredArray={props.filteredArray}
+        setFilteredArray={props.setFilteredArray}
+        setUnlikeModal={setUnlikeModal}
       />
     </>
   );
