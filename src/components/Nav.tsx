@@ -55,6 +55,7 @@ function Nav() {
       <Favorite to='/myFavorite'>
         <FcLike />
       </Favorite>
+
       {isSidebar ? (
         <NavSidebar>
           <SidebarsClose to='#'>

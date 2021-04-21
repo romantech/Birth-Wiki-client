@@ -78,7 +78,7 @@ function SidebarLogin() {
 
     try {
       const res = await axios.post(birthwikiServer, { userEmail, password, source });
-      console.log(res.data.data);
+
       dispatch(setUserInfo(res.data.data));
       dispatch(setIsLogin(true));
     } catch (err) {
@@ -158,7 +158,6 @@ const LoginContainer = styled.div`
   width: 300px;
   margin: 10px;
   top: 60px;
-  overflow: scroll;
   position: fixed;
 `;
 

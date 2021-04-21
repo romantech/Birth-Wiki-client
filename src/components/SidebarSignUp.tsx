@@ -5,6 +5,7 @@ import { RootState } from '../store/index';
 import { setIsLogin, setUserInfo, setIsSidbar, setIsSignup } from '../actions/index';
 import { useHistory, Link } from 'react-router-dom';
 import * as ColorIcon from 'react-icons/fc';
+import { AiOutlineClose } from 'react-icons/ai';
 import { validateEmail, validatePassword, matchPassword, validateNickName } from '../utils/validate';
 import axios from 'axios';
 
@@ -19,6 +20,8 @@ function SidebarSignUp() {
     password: false,
     password2: false,
     nickName: false,
+    errorMsg: false,
+    errorMsg1: false,
   });
 
   const [duple, setduple] = useState({
@@ -33,9 +36,10 @@ function SidebarSignUp() {
     nickName: '',
     profileImage: '',
     errorMsg: '',
+    errorMsg1: '',
   });
 
-  const { password, password2, errorMsg } = signUpInfo;
+  const { password, password2, errorMsg, errorMsg1 } = signUpInfo;
 
   const inputHandler = async (key: string, e: any) => {
     setSignUpInfo({
@@ -78,14 +82,6 @@ function SidebarSignUp() {
     }
   };
 
-  const SigninRef: any = useRef<HTMLDivElement>(null);
-  const closeSignin = (e: React.SyntheticEvent) => {
-    if (SigninRef.current === (e.target as typeof e.target)) {
-      dispatch(setIsSidbar(!isSidebar));
-      dispatch(setIsSignup(false));
-    }
-  };
-
   const checkedEmail = () => {
     if (check.userEmail) {
       axios({
@@ -104,14 +100,22 @@ function SidebarSignUp() {
         .catch((err) => {
           setduple({ ...duple, userEmail: false });
           return !err.response
-            ? setSignUpInfo({
+            ? (setSignUpInfo({
                 ...signUpInfo,
                 errorMsg: '❗️ 서버 오류, 잠시 후 다시 시도해주세요',
-              })
-            : setSignUpInfo({
+              }),
+              setCheck({
+                ...check,
+                errorMsg: false,
+              }))
+            : (setSignUpInfo({
                 ...signUpInfo,
                 errorMsg: '❗️ 이미 가입된 이메일입니다',
-              });
+              }),
+              setCheck({
+                ...check,
+                errorMsg: false,
+              }));
         });
     }
   };
@@ -126,28 +130,48 @@ function SidebarSignUp() {
         .then((res) => {
           setSignUpInfo({
             ...signUpInfo,
-            errorMsg: '',
+            errorMsg1: '',
+          });
+          setCheck({
+            ...check,
+            errorMsg1: true,
           });
           setduple({ ...duple, userEmail: true });
         })
         .catch((err) => {
           setduple({ ...duple, userEmail: false });
           return !err.response
-            ? setSignUpInfo({
+            ? (setSignUpInfo({
                 ...signUpInfo,
-                errorMsg: '❗️ 서버 오류, 잠시 후 다시 시도해주세요',
-              })
-            : setSignUpInfo({
+                errorMsg1: '❗️ 서버 오류, 잠시 후 다시 시도해주세요',
+              }),
+              setCheck({
+                ...check,
+                errorMsg1: false,
+              }))
+            : (setSignUpInfo({
                 ...signUpInfo,
-                errorMsg: '❗️ 이미 사용중인 닉네임입니다',
-              });
+                errorMsg1: '❗️ 이미 사용중인 닉네임입니다',
+              }),
+              setCheck({
+                ...check,
+                errorMsg1: false,
+              }));
         });
     }
   };
 
+  const closeSignin = () => {
+    dispatch(setIsSidbar(true));
+    dispatch(setIsSignup(false));
+  };
+
   return (
-    <Background ref={SigninRef} onClick={closeSignin}>
+    <Background>
       <SignUpWrapper>
+        <SigninClose to='#'>
+          <AiOutlineClose onClick={closeSignin} />
+        </SigninClose>
         <Title>Welcome!</Title>
         <SubTitle>필수 사항</SubTitle>
         <iframe
@@ -200,6 +224,7 @@ function SidebarSignUp() {
               <ColorIcon.FcCancel />
             </Invalid>
           )}
+          {errorMsg ? <ErrorMsg>{errorMsg}</ErrorMsg> : ''}
           <InputCatecory>닉네임</InputCatecory>
           <SignUpInput
             type='text'
@@ -220,6 +245,7 @@ function SidebarSignUp() {
               <ColorIcon.FcCancel />
             </Invalid>
           )}
+          {errorMsg1 ? <ErrorMsg>{errorMsg1}</ErrorMsg> : ''}
           <InputCatecory>password</InputCatecory>
           <SignUpInput
             type='password'
@@ -294,7 +320,7 @@ const SignUpWrapper = styled.div`
   box-sizing: border-box;
   height: 680px;
   padding: 20px 25px;
-  width: 400px;
+  width: 500px;
   transition: all 0.2s ease-in-out;
   text-decoration: none;
   z-index: 10;
@@ -304,28 +330,6 @@ const SignUpWrapper = styled.div`
   }
   & .alert-box {
     color: #eee;
-  }
-`;
-
-const EditWrapper = styled.div`
-  background-color: #0e6973;
-  border-radius: 20px;
-  box-sizing: border-box;
-  height: 580px;
-  padding: 20px 25px;
-  width: 400px;
-  transition: all 0.2s ease-in-out;
-  text-decoration: none;
-  z-index: 10;
-  position: relative;
-  & .invisable {
-    display: none;
-  }
-  & .alert-box {
-    color: #eee;
-  }
-  & .access {
-    display: none;
   }
 `;
 
@@ -336,7 +340,18 @@ const Title = styled.div`
   font-weight: 600;
   margin-top: 10px;
 `;
-
+const SigninClose = styled(Link)`
+  display: flex;
+  align-items: center;
+  font-size: 30px;
+  margin: 10px;
+  position: absolute;
+  right: 32px;
+  height: 40px;
+  font-size: 2rem;
+  background: none;
+  color: #fff;
+`;
 const SubTitle = styled.div`
   color: #eee;
   font-family: sans-serif;
@@ -362,6 +377,11 @@ const InputCatecory = styled.div`
   padding: 0.5rem;
   margin: 5px;
   color: #eee;
+`;
+
+const ErrorMsg = styled.div`
+  font-size: 10px;
+  color: pink;
 `;
 
 const SignUpInput = styled.input`

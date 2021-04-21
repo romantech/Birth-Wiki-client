@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../store/index';
 import { setIsLogin, setUserInfo, setIsSidbar, setIsEdit } from '../actions/index';
 import axios from 'axios';
+import initialState from '../reducers/initialState';
 
 const MypageContainer = styled.div`
   color: #fff;
@@ -171,14 +172,15 @@ const MyBookMarkList = styled.div`
   }
 `;
 
-const MyBookMark = styled(Link)`
+const MyBookMark = styled.button`
   display: flex;
   margin: 5px;
 `;
 
 function SidebarMypage() {
   const userInfo = useSelector((state: RootState) => state.userInfoReducer.userInfo);
-  const { accessToken, source, profileImage, nickName, userEmail } = userInfo;
+  const { accessToken, source, profileImage, nickName, userEmail, likeCards, recordCards } = userInfo;
+  console.log('source', source);
   const sidebar = useSelector((state: RootState) => state.sidebarReducer.isSidebar);
   const dispatch = useDispatch();
   const [storyclicked, setStoryClicked] = useState(false);
@@ -201,7 +203,9 @@ function SidebarMypage() {
         console.log('Logout', res);
         dispatch(setIsLogin(false));
         dispatch(setIsSidbar(false));
+        //dispatch(setUserInfo(initialState.userInfo));
       })
+      .then(() => console.log(userInfo))
       .catch((error) => console.log('err', error.message));
   };
 
@@ -220,6 +224,8 @@ function SidebarMypage() {
 
   return (
     <MypageContainer>
+      {console.log(likeCards[0].category)}
+      {console.log(likeCards[0].date)}
       Mypage
       <ProfileContainer>
         <Profile>
@@ -242,24 +248,18 @@ function SidebarMypage() {
       <MyStoryContainer>
         <MyStoryList>
           <p onClick={clickedStoryHandler}> 나만의 기록리스트 </p>
-          {storyclicked
-            ? userInfo.recordCard.map((data: any) => (
+          {/* {storyclicked
+            ? recordCards.map((data: any) => (
                 <MyStory to='/' key={data.id}>
                   {data}
                 </MyStory>
               ))
-            : ''}
+            : ''} */}
         </MyStoryList>
 
         <MyBookMarkList>
           <p onClick={clickMarkHandler}> 나의 찜 리스트 </p>
-          {markclicked
-            ? userInfo.likeCard.map((data: any) => (
-                <MyBookMark to='/' key={data.id}>
-                  {data}
-                </MyBookMark>
-              ))
-            : ''}
+          <div></div>
         </MyBookMarkList>
       </MyStoryContainer>
     </MypageContainer>

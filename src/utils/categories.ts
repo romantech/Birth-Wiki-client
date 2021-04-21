@@ -16,11 +16,11 @@ export default [
     imagePath: '/img/events.jpg',
   },
   {
-    categoryName: 'BIRTHS',
+    categoryName: 'BIRTH',
     imagePath: '/img/births.jpg',
   },
   {
-    categoryName: 'DEATHS',
+    categoryName: 'DEATH',
     imagePath: '/img/deaths.jpg',
   },
   {
