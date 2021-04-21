@@ -17,7 +17,6 @@ import cloud from '../img/cloud.jpg';
 const Weather: React.FC = ({ match }: any) => {
   const selectedDate = match.params.date.replace(/(\d{4})(\d{2})(\d{2})/g, '$1-$2-$3');
   const selectedDate2 = new URL(window.location.href).pathname;
-  console.log(selectedDate);
   const [weather, setWeather] = useState(clear);
   const [text, setText] = useState('화창한');
   const [showCard, setShowCard] = useState(false);
@@ -36,8 +35,7 @@ const Weather: React.FC = ({ match }: any) => {
         data: { date: `${selectedDate2.split('/')[2]}` },
       }).then((response) => {
         setData(response.data.data);
-        console.log(response.data.data.issueCard);
-        // setWeatherData(response.data.data.weatherCard[0]);
+        setWeatherData(response.data.data.weatherCard.weather);
         // console.log(response.data.data.weatherCard[0]);
       });
     };
@@ -88,7 +86,7 @@ const Weather: React.FC = ({ match }: any) => {
 
     input {
       display: block;
-      font-size: 20px;
+      font-size: 1.3rem;
       padding: 10px;
       background: none;
       appearance: none;
@@ -115,7 +113,7 @@ const Weather: React.FC = ({ match }: any) => {
       justify-content: center;
       align-items: center;
       margin: 10px;
-      font-size: 1.4rem;
+      font-size: 1.1rem;
       font-weight: 800;
     }
   `;

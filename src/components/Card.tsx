@@ -19,7 +19,7 @@ const Card = (props: any) => {
     width: 100%;
     padding: 4% 2% 0;
     box-sizing: border-box;
-    height: 50vh;
+    height: 40vh;
   `;
 
   const CardContents = styled.div`

@@ -87,14 +87,14 @@ function CardCreate() {
         <iframe name='frAttachFiles' className='invisable'></iframe>
         <form
           target='frAttachFiles'
-          action='https://server.bitrhwiki.com/record/create'
+          action='https://server.birthwiki.space/record/create'
           method='POST'
           encType='multipart/form-data'
         >
           <div className='crtCard'>
-            <label className='input-file-button' htmlFor='input-file'>
+            {/* <label className='input-file-button' htmlFor='input-file'>
               이미지 업로드
-            </label>
+            </label> */}
             <input type='file' name='cardImage' id='input-file' />
           </div>
           <div className='crtCard'>
