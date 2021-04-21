@@ -2,13 +2,13 @@ import React, { useState, useRef } from 'react';
 import styled from 'styled-components';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../store/index';
-import { setIsLogin, setUserInfo, setIsSidbar, setIsSignup } from '../actions/index';
+import { setIsLogin, setUserInfo, setIsSidbar, setIsEdit } from '../actions/index';
 import { useHistory, Link } from 'react-router-dom';
 import * as ColorIcon from 'react-icons/fc';
 import { validatePassword, matchPassword, validateNickName } from '../utils/validate';
 import axios from 'axios';
 
-function SidebarEdit() {
+function SidebarEdit({ setChangeInfo }: any) {
   const isSidebar = useSelector((state: RootState) => state.sidebarReducer.isSidebar);
   const userInfo = useSelector((state: RootState) => state.userInfoReducer.userInfo);
   const dispatch = useDispatch();
@@ -101,7 +101,7 @@ function SidebarEdit() {
   const closeEidt = (e: React.SyntheticEvent) => {
     if (EidtRef.current === (e.target as typeof e.target)) {
       dispatch(setIsSidbar(!isSidebar));
-      dispatch(setIsSignup(false));
+      dispatch(setIsEdit(false));
     }
   };
   return (
@@ -109,7 +109,15 @@ function SidebarEdit() {
       <EditWrapper>
         <Title>회원 정보 수정</Title>
         <SubTitle>필수 사항</SubTitle>
-        <iframe name='frAttachFiles' className='invisable'></iframe>
+        <iframe
+          name='frAttachFiles'
+          className='invisable'
+          onLoad={() => {
+            dispatch(setIsEdit(false));
+            dispatch(setIsSidbar(true));
+            setChangeInfo(true);
+          }}
+        ></iframe>
         {errorMsg ? <div className='alert-box'>{errorMsg}</div> : ''}
         <EditContainer
           action='https://server.birthwiki.space/user/update'
@@ -186,17 +194,7 @@ function SidebarEdit() {
           <InputCatecory>프로필 이미지 등록</InputCatecory>
           <EditInput type='file' name='profileImage' accept='image/*' />
           {(check.password && check.password2) || check.nickName ? (
-            <EditSubmit
-              type='submit'
-              value='회원 정보 수정'
-              onClick={() => {
-                setTimeout(() => {
-                  dispatch(setUserInfo(editUserInfo));
-                  dispatch(setIsSignup(false));
-                  dispatch(setIsSidbar(true));
-                }, 5000);
-              }}
-            ></EditSubmit>
+            <EditSubmit type='submit' value='회원 정보 수정'></EditSubmit>
           ) : (
             <SubmitDiv>회원 정보 수정</SubmitDiv>
           )}

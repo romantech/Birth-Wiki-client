@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { useHistory, Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../store/index';
-import { setIsLogin, setUserInfo, setIsSidbar, setIsSignup } from '../actions/index';
+import { setIsLogin, setUserInfo, setIsSidbar, setIsEdit } from '../actions/index';
 import axios from 'axios';
 import initialState from '../reducers/initialState';
 
@@ -211,7 +211,7 @@ function SidebarMypage() {
 
   const editHandler = () => {
     dispatch(setIsSidbar(false));
-    dispatch(setIsSignup(true));
+    dispatch(setIsEdit(true));
   };
 
   const clickedStoryHandler = () => {

@@ -6,22 +6,17 @@ import * as IconName from 'react-icons/fc';
 import axios from 'axios';
 import { setIsLogin, setUserInfo, setIsSidbar, setIsSignup } from '../actions/index';
 import { RootState } from '../store/index';
-import 'dotenv/config';
+import dotenv from 'dotenv';
+dotenv.config();
 
 function SidebarLogin() {
-  const userInfo = useSelector((state: RootState) => state.userInfoReducer.userInfo);
-  const isLogin = useSelector((state: RootState) => state.loginReducer.isLogin);
-  const isSidebar = useSelector((state: RootState) => state.sidebarReducer.isSidebar);
-  const isSignup = useSelector((state: RootState) => state.signupReducer.isSignup);
-
-  const history = useHistory();
   const dispatch = useDispatch();
 
   const googleLoginHandler = () => {
     localStorage.setItem('source', 'google');
     const url = 'https://accounts.google.com/o/oauth2/auth';
     const client_id = `client_id=${process.env.REACT_APP_G_CLIENTID}`;
-    const redirect_uri = `redirect_uri=${process.env.REACT_APP_URI_REDIRECT}`;
+    const redirect_uri = `redirect_uri=https://localhost:3000`;
     const scope =
       'scope=https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/userinfo.profile';
     const response_type = 'response_type=code';
@@ -63,13 +58,16 @@ function SidebarLogin() {
   const { userEmail, password, errorMsg, source } = loginInfo;
 
   const inputHandler = (key: string) => (e: React.ChangeEvent<HTMLInputElement>) => {
+    localStorage.setItem('source', 'home');
     setLoginInfo({
       ...loginInfo,
       [key]: e.target.value,
+      source: 'home',
     });
   };
 
   const homeLoginHandler = async () => {
+    localStorage.setItem('source', 'home');
     const birthwikiServer = 'https://server.birthwiki.space/user/login';
     if (!userEmail || !password) {
       return setLoginInfo({

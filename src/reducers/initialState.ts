@@ -2,6 +2,7 @@ export default {
   isLogin: false,
   isSidebar: false,
   isSignup: false,
+  isEdit: false,
   userInfo: {
     userEmail: null,
     nickName: null,

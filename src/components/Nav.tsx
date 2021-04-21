@@ -11,16 +11,13 @@ import { setIsSidbar, setIsLogin, setIsSignup, setUserInfo } from '../actions';
 import { FcLike } from 'react-icons/fc';
 import axios from 'axios';
 
-function Nav({ isLogin }: any) {
+function Nav() {
   const isSidebar = useSelector((state: RootState) => state.sidebarReducer.isSidebar);
   const userInfo = useSelector((state: RootState) => state.userInfoReducer.userInfo);
+  const isLogin = useSelector((state: RootState) => state.loginReducer.isLogin);
   const dispatch = useDispatch();
-  const showSidebar = () => {
-    dispatch(setIsSidbar(!isSidebar));
-  };
 
   useEffect(() => {
-    console.log(localStorage.getItem('source'));
     const url = new URL(window.location.href);
     const AuthorizationCode = url.searchParams.get('code');
 
@@ -34,13 +31,15 @@ function Nav({ isLogin }: any) {
         },
         withCredentials: true,
       }).then((res) => {
-        console.log(res);
         dispatch(setUserInfo(res.data.data));
         dispatch(setIsLogin(true));
-        //setAt(res.data.data.accessToken)
       });
     }
   }, []);
+
+  const showSidebar = () => {
+    dispatch(setIsSidbar(!isSidebar));
+  };
 
   const clickHandler = () => {
     window.location.replace('/');
