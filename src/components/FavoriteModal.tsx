@@ -2,18 +2,15 @@ import React, { useRef, useEffect, useCallback } from 'react';
 import { useSpring, animated } from 'react-spring';
 import styled from 'styled-components';
 import { MdClose } from 'react-icons/md';
+import { LikeCardsGeneral } from '../types/index';
 import { IconCircle, ShareIcon, HeartIcon } from './FavoriteCardList';
 
-interface Props {
+interface Props extends LikeCardsGeneral {
   showModal: boolean;
   setShowModal: React.Dispatch<React.SetStateAction<boolean>>;
-  imgPath: string;
-  issue: string[];
-  category: string;
-  date: string;
 }
 
-const FavoriteModal = ({ showModal, setShowModal, imgPath, issue, category, date }: Props): JSX.Element => {
+const FavoriteModal = ({ showModal, setShowModal, ...props }: Props): JSX.Element => {
   const modalRef = useRef<HTMLDivElement>(null);
   const animation = useSpring({
     config: {
@@ -22,6 +19,9 @@ const FavoriteModal = ({ showModal, setShowModal, imgPath, issue, category, date
     opacity: showModal ? 1 : 0,
     transform: showModal ? `translateY(0%)` : `translateY(100%)`,
   });
+
+  const contents = props.contents !== null ? props.contents : [];
+  const category = props.category;
 
   const closeModal = (e: React.MouseEvent<HTMLElement>) => {
     if (modalRef.current === e.target) {
@@ -49,16 +49,31 @@ const FavoriteModal = ({ showModal, setShowModal, imgPath, issue, category, date
         <Background ref={modalRef} onClick={closeModal}>
           <animated.div style={animation}>
             <ModalWrapper>
-              <ModalImg src={imgPath} alt='Selected Image' />
+              <ModalImg src={props.image} alt='Selected Image' />
               <ModalContent>
                 <div>
-                  <h1>{date.split('-')[0] + '월' + ' ' + date.split('-')[1] + '일'}</h1>
+                  {category !== 'music' && category !== 'movie' ? (
+                    <h1>{`${props.date.split('-')[0]}월 ${props.date.split('-')[1]}일`}</h1>
+                  ) : (
+                    <>
+                      <h1>{`${props.date.split('-')[0]}년 ${props.date.split('-')[1]}주`}</h1>
+                    </>
+                  )}
                   <h3>{category}</h3>
                 </div>
                 <div>
-                  {issue.map((issue, index) => (
-                    <p key={index}>{`${issue[0]} - ${issue[1]}`}</p>
-                  ))}
+                  {category !== 'music' && category !== 'movie' ? (
+                    props.contents?.map((issue, index) => <p key={index}>{`${issue[0]} - ${issue[1]}`}</p>)
+                  ) : category === 'movie' ? (
+                    <>
+                      <h3 style={{ marginBottom: '-10px' }}>한국 1위 영화</h3>
+                      <p>{props.korea === undefined ? '정보가 없습니다' : props.korea?.title}</p>
+                      <h3 style={{ marginBottom: '-10px' }}>해외 1위 영화</h3>
+                      <p>{props.world === undefined ? '정보가 없습니다' : props.world?.title}</p>
+                    </>
+                  ) : (
+                    ''
+                  )}
                 </div>
                 <IconWrapper>
                   <IconCircle className='icon-circle first' primary>

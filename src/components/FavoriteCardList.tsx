@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useRef } from 'react';
 import styled, { css } from 'styled-components';
 import { FiHeart, FiShare } from 'react-icons/fi';
 import FavoriteModal from '../components/FavoriteModal';
@@ -6,8 +6,10 @@ import FavoriteShareModal from '../components/FavoriteShareModal';
 import { LikeCardsGeneral } from '../types/index';
 import getVerticalImg from '../utils/resizeImage';
 
-const FavoriteCardList = ({ category, image: imgPath, contents, date }: LikeCardsGeneral): JSX.Element => {
+const FavoriteCardList = ({ ...props }: LikeCardsGeneral): JSX.Element => {
   const shareRef = useRef<HTMLDivElement>(null);
+  const contents = props.contents !== null ? props.contents : [];
+  const category = props.category;
 
   // const { webformatURL, tags } = item;
   const [showModal, setShowModal] = useState(false);
@@ -34,17 +36,17 @@ const FavoriteCardList = ({ category, image: imgPath, contents, date }: LikeCard
     });
   };
 
-  imgPath.includes('unsplash') ? (imgPath = getVerticalImg(imgPath)) : imgPath;
+  props.image.includes('unsplash') ? (props.image = getVerticalImg(props.image)) : props.image;
 
   return (
     <>
       <FlipCard>
-        <FlipCardInner imgPath={imgPath}>
+        <FlipCardInner imgPath={props.image} category={category}>
           <FlipCardFront>
             <CategoryName>{category}</CategoryName>
-            <img src={imgPath} alt={category} />
+            <img src={props.image} alt={category} />
           </FlipCardFront>
-          <FlipCardBack>
+          <FlipCardBackGeneral>
             <IconWrapper>
               <IconCircle>
                 <HeartIcon />
@@ -53,13 +55,32 @@ const FavoriteCardList = ({ category, image: imgPath, contents, date }: LikeCard
                 <ShareIcon />
               </IconCircle>
             </IconWrapper>
-            <h2>{date.split('-')[0] + '월' + date.split('-')[1] + '일'}</h2>
+            {category !== 'music' && category !== 'movie' ? (
+              <h2>{`${props.date.split('-')[0]}월 ${props.date.split('-')[1]}일`}</h2>
+            ) : (
+              <>
+                <h2>{`${props.date.split('-')[0]}년`}</h2>
+                <br />
+                <h4 style={{ margin: '-18px 0 -25px 0' }}>{`${props.date.split('-')[1]}주`}</h4>
+              </>
+            )}
             <li />
-            {contents.map((issue, index) => (
-              <p key={index}>{`${issue[0]} - ${issue[1]}`}</p>
-            ))}
+            {category !== 'music' && category !== 'movie' ? (
+              props.contents?.map((issue, index) => <p key={index}>{`${issue[0]} - ${issue[1]}`}</p>)
+            ) : category === 'movie' ? (
+              <>
+                <h3 style={{ marginBottom: '-10px' }}>한국 1위 영화</h3>
+                <p>{props.korea === undefined ? '정보가 없습니다' : props.korea?.title}</p>
+                <h3 style={{ marginBottom: '-10px' }}>해외 1위 영화</h3>
+                <p style={{ marginBottom: '20px' }}>
+                  {props.world === undefined ? '정보가 없습니다' : props.world?.title}
+                </p>
+              </>
+            ) : (
+              ''
+            )}
             <ModalView onClick={openModal}>크게보기</ModalView>
-          </FlipCardBack>
+          </FlipCardBackGeneral>
         </FlipCardInner>
       </FlipCard>
       <FavoriteShareModal
@@ -68,12 +89,15 @@ const FavoriteCardList = ({ category, image: imgPath, contents, date }: LikeCard
         xyPosition={xyPosition}
       ></FavoriteShareModal>
       <FavoriteModal
-        imgPath={imgPath}
+        id={props.id}
+        image={props.image}
         showModal={showModal}
         setShowModal={setShowModal}
-        issue={contents}
+        contents={contents as string[]}
         category={category}
-        date={date}
+        date={props.date}
+        korea={props.korea}
+        world={props.world}
       />
     </>
   );
@@ -177,7 +201,7 @@ const FlipCardFront = styled.div`
   }
 `;
 
-const FlipCardBack = styled.div`
+const FlipCardBackGeneral = styled.div`
   color: white;
   transform: rotateY(180deg);
   overflow: auto;
@@ -205,7 +229,7 @@ const FlipCardBack = styled.div`
   }
 `;
 
-const FlipCardInner = styled.div<{ imgPath: string }>`
+const FlipCardInner = styled.div<{ imgPath: string; category: string }>`
   width: 100%;
   height: 100%;
   transition: transform 0.6s;
@@ -218,11 +242,11 @@ const FlipCardInner = styled.div<{ imgPath: string }>`
       border-radius: 20px;
     `}
 
-  ${FlipCardBack}, ${FlipCardFront} {
+  ${FlipCardBackGeneral}, ${FlipCardFront} {
     -webkit-backface-visibility: hidden; /* Safari */
     backface-visibility: hidden;
   }
-  ${FlipCardBack} {
+  ${FlipCardBackGeneral} {
     padding: 18px;
     position: absolute;
     top: 0;
@@ -237,16 +261,22 @@ const FlipCardInner = styled.div<{ imgPath: string }>`
 
     h2 {
       position: absolute;
-      top: 3px;
+      top: 5px;
       text-transform: uppercase;
       letter-spacing: 1.5px;
       font-weight: 900;
+      font-size: 1.4rem;
     }
 
     li {
       display: block;
       border-bottom: 1px solid white;
       margin: 19px 0;
+      ${(props) =>
+        (props.category === 'music' || props.category === 'movie') &&
+        css`
+          margin: 40px 0 19px 0;
+        `}
     }
 
     p {

@@ -6,12 +6,11 @@ import InfiniteScroll from 'react-infinite-scroll-component';
 import ScrollMenu from 'react-horizontal-scrolling-menu';
 import FavoriteCategories from '../components/FavoriteCategories';
 import FavoriteCardList from '../components/FavoriteCardList';
-import FavoriteCardListMedia from '../components/FavoriteCardListMedia';
 import categories from '../utils/categories';
 import ProfileCard from '../components/FavoriteProfileCard';
 import { useSelector } from 'react-redux';
 import { RootState } from '../store';
-import { LikeCardsGeneral, LikeCardsMedia } from '../types/index';
+import { LikeCardsGeneral } from '../types/index';
 import { ArrowLeft, ArrowRight } from '../components/ArrowIcon';
 import { FaArrowCircleUp } from 'react-icons/fa';
 
@@ -25,20 +24,20 @@ const FavoritePage = (): JSX.Element => {
   const { userInfo } = useSelector((state: RootState) => state.userInfoReducer);
   const { likeCards } = userInfo;
 
-  let generalCategory: LikeCardsGeneral[] = [];
-  let mediaCategory: LikeCardsMedia[] = [];
+  // let generalCategory: LikeCardsGeneral[] = [];
+  // let mediaCategory: LikeCardsMedia[] = [];
 
-  if (likeCards !== null) {
-    generalCategory = likeCards.filter(
-      (el: { category: string }) => el.category !== 'music' && el.category !== 'movie',
-    );
-    mediaCategory = likeCards.filter(
-      (el: { category: string }) => el.category === 'music' || el.category === 'movie',
-    );
-  }
+  // if (likeCards !== null) {
+  //   generalCategory = likeCards.filter(
+  //     (el: { category: string }) => el.category !== 'music' && el.category !== 'movie',
+  //   );
+  //   mediaCategory = likeCards.filter(
+  //     (el: { category: string }) => el.category === 'music' || el.category === 'movie',
+  //   );
+  // }
 
   const [renderArray, setRenderArray] = useState<LikeCardsGeneral[]>([]);
-  const [filteredArray, setFilteredArray] = useState<LikeCardsGeneral[]>(generalCategory);
+  const [filteredArray, setFilteredArray] = useState<LikeCardsGeneral[]>(likeCards !== null ? likeCards : []);
   const [selected, setSelected] = useState<Selected>({ selected: '' });
 
   const onSelect = (key: string | number | null) => {
@@ -86,7 +85,7 @@ const FavoritePage = (): JSX.Element => {
               category={category}
               key={category.categoryName}
               setFilteredArray={setFilteredArray}
-              generalCategory={generalCategory}
+              likeCards={likeCards}
               setRenderArray={setRenderArray}
             />
           ))}
@@ -125,9 +124,11 @@ const FavoritePage = (): JSX.Element => {
                 id={card.id}
                 date={card.date}
                 category={card.category}
-                image={card.image}
-                key={index}
                 contents={card.contents}
+                image={card.image}
+                korea={card.korea}
+                world={card.world}
+                key={index}
               />
             ))}
           </Masonry>

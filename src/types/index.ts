@@ -13,29 +13,22 @@ export interface UserInfo {
   recordCard?: Array<string>;
 }
 
-export interface LikeCardsMedia {
-  id: number;
-  date: string;
-  image: string;
-  category: string;
-  korea: {
-    title: string;
-    poster: string;
-    singer?: string;
-  };
-  world: {
-    title: string;
-    poster: string;
-    singer?: string;
-  };
-}
-
 export interface LikeCardsGeneral {
   id: number;
   date: string;
   category: string;
-  contents: string[];
+  contents?: string[];
   image: string;
+  korea?: {
+    title: string;
+    poster: string;
+    singer?: string;
+  };
+  world?: {
+    title: string;
+    poster: string;
+    singer?: string;
+  };
 }
 
 export interface UserProfileCard {
