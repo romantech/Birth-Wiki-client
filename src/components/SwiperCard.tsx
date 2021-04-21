@@ -24,7 +24,7 @@ const SwiperCard = (props: any) => {
   const death = data.death;
   const birth = data.birth;
   const music = data.music;
-  const culture = data.culture;
+  const movie = data.culture;
 
   const isLogin = useSelector((state: RootState) => state.loginReducer.isLogin);
 
@@ -274,12 +274,35 @@ const SwiperCard = (props: any) => {
           <SlideCard>
             <div className='box'>
               <div className='imgBx'>
-                <img src={`${culture.image}`} alt='' />
+                <img src={`${movie.image}`} alt='' />
               </div>
               <div className='content'>
                 <div>
-                  <FavoriteButton cardData={culture} />
-                  <h2>그달의 문화들</h2>
+                  <FavoriteButton cardData={movie} />
+                  <h2>그달의 영화</h2>
+                  <p>
+                    <ul className='cultureContent'>
+                      <li className='cultureList'>
+                        <h4>{movie.world.title}</h4>
+                        <img src={`${movie.world.poster}`} alt={`${movie.world.title}`} />
+                      </li>
+                    </ul>
+                  </p>
+                </div>
+              </div>
+            </div>
+          </SlideCard>
+        </SwiperSlide>
+        <SwiperSlide className='SwipierSlide'>
+          <SlideCard>
+            <div className='box'>
+              <div className='imgBx'>
+                <img src={`${music.image}`} alt='' />
+              </div>
+              <div className='content'>
+                <div>
+                  <FavoriteButton cardData={music} />
+                  <h2>그달의 음악</h2>
                   <p>
                     <ul className='cultureContent'>
                       <li className='cultureList'>
@@ -288,10 +311,6 @@ const SwiperCard = (props: any) => {
                         </h4>
                         <span></span>
                         <img src={`${music.world.poster}`} alt={music.world.title} />
-                      </li>
-                      <li className='cultureList'>
-                        <h4>{culture.world.title}</h4>
-                        <img src={`${culture.world.poster}`} alt={`${culture.world.title}`} />
                       </li>
                     </ul>
                   </p>
