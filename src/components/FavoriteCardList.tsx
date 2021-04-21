@@ -4,6 +4,7 @@ import { FiHeart, FiShare } from 'react-icons/fi';
 import FavoriteModal from '../components/FavoriteModal';
 import FavoriteShareModal from '../components/FavoriteShareModal';
 import UnlikeConfirmModal from '../components/UnlikeConfirmModal';
+import ShareModalOfModal from '../components/ShareModalOfModal';
 import { LikeCardsGeneral } from '../types/index';
 import getVerticalImg from '../utils/resizeImage';
 
@@ -17,6 +18,7 @@ const FavoriteCardList = ({ ...props }: SetFilteredArray): JSX.Element => {
   const contents = props.contents !== null ? props.contents : [];
   const category = props.category;
 
+  const [shareModalOfModal, setShareModalOfModal] = useState(false);
   const [unLikeModal, setUnlikeModal] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [shareModal, setShareModal] = useState(false);
@@ -24,8 +26,6 @@ const FavoriteCardList = ({ ...props }: SetFilteredArray): JSX.Element => {
     pageX: 0,
     pageY: 0,
   });
-
-  console.log(props.filteredArray);
 
   const openModal = () => {
     setShowModal((prev) => !prev);
@@ -42,21 +42,6 @@ const FavoriteCardList = ({ ...props }: SetFilteredArray): JSX.Element => {
       pageX: e.pageX,
       pageY: e.pageY,
     });
-  };
-
-  const setUnlike = () => {
-    // const confirm: boolean = window.confirm('좋아요를 취소하시겠습니까?');
-    // console.log(confirm);
-    // if (confirm) {
-    //   const setLiked = props.filteredArray.map((el) => {
-    //     if (el.id === props.id) {
-    //       el.like = false;
-    //       return el;
-    //     }
-    //     return el;
-    //   });
-    //   props.setFilteredArray(setLiked);
-    // }
   };
 
   props.image.includes('unsplash') ? (props.image = getVerticalImg(props.image)) : props.image;
@@ -135,6 +120,8 @@ const FavoriteCardList = ({ ...props }: SetFilteredArray): JSX.Element => {
         date={props.date}
         korea={props.korea}
         world={props.world}
+        setUnlikeModal={setUnlikeModal}
+        setShareModalOfModal={setShareModalOfModal}
       />
       <UnlikeConfirmModal
         id={props.id}
@@ -143,6 +130,7 @@ const FavoriteCardList = ({ ...props }: SetFilteredArray): JSX.Element => {
         setFilteredArray={props.setFilteredArray}
         setUnlikeModal={setUnlikeModal}
       />
+      <ShareModalOfModal shareModalOfModal={shareModalOfModal} setShareModalOfModal={setShareModalOfModal} />
     </>
   );
 };

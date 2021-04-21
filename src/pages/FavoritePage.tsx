@@ -91,7 +91,7 @@ const FavoritePage = (): JSX.Element => {
         hasMore={renderArray.length < filteredArray.length}
         loader={<Loader />}
         endMessage={
-          <p style={{ textAlign: 'center' }}>
+          <p style={{ textAlign: 'center', marginTop: '50px' }}>
             <b>Yay! You have seen it all</b>
           </p>
         }

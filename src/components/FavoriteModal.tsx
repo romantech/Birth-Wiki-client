@@ -8,6 +8,9 @@ import { IconCircle, ShareIcon, HeartIcon } from './FavoriteCardList';
 interface Props extends LikeCardsGeneral {
   showModal: boolean;
   setShowModal: React.Dispatch<React.SetStateAction<boolean>>;
+  setUnlikeModal: React.Dispatch<React.SetStateAction<boolean>>;
+  setShareModalOfModal: React.Dispatch<React.SetStateAction<boolean>>;
+  id: number;
 }
 
 const FavoriteModal = ({ showModal, setShowModal, ...props }: Props): JSX.Element => {
@@ -83,7 +86,6 @@ const FavoriteModal = ({ showModal, setShowModal, ...props }: Props): JSX.Elemen
                         <br />
                         {props.korea === undefined ? '' : `— ${props.korea?.singer}`}
                       </p>
-
                       <h4 style={{ marginBottom: '-10px' }}>해외 1위 음악</h4>
                       <p style={{ textAlign: 'center' }}>
                         {props.world === undefined ? '정보가 없습니다 😢' : `<${props.world?.title}>`}
@@ -94,10 +96,18 @@ const FavoriteModal = ({ showModal, setShowModal, ...props }: Props): JSX.Elemen
                   )}
                 </div>
                 <IconWrapper>
-                  <IconCircle className='icon-circle first' primary>
+                  <IconCircle
+                    className='icon-circle first'
+                    primary
+                    onClick={() => props.setUnlikeModal((prev) => !prev)}
+                  >
                     <HeartIcon style={{ fontSize: '1.2rem' }} />
                   </IconCircle>
-                  <IconCircle className='icon-circle second' primary>
+                  <IconCircle
+                    className='icon-circle second'
+                    primary
+                    onClick={() => props.setShareModalOfModal((prev) => !prev)}
+                  >
                     <ShareIcon style={{ fontSize: '1.2rem' }} />
                   </IconCircle>
                   <IconCircle
@@ -240,7 +250,7 @@ const ModalContent = styled.div<{ category: string }>`
         content: '';
         display: block;
         border-bottom: 2px solid black;
-        width: 220px;
+        width: 180px;
         margin: 20px 0 30px 0;
       }
     `}
