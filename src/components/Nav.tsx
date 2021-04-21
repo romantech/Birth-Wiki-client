@@ -40,7 +40,7 @@ function Nav({ isLogin }: any) {
         //setAt(res.data.data.accessToken)
       });
     }
-  });
+  }, []);
 
   const clickHandler = () => {
     window.location.replace('/');

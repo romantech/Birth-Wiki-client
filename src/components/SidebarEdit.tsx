@@ -5,13 +5,8 @@ import { RootState } from '../store/index';
 import { setIsLogin, setUserInfo, setIsSidbar, setIsSignup } from '../actions/index';
 import { useHistory, Link } from 'react-router-dom';
 import * as ColorIcon from 'react-icons/fc';
-import {
-  validateEmail,
-  validatePassword,
-  matchPassword,
-  checkAllItems,
-  validateNickName,
-} from '../utils/validate';
+import { validatePassword, matchPassword, validateNickName } from '../utils/validate';
+import axios from 'axios';
 
 function SidebarEdit() {
   const isSidebar = useSelector((state: RootState) => state.sidebarReducer.isSidebar);
@@ -19,43 +14,129 @@ function SidebarEdit() {
   const dispatch = useDispatch();
   const history = useHistory();
   const [editUserInfo, setEditUserInfo] = useState(userInfo);
-  const [showModal, setShowModal] = useState(true);
+  console.log('editUserInfo', editUserInfo);
 
-  const inputHandler = (key: string) => (e: React.ChangeEvent<HTMLInputElement>) => {
-    setEditUserInfo(Object.assign({}, editUserInfo, { [key]: e.target.value }));
+  const { password, password2, errorMsg } = editUserInfo;
+
+  const [check, setCheck] = useState({
+    password: false,
+    password2: false,
+    nickName: false,
+  });
+
+  const inputHandler = async (key: string, e: any) => {
+    setEditUserInfo({
+      ...editUserInfo,
+      [key]: e.target.value,
+    });
+
+    console.log('password', password, 'password2', password2);
+    if (key === 'password') {
+      if (password2 === undefined) {
+        if (validatePassword(e.target.value)) {
+          setCheck({ ...check, password: true });
+        } else {
+          setCheck({ ...check, password: false });
+        }
+      } else if (password2 !== undefined) {
+        if (matchPassword(password2, e.target.value)) {
+          if (validatePassword(e.target.value)) {
+            setCheck({ ...check, password: true, password2: true });
+          } else {
+            setCheck({ ...check, password: false, password2: true });
+          }
+        } else {
+          if (validatePassword(e.target.value)) {
+            setCheck({ ...check, password: true, password2: false });
+          } else {
+            setCheck({ ...check, password: false, password2: false });
+          }
+        }
+      }
+    } else if (key === 'password2') {
+      if (matchPassword(password, e.target.value)) {
+        setCheck({ ...check, password2: true });
+      } else {
+        setCheck({ ...check, password2: false });
+      }
+    } else if (key === 'nickName') {
+      if (validateNickName(e.target.value)) {
+        setCheck({ ...check, nickName: true });
+      } else {
+        setCheck({ ...check, nickName: false });
+      }
+    }
   };
 
-  const editSubmitHandler = () => {
-    dispatch(setUserInfo(editUserInfo));
-    dispatch(setIsSidbar(true));
-    history.push('/');
+  const checkedNickName = () => {
+    if (check.nickName) {
+      axios({
+        url: 'https://server.birthwiki.space/user/exist',
+        params: {
+          nickName: editUserInfo.nickName,
+        },
+      })
+        .then((res) => {
+          setEditUserInfo({
+            ...editUserInfo,
+            errorMsg: '',
+          });
+        })
+        .catch((err) => {
+          console.log(err);
+          return !err.response
+            ? setEditUserInfo({
+                ...editUserInfo,
+                errorMsg: '❗️ 서버 오류, 잠시 후 다시 시도해주세요',
+              })
+            : setEditUserInfo({
+                ...editUserInfo,
+                errorMsg: '❗️ 이미 사용중인 닉네임입니다',
+              });
+        });
+    }
   };
 
   const EidtRef: any = useRef<HTMLDivElement>(null);
   const closeEidt = (e: React.SyntheticEvent) => {
     if (EidtRef.current === (e.target as typeof e.target)) {
       dispatch(setIsSidbar(!isSidebar));
-      history.goBack();
+      dispatch(setIsSignup(false));
     }
   };
-
   return (
     <Background ref={EidtRef} onClick={closeEidt}>
-      <ModalWrapper>
+      <EditWrapper>
         <Title>회원 정보 수정</Title>
-        <SubTitle> 수정 사항을 입력하세요 </SubTitle>
-        <EditContainer>
-          <InputCatecory>프로필 변경</InputCatecory>
-          <InputField type='file' onChange={inputHandler('profileImage')} />
-          <InputCatecory>닉네임</InputCatecory>
-          <InputField
+        <SubTitle>필수 사항</SubTitle>
+        <iframe name='frAttachFiles' className='invisable'></iframe>
+        {errorMsg ? <div className='alert-box'>{errorMsg}</div> : ''}
+        <EditContainer
+          action='https://server.birthwiki.space/user/update'
+          method='post'
+          target='frAttachFiles'
+          encType='multipart/form-data'
+        >
+          <input
+            className='access'
+            name='accessToken'
             type='text'
-            value={editUserInfo.userNickName}
+            value={`Bearer ${userInfo.accessToken}`}
+          ></input>
+          <input className='access' name='userEmail' type='text' value={userInfo.userEmail}></input>
+          <InputCatecory>닉네임</InputCatecory>
+          <EditInput
+            type='text'
+            name='nickName'
+            defaultValue={userInfo.nickName}
             maxLength={10}
-            placeholder='한글만 입력 가능합니다'
-            onChange={inputHandler('userNickName')}
+            placeholder='한글, 숫자, 영어를 포함 최소 2자리'
+            onKeyUp={(e) => {
+              inputHandler('nickName', e);
+            }}
+            onBlur={checkedNickName}
           />
-          {validateNickName(editUserInfo.userNickName) ? (
+          {check.nickName ? (
             <Valid to='#'>
               <ColorIcon.FcApproval />
             </Valid>
@@ -65,13 +146,16 @@ function SidebarEdit() {
             </Invalid>
           )}
           <InputCatecory>password</InputCatecory>
-          <InputField
+          <EditInput
             type='password'
+            name='password'
             placeholder='숫자와 영문을 포함해 최소 8자리'
             maxLength={16}
-            onChange={inputHandler('password')}
+            onKeyUp={(e) => {
+              inputHandler('password', e);
+            }}
           />
-          {validatePassword(editUserInfo.password) ? (
+          {check.password ? (
             <Valid to='#'>
               <ColorIcon.FcApproval />
             </Valid>
@@ -81,26 +165,43 @@ function SidebarEdit() {
             </Invalid>
           )}
           <InputCatecory>password 확인 </InputCatecory>
-          <InputField
+          <EditInput
             type='password'
             maxLength={16}
             placeholder='위와 동일한 비밀번호 입력'
-            onChange={inputHandler('password2')}
+            onKeyUp={(e) => {
+              inputHandler('password2', e);
+            }}
           />
-          {/* {matchPassword(editUserInfo.password, editUserInfo.password2) ? (
-              <Valid to='#'>
-                <ColorIcon.FcApproval />
-              </Valid>
-            ) : (
-              <Invalid to='#'>
-                <ColorIcon.FcCancel />
-              </Invalid>
-            )} */}
-          <EditSubmit type='submit' onClick={editSubmitHandler}>
-            수정
-          </EditSubmit>
+          {check.password2 ? (
+            <Valid to='#'>
+              <ColorIcon.FcApproval />
+            </Valid>
+          ) : (
+            <Invalid to='#'>
+              <ColorIcon.FcCancel />
+            </Invalid>
+          )}
+          <SubTitle>선택사항</SubTitle>
+          <InputCatecory>프로필 이미지 등록</InputCatecory>
+          <EditInput type='file' name='profileImage' accept='image/*' />
+          {(check.password && check.password2) || check.nickName ? (
+            <EditSubmit
+              type='submit'
+              value='회원 정보 수정'
+              onClick={() => {
+                setTimeout(() => {
+                  dispatch(setUserInfo(editUserInfo));
+                  dispatch(setIsSignup(false));
+                  dispatch(setIsSidbar(true));
+                }, 5000);
+              }}
+            ></EditSubmit>
+          ) : (
+            <SubmitDiv>회원 정보 수정</SubmitDiv>
+          )}
         </EditContainer>
-      </ModalWrapper>
+      </EditWrapper>
     </Background>
   );
 }
@@ -116,17 +217,26 @@ const Background = styled.div`
   align-items: center;
 `;
 
-const ModalWrapper = styled.div`
+const EditWrapper = styled.div`
   background-color: #0e6973;
   border-radius: 20px;
   box-sizing: border-box;
-  height: 530px;
+  height: 580px;
   padding: 20px 25px;
   width: 400px;
   transition: all 0.2s ease-in-out;
   text-decoration: none;
   z-index: 10;
   position: relative;
+  & .invisable {
+    display: none;
+  }
+  & .alert-box {
+    color: #eee;
+  }
+  & .access {
+    display: none;
+  }
 `;
 
 const Title = styled.div`
@@ -140,11 +250,10 @@ const Title = styled.div`
 const SubTitle = styled.div`
   color: #eee;
   font-family: sans-serif;
-  font-size: 16px;
-  font-weight: 600;
-  margin-top: 5px;
+  font-size: 20px;
+  font-weight: bold;
+  margin-top: 15px;
 `;
-
 const EditContainer = styled.form`
   height: 50px;
   position: relative;
@@ -159,7 +268,7 @@ const InputCatecory = styled.div`
   color: #eee;
 `;
 
-const InputField = styled.input`
+const EditInput = styled.input`
   box-sizing: border-box;
   color: #eee;
   font-size: 15px;
@@ -176,7 +285,7 @@ const InputField = styled.input`
   }
 `;
 
-const EditSubmit = styled.button`
+const EditSubmit = styled.input`
   background-color: #e4fff7;
   border-radius: 12px;
   border: 0;
@@ -196,6 +305,25 @@ const EditSubmit = styled.button`
     background-color: #04bfbf;
     color: #15172b;
   }
+`;
+
+const SubmitDiv = styled.div`
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  background-color: #292929;
+  border-radius: 12px;
+  border: 0;
+  box-sizing: border-box;
+  color: #eee;
+  cursor: pointer;
+  font-size: 18px;
+  height: 50px;
+  margin-top: 30px;
+  text-align: center;
+  width: 100%;
+  transition: all 0.2s ease-in-out;
+  text-decoration: none;
 `;
 
 const Valid = styled(Link)`

@@ -60,7 +60,7 @@ const UserInfo = styled.div`
   overflow: auto;
 `;
 
-const UserInfoEdit = styled(Link)`
+const UserInfoEdit = styled.button`
   border-radius: 50px;
   background: rgba(6, 11, 38, 0.8);
   white-space: nowrap;
@@ -191,6 +191,9 @@ function SidebarMypage() {
     axios({
       url: birthwikiServer,
       method: 'POST',
+      data: {
+        source: source,
+      },
       headers: {
         authorization: `Bearer ${accessToken}`,
       },
@@ -204,8 +207,8 @@ function SidebarMypage() {
   };
 
   const editHandler = () => {
-    dispatch(setIsSidbar(!sidebar));
-    <Link to='/edit' />;
+    dispatch(setIsSidbar(false));
+    dispatch(setIsSignup(true));
   };
 
   const clickedStoryHandler = () => {
@@ -222,7 +225,7 @@ function SidebarMypage() {
       <ProfileContainer>
         <Profile>
           {profileImage ? (
-            <UserPoto src={`https://server.birthwiki.space/${profileImage}`}></UserPoto>
+            <UserPoto src={`${profileImage}`}></UserPoto>
           ) : (
             <UserPoto src={`${process.env.PUBLIC_URL}/img/profile.png`}></UserPoto>
           )}
@@ -232,9 +235,7 @@ function SidebarMypage() {
             <UserInfo>{userEmail}</UserInfo>
           </UserInfoContainer>
         </Profile>
-        <UserInfoEdit to='/edit' onClick={editHandler}>
-          Edit
-        </UserInfoEdit>
+        <UserInfoEdit onClick={editHandler}>Edit</UserInfoEdit>
         <Logout type='submit' onClick={logoutHandler}>
           Logout
         </Logout>

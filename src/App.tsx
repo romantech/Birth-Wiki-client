@@ -6,7 +6,6 @@ import Main from './pages/Main';
 import Nav from './components/Nav';
 import Weather from './components/Weather';
 import { RootState } from './store/index';
-import SidebarEdit from './components/SidebarEdit';
 import FavoritePage from './pages/FavoritePage';
 import LaunchPage from './components/LaunchPage';
 import SidebarSignUp from './components/SidebarSignUp';
@@ -24,7 +23,6 @@ function App(): JSX.Element {
         <Switch>
           <Route exact path='/' component={LaunchPage} />
           <Route exact path='/main/:date' component={Weather} />
-          <Route exact path='/edit' component={SidebarEdit} />
           <Route exact path='/myFavorite' component={FavoritePage} />
         </Switch>
       )}
