@@ -9,7 +9,7 @@ import { LikeCardsGeneral } from '../types/index';
 import getVerticalImg from '../utils/resizeImage';
 
 const FavoriteCardList = ({ ...props }: LikeCardsGeneral): JSX.Element => {
-  const shareRef = useRef<HTMLDivElement>(null);
+  // const shareRef = useRef<HTMLDivElement>(null);
   const contents = props.contents !== null ? props.contents : [];
   const category = props.category;
 
@@ -39,7 +39,16 @@ const FavoriteCardList = ({ ...props }: LikeCardsGeneral): JSX.Element => {
     });
   };
 
-  props.image.includes('unsplash') ? (props.image = getVerticalImg(props.image)) : props.image;
+  if (props.category === 'movie') {
+    props.image = props.world?.poster ? props.world?.poster : props.image;
+  }
+  if (props.category === 'music') {
+    props.image = props.korea?.poster ? props.korea?.poster : getVerticalImg(props.image, props.category, 0);
+  }
+  if (props.contents) {
+    const contentsLength = props.contents.length;
+    props.image = getVerticalImg(props.image, props.category, contentsLength);
+  }
 
   return (
     <>
