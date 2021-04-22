@@ -1,14 +1,16 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import styled, { css } from 'styled-components';
 import { FiHeart, FiShare, FiZoomIn } from 'react-icons/fi';
 import FavoriteModal from '../components/FavoriteModal';
 import FavoriteShareModalMini from './FavoriteShareModalMini';
 import FavoriteShareModalMain from './FavoriteShareModalMain';
 import UnlikeConfirmModal from '../components/UnlikeConfirmModal';
-import { LikeCardsGeneral } from '../types/index';
+import { LikeCardsGeneral, MovieInfo } from '../types/index';
 import getVerticalImg from '../utils/resizeImage';
+import TMDB_API from '../utils/TMDB_API';
 
 const FavoriteCardList = ({ ...props }: LikeCardsGeneral): JSX.Element => {
+  console.log('렌더');
   // const shareRef = useRef<HTMLDivElement>(null);
   const contents = props.contents !== null ? props.contents : [];
   const category = props.category;
@@ -20,6 +22,38 @@ const FavoriteCardList = ({ ...props }: LikeCardsGeneral): JSX.Element => {
   const [xyPosition, setXYPosition] = useState({
     pageX: 0,
     pageY: 0,
+  });
+  const [movieInfoKorean, setMovieInfoKorean] = useState<MovieInfo>();
+  const [movieInfoWorld, setMovieInfoWorld] = useState<MovieInfo>();
+  const [loading, setLoading] = useState(false);
+
+  const getMovieRate = (movieTitle: string, region: string) => {
+    TMDB_API.get('/movie', {
+      params: {
+        query: movieTitle,
+      },
+    }).then((res) => {
+      console.log(res);
+      if (region === 'korea') {
+        setMovieInfoKorean(res.data.results[0]);
+      }
+      if (region === 'world') {
+        setMovieInfoWorld(res.data.results[0]);
+      }
+    });
+  };
+
+  useEffect(() => {
+    if (!movieInfoKorean && !movieInfoWorld) {
+      if (props.category === 'movie') {
+        if (props.korea) {
+          getMovieRate(props.korea.title, 'korea');
+        }
+        if (props.world) {
+          getMovieRate(props.world.title, 'world');
+        }
+      }
+    }
   });
 
   const openModal = () => {
@@ -87,10 +121,22 @@ const FavoriteCardList = ({ ...props }: LikeCardsGeneral): JSX.Element => {
               <>
                 <h3 style={{ marginBottom: '-10px' }}>한국 1위 영화</h3>
                 <p>{props.korea === undefined ? '정보가 없습니다 😢' : `<${props.korea?.title}>`}</p>
+                {movieInfoKorean ? (
+                  <p style={{ marginTop: '-10px' }}>{`${movieInfoKorean.vote_average}점`}</p>
+                ) : (
+                  ''
+                )}
                 <h3 style={{ marginBottom: '-10px' }}>해외 1위 영화</h3>
                 <p style={{ marginBottom: '20px' }}>
                   {props.world === undefined ? '정보가 없습니다 😢' : `<${props.world?.title}>`}
                 </p>
+                {movieInfoWorld ? (
+                  <p
+                    style={{ marginTop: '-15px' }}
+                  >{`${movieInfoWorld.vote_average}점 (${movieInfoWorld.vote_count}명 투표)`}</p>
+                ) : (
+                  ''
+                )}
               </>
             ) : (
               <>
