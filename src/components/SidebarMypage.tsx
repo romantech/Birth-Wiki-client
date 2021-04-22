@@ -6,8 +6,8 @@ import { RootState } from '../store/index';
 import { setIsLogin, setUserInfo, setIsSidbar, setIsEdit, setGuest, setGuestModal } from '../actions/index';
 import axios from 'axios';
 import initialState from '../reducers/initialState';
-import { setConstantValue } from 'typescript';
-import { LikeCardsGeneral } from '../types/index';
+import SidebarMystory from './SidebarMystory';
+import FavoriteModal from './FavoriteModal';
 
 const MypageContainer = styled.div`
   color: #fff;
@@ -113,7 +113,7 @@ const MyStoryContainer = styled.div`
   color: #fff;
 `;
 
-const MyStoryList = styled.div`
+const RecordCardsList = styled.div`
   font-size: 20px;
   border: #fff 1px solid;
   border-radius: 20px;
@@ -146,7 +146,7 @@ const MyStory = styled(Link)`
   margin: 5px;
 `;
 
-const MyBookMarkList = styled.div`
+const LikeCardsList = styled.div`
   font-size: 20px;
   border: #fff 1px solid;
   border-radius: 20px;
@@ -173,11 +173,7 @@ const MyBookMarkList = styled.div`
     margin: 0;
   }
 `;
-
-const MyBookMark = styled.div`
-  display: flex;
-  margin: 5px;
-`;
+const Categories = styled.button``;
 
 function SidebarMypage() {
   const userInfo = useSelector((state: RootState) => state.userInfoReducer.userInfo);
@@ -208,7 +204,7 @@ function SidebarMypage() {
           console.log('Logout', res);
           dispatch(setIsLogin(false));
           dispatch(setIsSidbar(false));
-          //dispatch(setUserInfo(initialState.userInfo));
+          dispatch(setUserInfo(initialState.userInfo));
         })
         .then(() => console.log(userInfo))
         .catch((error) => console.log('err', error.message));
@@ -250,7 +246,7 @@ function SidebarMypage() {
         </Logout>
       </ProfileContainer>
       <MyStoryContainer>
-        <MyStoryList>
+        <RecordCardsList>
           <p onClick={clickedStoryHandler}> 나만의 기록리스트 </p>
           {/* {storyclicked
             ? recordCards.map((data: any) => (
@@ -259,18 +255,19 @@ function SidebarMypage() {
                 </MyStory>
               ))
             : ''} */}
-        </MyStoryList>
+        </RecordCardsList>
+        <LikeCardsList>
+          <p> 내가 찜한 카드 </p>
+          <Categories className='issue' />
+          <div>issue</div>
+          <Categories className='birth' />
+          <div>birth</div>
 
-        <MyBookMarkList>
-          <p onClick={clickMarkHandler}> 나의 찜 리스트 </p>
-          {markclicked
-            ? likeCards.map((card: any, index: any) => (
-                <MyBookMark key={index}>
-                  {index + 1} {card.category} {card.date}
-                </MyBookMark>
-              ))
-            : ''}
-        </MyBookMarkList>
+          {likeCards.map((card: any, idx: any) => {
+            return console.log(card);
+            // <FavoriteModal  />
+          })}
+        </LikeCardsList>
       </MyStoryContainer>
     </MypageContainer>
   );

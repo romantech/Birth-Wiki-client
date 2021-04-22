@@ -101,9 +101,7 @@ const FavoritePage = (): JSX.Element => {
         hasMore={renderArray.length < filteredArray.length}
         loader={<Loader />}
         endMessage={
-          <p style={{ textAlign: 'center', marginTop: '50px' }}>
-            <b>Yay! You have seen it all</b>
-          </p>
+          <h3 style={{ textAlign: 'center', marginTop: '50px', color: 'gray' }}>더 이상 카드가 없어요</h3>
         }
       >
         <MasLayout>

@@ -46,7 +46,8 @@ const FavoriteCardList = ({ ...props }: LikeCardsGeneral): JSX.Element => {
       <FlipCard>
         <FlipCardInner imgPath={props.image} category={category}>
           <FlipCardFront>
-            <CategoryName>{category}</CategoryName>
+            <CategoryName category={category}>{category}</CategoryName>
+            <CardYear category={category}>{props.date}</CardYear>
             <img src={props.image} alt={category} />
           </FlipCardFront>
           <FlipCardBackGeneral>
@@ -196,15 +197,16 @@ export const HeartIcon = styled(FiHeart)`
   fill: black;
 `;
 
-const CardYear = styled.p`
+const CardYear = styled.p<{ category: string }>`
   position: absolute;
   color: #ffffffb3;
   font-size: 80%;
   text-align: center;
   font-weight: 900;
-  left: 48%;
-  width: 30%;
-  top: 3%;
+  left: ${(props) => (props.category !== 'music' && props.category !== 'movie' ? '21%' : '25%')};
+  width: ${(props) => (props.category !== 'music' && props.category !== 'movie' ? '30%' : '38%')};
+  top: auto;
+  bottom: -2.5%;
   transform: translate(-50%, -50%);
   z-index: 1;
   background: #00000029;
@@ -213,7 +215,10 @@ const CardYear = styled.p`
 `;
 
 const CategoryName = styled(CardYear)`
-  left: 81%;
+  left: 79%;
+  width: 30%;
+  top: 4%;
+  bottom: auto;
 `;
 
 const FlipCardFront = styled.div`

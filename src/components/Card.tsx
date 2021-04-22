@@ -2,6 +2,7 @@ import React, { useState, useRef } from 'react';
 import { useSpring, animated } from 'react-spring';
 import styled from 'styled-components';
 import SwiperCard from './SwiperCard';
+import CoverFlow from './CoverFlow';
 
 const Card = (props: any) => {
   const data = props.data;
@@ -61,7 +62,7 @@ const Card = (props: any) => {
   `;
 
   const CardBg = styled.div`
-    width: 100%;
+    width: 100vw;
     height: 100%;
     top: 0;
     left: 0;
@@ -101,7 +102,6 @@ const Card = (props: any) => {
     <CardLists>
       <CardContents
         onClick={() => {
-          //클릭시 모달 on
           openCard();
         }}
         style={{ backgroundImage: `url(${issue.image})` }}
@@ -110,7 +110,6 @@ const Card = (props: any) => {
       </CardContents>
       <CardContents
         onClick={() => {
-          //클릭시 모달 on
           openCard();
         }}
         style={{ backgroundImage: `url(${culture.image})` }}
@@ -119,7 +118,6 @@ const Card = (props: any) => {
       </CardContents>
       <CardContents
         onClick={() => {
-          //클릭시 모달 on
           openCard();
         }}
         style={{ backgroundImage: `url(${birth.image})` }}
@@ -128,7 +126,6 @@ const Card = (props: any) => {
       </CardContents>
       <CardContents
         onClick={() => {
-          //클릭시 모달 on
           openCard();
         }}
         style={{ backgroundImage: `url(${death.image})` }}
@@ -137,7 +134,6 @@ const Card = (props: any) => {
       </CardContents>
       <CardContents
         onClick={() => {
-          //클릭시 모달 on
           openCard();
         }}
         style={{
@@ -150,7 +146,8 @@ const Card = (props: any) => {
       {showCard ? (
         <CardBg ref={cardRef} onClick={closeCard}>
           <animated.div style={animation}>
-            <SwiperCard issue={issue} music={music} culture={culture} birth={birth} death={death} />
+            {/* <SwiperCard issue={issue} music={music} culture={culture} birth={birth} death={death} /> */}
+            <CoverFlow issue={issue} music={music} culture={culture} birth={birth} death={death} />
           </animated.div>
         </CardBg>
       ) : null}

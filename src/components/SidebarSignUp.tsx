@@ -114,9 +114,8 @@ function SidebarSignUp() {
   return (
     <Background>
       <SignUpWrapper>
-        <SigninClose to='#'>
-          <AiOutlineClose onClick={closeSignin} />
-        </SigninClose>
+        <SigninClose onClick={closeSignin} />
+
         <Title>Welcome!</Title>
         <SubTitle>필수 사항</SubTitle>
         <iframe
@@ -269,7 +268,7 @@ const Title = styled.div`
   font-weight: 600;
   margin-top: 10px;
 `;
-const SigninClose = styled(Link)`
+const SigninClose = styled(AiOutlineClose)`
   display: flex;
   align-items: center;
   font-size: 30px;

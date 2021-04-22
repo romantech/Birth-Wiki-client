@@ -6,6 +6,7 @@ import { useSelector } from 'react-redux';
 import { RootState } from '../store';
 import { Link } from 'react-router-dom';
 import Card from './Card';
+import CardLists from './CardLists';
 import WikiCulture from './WikiCulture';
 
 // 배경 이미지
@@ -164,7 +165,7 @@ const Weather = () => {
       {data ? (
         <Background>
           <DateInput>
-            <input type='text' placeholder={selectedDate} />
+            <input type='text' placeholder={selectedDate.split('/')[2]} />
           </DateInput>
           <WeatherDetail>
             <WeatherText>
@@ -176,6 +177,7 @@ const Weather = () => {
           </WeatherDetail>
           {/* 카드 리스트 start */}
           <Card data={data} weather={weather} />
+          {/* <CardLists data={data} /> */}
           {/* 카드 리스트 end */}
         </Background>
       ) : null}
