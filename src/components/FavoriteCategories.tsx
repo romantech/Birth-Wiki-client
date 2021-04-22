@@ -1,43 +1,26 @@
 import React from 'react';
 import styled from 'styled-components';
-import { LikeCardsGeneral } from '../types';
 
 interface Props {
   category: {
     categoryName: string;
     imagePath: string;
   };
-  setFilter: React.Dispatch<React.SetStateAction<string>>;
+  setSelectedCategory: React.Dispatch<React.SetStateAction<string>>;
   setEndCard: React.Dispatch<React.SetStateAction<number>>;
-  selected: string;
-  likeCards: LikeCardsGeneral[];
-  setFilteredArray: React.Dispatch<React.SetStateAction<LikeCardsGeneral[]>>;
-  setRenderArray: React.Dispatch<React.SetStateAction<LikeCardsGeneral[]>>;
 }
 
-const FavoriteCategories = ({
-  category,
-  selected,
-  likeCards,
-  setEndCard,
-  setFilter,
-  setFilteredArray,
-  setRenderArray,
-}: Props): JSX.Element => {
+const FavoriteCategories = ({ category, setEndCard, setSelectedCategory }: Props): JSX.Element => {
   const { imagePath, categoryName } = category;
 
   const handleClick = (categoryName: string) => {
     setEndCard(11);
-    setFilter(categoryName.toLowerCase());
+    setSelectedCategory(categoryName.toLowerCase());
   };
 
   return (
     <Wrapper>
-      <Category
-        className={`menu-item ${selected ? 'active' : ''}`}
-        imagePath={imagePath}
-        onClick={() => handleClick(categoryName)}
-      >
+      <Category imagePath={imagePath} onClick={() => handleClick(categoryName)}>
         {categoryName}
       </Category>
     </Wrapper>

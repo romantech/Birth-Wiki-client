@@ -3,7 +3,6 @@ import React, { useRef, useEffect, useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useSpring, animated } from 'react-spring';
 import styled, { css } from 'styled-components';
-import { LikeCardsGeneral } from '../types/index';
 import { RootState } from '../store/index';
 import { setUserInfo } from '../actions/index';
 
@@ -28,11 +27,11 @@ const UnlikeConfirmModal = ({ ...props }: UnlikeConfirmModal): JSX.Element => {
     transform: props.unLikeModal ? `translateX(0%)` : `translateX(100%)`,
   });
 
-  const setUnlike = async () => {
+  const setUnlike = () => {
     props.setUnlikeModal((prev) => !prev);
     props.setShowModal(false);
 
-    await axios({
+    axios({
       url: 'https://server.birthwiki.space/like',
       method: 'post',
       data: {

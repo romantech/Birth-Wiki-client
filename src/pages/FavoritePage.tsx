@@ -14,10 +14,6 @@ import { LikeCardsGeneral } from '../types/index';
 import { ArrowLeft, ArrowRight } from '../components/ArrowIcon';
 import { FaArrowCircleUp } from 'react-icons/fa';
 
-interface Selected {
-  selected: string | number | null;
-}
-
 const FavoritePage = (): JSX.Element => {
   const isLogin = useSelector((state: RootState) => state.loginReducer.isLogin);
   const isGuest = useSelector((state: RootState) => state.guestReducer.isGuest);
@@ -27,13 +23,8 @@ const FavoritePage = (): JSX.Element => {
   const [filteredArray, setFilteredArray] = useState<LikeCardsGeneral[]>(
     userInfo.likeCards ? userInfo.likeCards : [],
   );
-  const [filter, setFilter] = useState('all');
-  const [selected, setSelected] = useState<Selected>({ selected: '' });
+  const [selectedCategory, setSelectedCategory] = useState('all');
   const [endCard, setEndCard] = useState(11);
-
-  const onSelect = (key: string | number | null) => {
-    setSelected({ selected: key });
-  };
 
   const getLikeCards = () => {
     const sliced = filteredArray.slice(0, endCard);
@@ -47,11 +38,11 @@ const FavoritePage = (): JSX.Element => {
 
   useEffect(() => {
     if (userInfo.likeCards) {
-      filter === 'all'
+      selectedCategory === 'all'
         ? setFilteredArray(userInfo.likeCards)
         : setFilteredArray(
-            userInfo.likeCards.filter((el: any) => {
-              if (el.category === filter) {
+            userInfo.likeCards.filter((el: { category: string }) => {
+              if (el.category === selectedCategory) {
                 return el;
               }
             }),
@@ -59,7 +50,7 @@ const FavoritePage = (): JSX.Element => {
     } else {
       setFilteredArray([]);
     }
-  }, [filter, userInfo]);
+  }, [selectedCategory, userInfo]);
 
   const breakPoints = {
     default: 6,
@@ -77,19 +68,14 @@ const FavoritePage = (): JSX.Element => {
         <ScrollMenu
           data={categories.map((category) => (
             <FavoriteCategories
-              selected={(selected as unknown) as string}
               category={category}
               key={category.categoryName}
-              setFilteredArray={setFilteredArray}
               setEndCard={setEndCard}
-              likeCards={userInfo.likeCards}
-              setRenderArray={setRenderArray}
-              setFilter={setFilter}
+              setSelectedCategory={setSelectedCategory}
             />
           ))}
           arrowLeft={ArrowLeft}
           arrowRight={ArrowRight}
-          onSelect={onSelect}
           alignCenter={false}
         />
       </Categories>
@@ -115,21 +101,19 @@ const FavoritePage = (): JSX.Element => {
               likeCards={userInfo.likeCards !== null ? userInfo.likeCards.length : 0}
               profileImage={userInfo.profileImage}
             />
-            {renderArray.map((card, index) => {
-              return (
-                <FavoriteCardList
-                  id={card.id}
-                  like={card.like}
-                  date={card.date}
-                  category={card.category}
-                  contents={card.contents}
-                  image={card.image}
-                  korea={card.korea}
-                  world={card.world}
-                  key={index}
-                />
-              );
-            })}
+            {renderArray.map((card, index) => (
+              <FavoriteCardList
+                id={card.id}
+                like={card.like}
+                date={card.date}
+                category={card.category}
+                contents={card.contents}
+                image={card.image}
+                korea={card.korea}
+                world={card.world}
+                key={index}
+              />
+            ))}
           </Masonry>
         </MasLayout>
         <ScrollIcon onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })} />

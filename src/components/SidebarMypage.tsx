@@ -263,10 +263,10 @@ function SidebarMypage() {
           <Categories className='birth' />
           <div>birth</div>
 
-          {likeCards.map((card: any, idx: any) => {
+          {/* {likeCards.map((card: any, idx: any) => {
             return console.log(card);
             // <FavoriteModal  />
-          })}
+          })} */}
         </LikeCardsList>
       </MyStoryContainer>
     </MypageContainer>

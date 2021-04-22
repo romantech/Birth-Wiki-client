@@ -1,6 +1,6 @@
 import React, { useState, useRef } from 'react';
 import styled, { css } from 'styled-components';
-import { FiHeart, FiShare } from 'react-icons/fi';
+import { FiHeart, FiShare, FiZoomIn } from 'react-icons/fi';
 import FavoriteModal from '../components/FavoriteModal';
 import FavoriteShareModalMini from './FavoriteShareModalMini';
 import FavoriteShareModalMain from './FavoriteShareModalMain';
@@ -55,8 +55,11 @@ const FavoriteCardList = ({ ...props }: LikeCardsGeneral): JSX.Element => {
               <IconCircle onClick={() => setUnlikeModal((prev) => !prev)}>
                 <HeartIcon />
               </IconCircle>
-              <IconCircle onClick={openShareModal} ref={shareRef}>
+              {/* <IconCircle onClick={openShareModal} ref={shareRef}>
                 <ShareIcon />
+              </IconCircle> */}
+              <IconCircle onClick={openModal}>
+                <ZoomInIcon />
               </IconCircle>
             </IconWrapper>
             {category !== 'music' && category !== 'movie' ? (
@@ -191,6 +194,10 @@ const InnerCardIcon = css`
 
 export const ShareIcon = styled(FiShare)`
   ${InnerCardIcon};
+`;
+
+const ZoomInIcon = styled(FiZoomIn)`
+  ${InnerCardIcon}
 `;
 
 export const HeartIcon = styled(FiHeart)`
