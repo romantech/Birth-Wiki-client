@@ -10,6 +10,7 @@ import { setUserInfo } from '../actions/index';
 interface UnlikeConfirmModal {
   unLikeModal: boolean;
   setUnlikeModal: React.Dispatch<React.SetStateAction<boolean>>;
+  setShowModal: React.Dispatch<React.SetStateAction<boolean>>;
   id: number;
   category: string;
 }
@@ -28,6 +29,9 @@ const UnlikeConfirmModal = ({ ...props }: UnlikeConfirmModal): JSX.Element => {
   });
 
   const setUnlike = async () => {
+    props.setUnlikeModal((prev) => !prev);
+    props.setShowModal(false);
+
     await axios({
       url: 'https://server.birthwiki.space/like',
       method: 'post',
@@ -46,7 +50,6 @@ const UnlikeConfirmModal = ({ ...props }: UnlikeConfirmModal): JSX.Element => {
           recordCards: res.data.data.recordCards,
         }),
       );
-      props.setUnlikeModal((prev) => !prev);
     });
   };
 
