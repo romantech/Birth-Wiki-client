@@ -3,7 +3,7 @@ import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import './App.css';
 import { useSelector } from 'react-redux';
 import Nav from './components/Nav';
-import Weather from './components/Weather';
+import Main from './pages/Main';
 import { RootState } from './store/index';
 import FavoritePage from './pages/FavoritePage';
 import LaunchPage from './components/LaunchPage';
@@ -22,7 +22,7 @@ function App(): JSX.Element {
       {!isSignup && !isEdit ? (
         <Switch>
           <Route exact path='/' component={LaunchPage} />
-          <Route exact path='/main/:date' component={Weather} />
+          <Route exact path='/main/:date' component={Main} />
           <Route exact path='/myFavorite' component={FavoritePage} />
         </Switch>
       ) : null}
