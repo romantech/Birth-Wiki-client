@@ -62,19 +62,18 @@ const Card = (props: any) => {
   `;
 
   const CardBg = styled.div`
-    width: 100vw;
-    height: 100%;
+    background: linear-gradient(90deg, rgba(0, 0, 0, 0.7) 0%, rgba(0, 0, 0, 0.7) 50%, rgba(0, 0, 0, 0.7) 100%),
+      url(${props.weather}) center center/cover no-repeat;
+    position: fixed;
     top: 0;
     left: 0;
     right: 0;
     bottom: 0;
-    background: linear-gradient(90deg, rgba(0, 0, 0, 0.7) 0%, rgba(0, 0, 0, 0.7) 50%, rgba(0, 0, 0, 0.7) 100%),
-      url(${props.weather}) center center/cover no-repeat;
-    position: fixed;
     display: flex;
     justify-content: center;
     align-items: center;
-    z-index: 100;
+    z-index: 1000;
+    min-height: 100vh;
   `;
 
   const openCard = () => {
