@@ -1,68 +1,187 @@
-[type='radio'] {
+.slider {
+  width: 100%;
+}
+.slider input {
   display: none;
 }
-
-#slider {
-  width: 50vw;
-  height: 55vh;
+.testimonials {
+  display: flex;
+  align-items: center;
+  justify-content: center;
   position: relative;
+  min-height: 350px;
   perspective: 1000px;
-  transform-style: preserve-3d;
+  overflow: hidden;
 }
-
-#slider label {
-  margin: auto;
-  width: 70%;
-  height: 100%;
-  border-radius: 10px;
+.testimonials .item {
+  top: 0;
   position: absolute;
-  left: 0;
-  right: 0;
+  box-sizing: border-box;
+  padding: 30px;
+  width: 450px;
+  border-radius: 10px;
+  height: 300px;
+  text-align: center;
+  transition: transform 0.4s;
+  transform-style: preserve-3d;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+  user-select: none;
   cursor: pointer;
-  transition: transform 0.4s ease;
 }
-
-#s1:checked ~ #slide4,
-#s2:checked ~ #slide5,
-#s3:checked ~ #slide1,
-#s4:checked ~ #slide2,
-#s5:checked ~ #slide3 {
-  box-shadow: 0 1px 4px 0 rgba(0, 0, 0, 0.37);
-  transform: translate3d(-30%, 0, -200px);
+.testimonials .item img {
 }
-
-#s1:checked ~ #slide5,
-#s2:checked ~ #slide1,
-#s3:checked ~ #slide2,
-#s4:checked ~ #slide3,
-#s5:checked ~ #slide4 {
-  box-shadow: 0 6px 10px 0 rgba(0, 0, 0, 0.3), 0 2px 2px 0 rgba(0, 0, 0, 0.2);
-  transform: translate3d(-15%, 0, -100px);
+.testimonials .item p {
+  color: #ddd;
 }
-
-#s1:checked ~ #slide1,
-#s2:checked ~ #slide2,
-#s3:checked ~ #slide2,
-#s4:checked ~ #slide4,
-#s5:checked ~ #slide5 {
-  box-shadow: 0 13px 25px 0 rgba(0, 0, 0, 0.3), 0 11px 7px 0 rgba(0, 0, 0, 0.19);
-  transform: translate3d(0, 0, 0);
+.testimonials .item h2 {
+  font-size: 14px;
 }
-
-#s1:checked ~ #slide2,
-#s2:checked ~ #slide3,
-#s3:checked ~ #slide3,
-#s4:checked ~ #slide5,
-#s5:checked ~ #slide1 {
-  box-shadow: 0 6px 10px 0 rgba(0, 0, 0, 0.3), 0 2px 2px 0 rgba(0, 0, 0, 0.2);
-  transform: translate3d(-15%, 0, -100px);
+.dots {
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
-
-#s1:checked ~ #slide3,
-#s2:checked ~ #slide4,
-#s3:checked ~ #slide5,
-#s4:checked ~ #slide1,
-#s5:checked ~ #slide2 {
-  box-shadow: 0 1px 4px 0 rgba(0, 0, 0, 0.37);
-  transform: translate3d(30%, 0, -200px);
+.dots label {
+  display: block;
+  height: 5px;
+  width: 5px;
+  border-radius: 50%;
+  cursor: pointer;
+  background-color: #413b52;
+  margin: 7px;
+  transition: transform 0.2s, color 0.2s;
+}
+/* First */
+#t-1:checked ~ .dots label[for='t-1'] {
+  transform: scale(2);
+  background-color: #fff;
+}
+#t-1:checked ~ .dots label[for='t-2'] {
+  transform: scale(1.5);
+}
+#t-1:checked ~ .testimonials label[for='t-1'] {
+  z-index: 4;
+}
+#t-1:checked ~ .testimonials label[for='t-2'] {
+  transform: translateX(300px) translateZ(-90px) rotateY(-15deg);
+  z-index: 3;
+}
+#t-1:checked ~ .testimonials label[for='t-3'] {
+  transform: translateX(600px) translateZ(-180px) rotateY(-25deg);
+  z-index: 2;
+}
+#t-1:checked ~ .testimonials label[for='t-4'] {
+  transform: translateX(900px) translateZ(-270px) rotateY(-35deg);
+  z-index: 1;
+}
+#t-1:checked ~ .testimonials label[for='t-5'] {
+  transform: translateX(1200px) translateZ(-360px) rotateY(-45deg);
+}
+/* Second */
+#t-2:checked ~ .dots label[for='t-1'] {
+  transform: scale(1.5);
+}
+#t-2:checked ~ .dots label[for='t-2'] {
+  transform: scale(2);
+  background-color: #fff;
+}
+#t-2:checked ~ .dots label[for='t-3'] {
+  transform: scale(1.5);
+}
+#t-2:checked ~ .testimonials label[for='t-1'] {
+  transform: translateX(-300px) translateZ(-90px) rotateY(15deg);
+}
+#t-2:checked ~ .testimonials label[for='t-2'] {
+  z-index: 3;
+}
+#t-2:checked ~ .testimonials label[for='t-3'] {
+  transform: translateX(300px) translateZ(-90px) rotateY(-15deg);
+  z-index: 2;
+}
+#t-2:checked ~ .testimonials label[for='t-4'] {
+  transform: translateX(600px) translateZ(-180px) rotateY(-25deg);
+  z-index: 1;
+}
+#t-2:checked ~ .testimonials label[for='t-5'] {
+  transform: translateX(900px) translateZ(-270px) rotateY(-35deg);
+}
+/* Third */
+#t-3:checked ~ .dots label[for='t-2'] {
+  transform: scale(1.5);
+}
+#t-3:checked ~ .dots label[for='t-3'] {
+  transform: scale(2);
+  background-color: #fff;
+}
+#t-3:checked ~ .dots label[for='t-4'] {
+  transform: scale(1.5);
+}
+#t-3:checked ~ .testimonials label[for='t-1'] {
+  transform: translateX(-600px) translateZ(-180px) rotateY(25deg);
+}
+#t-3:checked ~ .testimonials label[for='t-2'] {
+  transform: translateX(-300px) translateZ(-90px) rotateY(15deg);
+}
+#t-3:checked ~ .testimonials label[for='t-3'] {
+  z-index: 3;
+}
+#t-3:checked ~ .testimonials label[for='t-4'] {
+  transform: translateX(300px) translateZ(-90px) rotateY(-15deg);
+  z-index: 2;
+}
+#t-3:checked ~ .testimonials label[for='t-5'] {
+  transform: translateX(600px) translateZ(-180px) rotateY(-25deg);
+}
+/* Fourth */
+#t-4:checked ~ .dots label[for='t-3'] {
+  transform: scale(1.5);
+}
+#t-4:checked ~ .dots label[for='t-4'] {
+  transform: scale(2);
+  background-color: #fff;
+}
+#t-4:checked ~ .dots label[for='t-5'] {
+  transform: scale(1.5);
+}
+#t-4:checked ~ .testimonials label[for='t-1'] {
+  transform: translateX(-900px) translateZ(-270px) rotateY(35deg);
+}
+#t-4:checked ~ .testimonials label[for='t-2'] {
+  transform: translateX(-600px) translateZ(-180px) rotateY(25deg);
+}
+#t-4:checked ~ .testimonials label[for='t-3'] {
+  transform: translateX(-300px) translateZ(-90px) rotateY(15deg);
+  z-index: 2;
+}
+#t-4:checked ~ .testimonials label[for='t-4'] {
+  z-index: 3;
+}
+#t-4:checked ~ .testimonials label[for='t-5'] {
+  transform: translateX(300px) translateZ(-90px) rotateY(-15deg);
+}
+/* Fifth */
+#t-5:checked ~ .dots label[for='t-4'] {
+  transform: scale(1.5);
+}
+#t-5:checked ~ .dots label[for='t-5'] {
+  transform: scale(2);
+  background-color: #fff;
+}
+#t-5:checked ~ .testimonials label[for='t-1'] {
+  transform: translateX(-1200px) translateZ(-360px) rotateY(45deg);
+}
+#t-5:checked ~ .testimonials label[for='t-2'] {
+  transform: translateX(-900px) translateZ(-270px) rotateY(35deg);
+  z-index: 1;
+}
+#t-5:checked ~ .testimonials label[for='t-3'] {
+  transform: translateX(-600px) translateZ(-180px) rotateY(25deg);
+  z-index: 2;
+}
+#t-5:checked ~ .testimonials label[for='t-4'] {
+  transform: translateX(-300px) translateZ(-90px) rotateY(15deg);
+  z-index: 3;
+}
+#t-5:checked ~ .testimonials label[for='t-5'] {
+  z-index: 4;
 }
