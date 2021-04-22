@@ -40,7 +40,7 @@
     "typescript": "^4.2.3"
   },
   "scripts": {
-    "start": "react-scripts start",
+    "start": "HTTPS=true SSL_CRT_FILE='../Birth-Wiki-client/cert.pem' SSL_KEY_FILE='../Birth-Wiki-client/key.pem' react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
