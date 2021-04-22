@@ -125,9 +125,7 @@ function SidebarEdit() {
   return (
     <Background>
       <EditWrapper>
-        <EditClose to='#'>
-          <AiOutlineClose onClick={closeEidt} />
-        </EditClose>
+        <EditClose onClick={closeEidt} />
         <Title>회원 정보 수정</Title>
         <SubTitle>필수 사항</SubTitle>
         <iframe
@@ -255,7 +253,7 @@ const EditWrapper = styled.div`
     display: none;
   }
 `;
-const EditClose = styled(Link)`
+const EditClose = styled(AiOutlineClose)`
   display: flex;
   align-items: center;
   font-size: 30px;
