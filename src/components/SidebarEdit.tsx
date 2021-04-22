@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import styled from 'styled-components';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../store/index';
@@ -9,13 +9,13 @@ import { AiOutlineClose } from 'react-icons/ai';
 import { validatePassword, matchPassword, validateNickName } from '../utils/validate';
 import axios from 'axios';
 
-function SidebarEdit({ setChangeInfo }: any) {
+function SidebarEdit() {
   const isSidebar = useSelector((state: RootState) => state.sidebarReducer.isSidebar);
   const userInfo = useSelector((state: RootState) => state.userInfoReducer.userInfo);
   const dispatch = useDispatch();
   const history = useHistory();
   const [editUserInfo, setEditUserInfo] = useState(userInfo);
-  console.log('editUserInfo', editUserInfo);
+  const [changeInfo, setChangeInfo] = useState(false);
 
   const { password, password2, errorMsg } = editUserInfo;
 
@@ -25,13 +25,34 @@ function SidebarEdit({ setChangeInfo }: any) {
     nickName: false,
   });
 
+  useEffect(() => {
+    if (changeInfo) {
+      axios({
+        url: 'https://server.birthwiki.space/user/info',
+        method: 'POST',
+        data: {
+          userEmail: userInfo.userEmail,
+          accessToken: `Bearer ${userInfo.accessToken}`,
+        },
+      }).then((res) => {
+        console.log(res.data.data);
+        let newUserInfo = Object.assign({}, userInfo, {
+          nickName: res.data.data.nickName,
+          profileImage: res.data.data.profileImage,
+        });
+        dispatch(setUserInfo(newUserInfo));
+        dispatch(setIsEdit(false));
+        dispatch(setIsSidbar(true));
+      });
+    }
+  }, [changeInfo]);
+
   const inputHandler = async (key: string, e: any) => {
     setEditUserInfo({
       ...editUserInfo,
       [key]: e.target.value,
     });
 
-    console.log('password', password, 'password2', password2);
     if (key === 'password') {
       if (password2 === undefined) {
         if (validatePassword(e.target.value)) {
@@ -114,8 +135,6 @@ function SidebarEdit({ setChangeInfo }: any) {
           name='frAttachFiles'
           className='invisable'
           onLoad={() => {
-            dispatch(setIsEdit(false));
-            dispatch(setIsSidbar(true));
             setChangeInfo(true);
           }}
         ></iframe>
