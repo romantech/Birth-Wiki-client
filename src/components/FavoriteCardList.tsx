@@ -2,18 +2,26 @@ import React, { useState, useRef } from 'react';
 import styled, { css } from 'styled-components';
 import { FiHeart, FiShare } from 'react-icons/fi';
 import FavoriteModal from '../components/FavoriteModal';
-import FavoriteShareModal from '../components/FavoriteShareModal';
+import FavoriteShareModalMini from './FavoriteShareModalMini';
+import FavoriteShareModalMain from './FavoriteShareModalMain';
+import UnlikeConfirmModal from '../components/UnlikeConfirmModal';
 import { LikeCardsGeneral } from '../types/index';
 import getVerticalImg from '../utils/resizeImage';
 
-const FavoriteCardList = ({ ...props }: LikeCardsGeneral): JSX.Element => {
+interface SetFilteredArray extends LikeCardsGeneral {
+  setFilteredArray: React.Dispatch<React.SetStateAction<LikeCardsGeneral[]>>;
+  filteredArray: LikeCardsGeneral[];
+}
+
+const FavoriteCardList = ({ ...props }: SetFilteredArray): JSX.Element => {
   const shareRef = useRef<HTMLDivElement>(null);
   const contents = props.contents !== null ? props.contents : [];
   const category = props.category;
 
-  // const { webformatURL, tags } = item;
+  const [shareModalMain, setShareModalMain] = useState(false);
+  const [shareModalMini, setShareModalMini] = useState(false);
+  const [unLikeModal, setUnlikeModal] = useState(false);
   const [showModal, setShowModal] = useState(false);
-  const [shareModal, setShareModal] = useState(false);
   const [xyPosition, setXYPosition] = useState({
     pageX: 0,
     pageY: 0,
@@ -29,7 +37,7 @@ const FavoriteCardList = ({ ...props }: LikeCardsGeneral): JSX.Element => {
     // const scrolledTopLength = window.pageYOffset;
     // const absoluteTop = scrolledTopLength + relativeTop;
 
-    setShareModal((prev) => !prev);
+    setShareModalMini((prev) => !prev);
     setXYPosition({
       pageX: e.pageX,
       pageY: e.pageY,
@@ -48,7 +56,7 @@ const FavoriteCardList = ({ ...props }: LikeCardsGeneral): JSX.Element => {
           </FlipCardFront>
           <FlipCardBackGeneral>
             <IconWrapper>
-              <IconCircle>
+              <IconCircle onClick={() => setUnlikeModal((prev) => !prev)}>
                 <HeartIcon />
               </IconCircle>
               <IconCircle onClick={openShareModal} ref={shareRef}>
@@ -56,7 +64,7 @@ const FavoriteCardList = ({ ...props }: LikeCardsGeneral): JSX.Element => {
               </IconCircle>
             </IconWrapper>
             {category !== 'music' && category !== 'movie' ? (
-              <h2>{`${props.date.split('-')[0]}월 ${props.date.split('-')[1]}일`}</h2>
+              <h2>{`${props.date.split('-')[0]}월${props.date.split('-')[1]}일`}</h2>
             ) : (
               <>
                 <h2>{`${props.date.split('-')[0]}년`}</h2>
@@ -70,26 +78,40 @@ const FavoriteCardList = ({ ...props }: LikeCardsGeneral): JSX.Element => {
             ) : category === 'movie' ? (
               <>
                 <h3 style={{ marginBottom: '-10px' }}>한국 1위 영화</h3>
-                <p>{props.korea === undefined ? '정보가 없습니다' : props.korea?.title}</p>
+                <p>{props.korea === undefined ? '정보가 없습니다 😢' : `<${props.korea?.title}>`}</p>
                 <h3 style={{ marginBottom: '-10px' }}>해외 1위 영화</h3>
                 <p style={{ marginBottom: '20px' }}>
-                  {props.world === undefined ? '정보가 없습니다' : props.world?.title}
+                  {props.world === undefined ? '정보가 없습니다 😢' : `<${props.world?.title}>`}
                 </p>
               </>
             ) : (
-              ''
+              <>
+                <h3 style={{ marginBottom: '-10px' }}>한국 1위 음악</h3>
+                <p>
+                  {props.korea === undefined ? '정보가 없습니다 😢' : `<${props.korea?.title}>`}
+                  <br />
+                  {props.korea === undefined ? '' : `— ${props.korea?.singer}`}
+                </p>
+                <h3 style={{ marginBottom: '-10px' }}>해외 1위 음악</h3>
+                <p style={{ marginBottom: '20px' }}>
+                  {props.world === undefined ? '정보가 없습니다 😢' : `<${props.world?.title}>`}
+                  <br />
+                  {props.world === undefined ? '' : `— ${props.world?.singer}`}
+                </p>
+              </>
             )}
             <ModalView onClick={openModal}>크게보기</ModalView>
           </FlipCardBackGeneral>
         </FlipCardInner>
       </FlipCard>
-      <FavoriteShareModal
-        shareModal={shareModal}
-        setShareModal={setShareModal}
+      <FavoriteShareModalMini
+        shareModalMini={shareModalMini}
+        setShareModalMini={setShareModalMini}
         xyPosition={xyPosition}
-      ></FavoriteShareModal>
+      />
       <FavoriteModal
         id={props.id}
+        like={props.like}
         image={props.image}
         showModal={showModal}
         setShowModal={setShowModal}
@@ -98,7 +120,17 @@ const FavoriteCardList = ({ ...props }: LikeCardsGeneral): JSX.Element => {
         date={props.date}
         korea={props.korea}
         world={props.world}
+        setUnlikeModal={setUnlikeModal}
+        setShareModalMain={setShareModalMain}
       />
+      <UnlikeConfirmModal
+        id={props.id}
+        unLikeModal={unLikeModal}
+        filteredArray={props.filteredArray}
+        setFilteredArray={props.setFilteredArray}
+        setUnlikeModal={setUnlikeModal}
+      />
+      <FavoriteShareModalMain shareModalMain={shareModalMain} setShareModalMain={setShareModalMain} />
     </>
   );
 };

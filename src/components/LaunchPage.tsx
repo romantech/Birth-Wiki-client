@@ -100,8 +100,10 @@ export default function LaunchPage() {
 
   return (
     <LaunchScreen>
-      <h1>What Happend</h1>
-      <h1>on Your BirthDay!</h1>
+      <WordsContainner>
+        <Words>What happened</Words>
+        <Words>on Your BirthDay!</Words>
+      </WordsContainner>
       <InputContiner>
         <InputDate
           type='number'
@@ -152,14 +154,59 @@ export default function LaunchPage() {
         ></InputDate>{' '}
         일
       </InputContiner>
-
       <BirthwikiBtn onClick={birthwikiHandler}>Birth Wiki!</BirthwikiBtn>
-      {warning ? <div>날짜 제대로 입력하셈</div> : null}
+      {warning ? <div>날짜를 다시 입력해 주세요</div> : null}
     </LaunchScreen>
   );
 }
 
+const Words = styled.span`
+  color: #000;
+  text-transform: uppercase;
+  display: block;
+  font-size: 40px;
+  font-weight: 700;
+  letter-spacing: 3px;
+  margin-bottom: 30px;
+  position: relative;
+  animation: text 3s 1;
+
+  @keyframes text {
+    0% {
+      color: black;
+      margin-bottom: -10px;
+    }
+    30% {
+      letter-spacing: 25px;
+      margin-bottom: -10px;
+    }
+    85% {
+      letter-spacing: 8px;
+      margin-bottom: -15px;
+    }
+  }
+  /* color: #f4d03f;
+  font-size: 0;
+  line-height: 1.5;
+  font-size: 5rem;
+  display: inline-block;
+
+  } */
+`;
+const WordsContainner = styled.div`
+  text-align: center;
+  position: absolute;
+  top: 40%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 100%;
+`;
+
 const LaunchScreen = styled.div`
+  font-family: sans-serif;
+  background: #eee;
+  padding: 0;
+  margin: 0;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -171,16 +218,6 @@ const LaunchScreen = styled.div`
   /* background-image: url('../movie.png'); */
   background-position: x y;
   background-size: 100%;
-  animation: movebg 3s linear infinite;
-
-  @keyframes movebg {
-    0% {
-      background-position: 0 center;
-    }
-    100% {
-      background-position: 500px center;
-    }
-  }
 `;
 
 const InputContiner = styled.form`

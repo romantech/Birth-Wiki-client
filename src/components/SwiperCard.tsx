@@ -295,7 +295,16 @@ const SwiperCard = (props: any) => {
           <SlideCard>
             <div className='box'>
               <div className='imgBx'>
-                <img src={`${music.image}`} alt='' />
+                {music.image ? (
+                  <img src={`${music.image}`} alt={`${music.world.title}`} />
+                ) : (
+                  <img
+                    src='https://www.musicaroma.kr/img/no_img_s.png'
+                    style={{ width: '100%' }}
+                    alt={`${music.world.title}`}
+                  />
+                )}
+                {/* <img src={`${music.image}`} alt='' /> */}
               </div>
               <div className='content'>
                 <div>

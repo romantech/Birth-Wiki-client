@@ -14,6 +14,7 @@ export interface UserInfo {
 
 export interface LikeCardsGeneral {
   id: number;
+  like: boolean;
   date: string;
   category: string;
   contents?: string[];
