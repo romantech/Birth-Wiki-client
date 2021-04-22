@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
+import { useSelector } from 'react-redux';
+import { RootState } from '../store/index';
 
 const CreateCard = styled.div`
   border-radius: 10px;
@@ -78,8 +80,10 @@ const CreateCard = styled.div`
     display: none;
   }
 `;
-
 function CardCreate() {
+  const userInfo = useSelector((state: RootState) => state.userInfoReducer.userInfo);
+
+  const currentDate = new Date().toISOString().substring(0, 10);
   return (
     <CreateCard>
       <div className='box create'>
@@ -91,6 +95,15 @@ function CardCreate() {
           method='POST'
           encType='multipart/form-data'
         >
+          <input
+            className='access'
+            name='accessToken'
+            type='text'
+            value={`Bearer ${userInfo.accessToken}`}
+            style={{ display: 'none' }}
+          />
+          <input type='text' name='nickName' value={`${userInfo.nickName}`} style={{ display: 'none' }} />
+          <input type='text' name='date' value={`${currentDate}`} style={{ display: 'none' }} />
           <div className='crtCard'>
             {/* <label className='input-file-button' htmlFor='input-file'>
               이미지 업로드
