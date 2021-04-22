@@ -14,43 +14,35 @@ import { LikeCardsGeneral } from '../types/index';
 import { ArrowLeft, ArrowRight } from '../components/ArrowIcon';
 import { FaArrowCircleUp } from 'react-icons/fa';
 
+let sliceStart = 0;
+let sliceEnd = 11;
 const FavoritePage = (): JSX.Element => {
   const isLogin = useSelector((state: RootState) => state.loginReducer.isLogin);
   const isGuest = useSelector((state: RootState) => state.guestReducer.isGuest);
-  const userInfo = useSelector((state: RootState) => state.userInfoReducer.userInfo);
+  const { userInfo } = useSelector((state: RootState) => state.userInfoReducer);
+  const { likeCards } = userInfo;
 
   const [renderArray, setRenderArray] = useState<LikeCardsGeneral[]>([]);
   const [filteredArray, setFilteredArray] = useState<LikeCardsGeneral[]>(
-    userInfo.likeCards ? userInfo.likeCards : [],
+    likeCards !== null ? likeCards.filter((el: { like: boolean }) => el.like === true) : [],
   );
-  const [selectedCategory, setSelectedCategory] = useState('all');
-  const [endCard, setEndCard] = useState(11);
 
-  const getLikeCards = () => {
-    const sliced = filteredArray.slice(0, endCard);
-    setRenderArray(sliced);
-    setEndCard(endCard + 11);
+  const getLikeCards = (start: number, end: number) => {
+    const sliced = filteredArray.slice(start, end);
+    if (sliced.length) {
+      setRenderArray(renderArray.concat(...sliced));
+      sliceStart = sliceEnd;
+      sliceEnd = sliceEnd + 11;
+    }
   };
 
   useEffect(() => {
-    getLikeCards();
-  }, [filteredArray]);
-
-  useEffect(() => {
-    if (userInfo.likeCards) {
-      selectedCategory === 'all'
-        ? setFilteredArray(userInfo.likeCards)
-        : setFilteredArray(
-            userInfo.likeCards.filter((el: { category: string }) => {
-              if (el.category === selectedCategory) {
-                return el;
-              }
-            }),
-          );
-    } else {
-      setFilteredArray([]);
+    if (renderArray.length === 0) {
+      sliceStart = 0;
+      sliceEnd = 11;
+      getLikeCards(sliceStart, sliceEnd);
     }
-  }, [selectedCategory, userInfo]);
+  }, [renderArray, filteredArray]);
 
   const breakPoints = {
     default: 6,
@@ -70,8 +62,9 @@ const FavoritePage = (): JSX.Element => {
             <FavoriteCategories
               category={category}
               key={category.categoryName}
-              setEndCard={setEndCard}
-              setSelectedCategory={setSelectedCategory}
+              setFilteredArray={setFilteredArray}
+              likeCards={likeCards}
+              setRenderArray={setRenderArray}
             />
           ))}
           arrowLeft={ArrowLeft}
@@ -83,7 +76,7 @@ const FavoritePage = (): JSX.Element => {
       <h1 className='Favorite-H1'>YOUR CARDS</h1>
       <InfiniteScroll
         dataLength={renderArray.length}
-        next={() => setTimeout(() => getLikeCards(), 1200)}
+        next={() => setTimeout(() => getLikeCards(sliceStart, sliceEnd), 1200)}
         hasMore={renderArray.length < filteredArray.length}
         loader={<Loader />}
         endMessage={
@@ -101,19 +94,25 @@ const FavoritePage = (): JSX.Element => {
               likeCards={userInfo.likeCards !== null ? userInfo.likeCards.length : 0}
               profileImage={userInfo.profileImage}
             />
-            {renderArray.map((card, index) => (
-              <FavoriteCardList
-                id={card.id}
-                like={card.like}
-                date={card.date}
-                category={card.category}
-                contents={card.contents}
-                image={card.image}
-                korea={card.korea}
-                world={card.world}
-                key={index}
-              />
-            ))}
+            {renderArray.map((card, index) => {
+              if (card.like === true) {
+                return (
+                  <FavoriteCardList
+                    id={card.id}
+                    like={card.like}
+                    date={card.date}
+                    category={card.category}
+                    contents={card.contents}
+                    image={card.image}
+                    korea={card.korea}
+                    world={card.world}
+                    key={index}
+                    setFilteredArray={setFilteredArray}
+                    filteredArray={filteredArray}
+                  />
+                );
+              }
+            })}
           </Masonry>
         </MasLayout>
         <ScrollIcon onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })} />

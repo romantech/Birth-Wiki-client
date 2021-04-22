@@ -1,21 +1,35 @@
 import React from 'react';
 import styled from 'styled-components';
+import { LikeCardsGeneral } from '../types';
 
 interface Props {
   category: {
     categoryName: string;
     imagePath: string;
   };
-  setSelectedCategory: React.Dispatch<React.SetStateAction<string>>;
-  setEndCard: React.Dispatch<React.SetStateAction<number>>;
+  likeCards: LikeCardsGeneral[];
+  setFilteredArray: React.Dispatch<React.SetStateAction<LikeCardsGeneral[]>>;
+  setRenderArray: React.Dispatch<React.SetStateAction<LikeCardsGeneral[]>>;
 }
-
-const FavoriteCategories = ({ category, setEndCard, setSelectedCategory }: Props): JSX.Element => {
+const FavoriteCategories = ({
+  category,
+  likeCards,
+  setFilteredArray,
+  setRenderArray,
+}: Props): JSX.Element => {
   const { imagePath, categoryName } = category;
 
   const handleClick = (categoryName: string) => {
-    setEndCard(11);
-    setSelectedCategory(categoryName.toLowerCase());
+    setRenderArray([]);
+    if (categoryName.toLowerCase() === 'all') {
+      if (likeCards !== null) {
+        return setFilteredArray(likeCards);
+      }
+    } else {
+      if (likeCards !== null) {
+        return setFilteredArray(likeCards.filter((el) => el.category === categoryName.toLowerCase()));
+      }
+    }
   };
 
   return (

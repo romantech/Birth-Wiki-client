@@ -9,7 +9,12 @@ import { LikeCardsGeneral, MovieInfo } from '../types/index';
 import getVerticalImg from '../utils/resizeImage';
 import TMDB_API from '../utils/TMDB_API';
 
-const FavoriteCardList = ({ ...props }: LikeCardsGeneral): JSX.Element => {
+interface SetFilteredArray extends LikeCardsGeneral {
+  setFilteredArray: React.Dispatch<React.SetStateAction<LikeCardsGeneral[]>>;
+  filteredArray: LikeCardsGeneral[];
+}
+
+const FavoriteCardList = ({ ...props }: SetFilteredArray): JSX.Element => {
   console.log('렌더');
   // const shareRef = useRef<HTMLDivElement>(null);
   const contents = props.contents !== null ? props.contents : [];
@@ -182,8 +187,9 @@ const FavoriteCardList = ({ ...props }: LikeCardsGeneral): JSX.Element => {
         id={props.id}
         category={props.category}
         unLikeModal={unLikeModal}
+        filteredArray={props.filteredArray}
+        setFilteredArray={props.setFilteredArray}
         setUnlikeModal={setUnlikeModal}
-        setShowModal={setShowModal}
       />
       <FavoriteShareModalMain shareModalMain={shareModalMain} setShareModalMain={setShareModalMain} />
     </>

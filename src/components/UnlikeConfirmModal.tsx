@@ -2,22 +2,24 @@ import axios from 'axios';
 import React, { useRef, useEffect, useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useSpring, animated } from 'react-spring';
-import styled, { css } from 'styled-components';
+import styled from 'styled-components';
 import { RootState } from '../store/index';
 import { setUserInfo } from '../actions/index';
+import { LikeCardsGeneral } from '../types/index';
 
 interface UnlikeConfirmModal {
   unLikeModal: boolean;
+  filteredArray: LikeCardsGeneral[];
+  setFilteredArray: React.Dispatch<React.SetStateAction<LikeCardsGeneral[]>>;
   setUnlikeModal: React.Dispatch<React.SetStateAction<boolean>>;
-  setShowModal: React.Dispatch<React.SetStateAction<boolean>>;
   id: number;
   category: string;
 }
 
 const UnlikeConfirmModal = ({ ...props }: UnlikeConfirmModal): JSX.Element => {
+  const modalRef = useRef<HTMLDivElement>(null);
   const userInfo = useSelector((state: RootState) => state.userInfoReducer.userInfo);
   const dispatch = useDispatch();
-  const modalRef = useRef<HTMLDivElement>(null);
 
   const animation = useSpring({
     config: {
@@ -28,8 +30,14 @@ const UnlikeConfirmModal = ({ ...props }: UnlikeConfirmModal): JSX.Element => {
   });
 
   const setUnlike = () => {
-    props.setUnlikeModal((prev) => !prev);
-    props.setShowModal(false);
+    const setLiked = props.filteredArray.map((el) => {
+      if (el.id === props.id) {
+        el.like = false;
+        return el;
+      }
+      return el;
+    });
+    props.setFilteredArray(setLiked);
 
     axios({
       url: 'https://server.birthwiki.space/like',
