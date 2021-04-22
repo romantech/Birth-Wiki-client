@@ -94,7 +94,9 @@ const HoverCard = (props: any) => {
           <CardContents
             key={idx}
             onClick={() => {
-              openCard();
+              props.setSelected(idx);
+              props.setIsFlow(true);
+              props.setIsHover(false);
             }}
             style={{ backgroundImage: `url(${el.image})` }}
           >

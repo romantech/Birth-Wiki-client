@@ -32,7 +32,6 @@ const Weather = ({ data, selectedDate }: any) => {
 
   useEffect(() => {
     if (weatherData) {
-      console.log(weatherData.weather);
       switch (weatherData.weather) {
         case '맑음':
           setText('화창한 날입니다.');
@@ -67,7 +66,6 @@ const Weather = ({ data, selectedDate }: any) => {
     }
   }, []);
 
-  // 햇무리 / 달무리 / 채운 / 우박 / 진눈깨비 / 눈 / 뇌전 / 비 / 안개 / 맑음
   const WeatherText = styled.div`
     padding: 1.2rem;
     font-size: 1.1rem;
@@ -103,7 +101,6 @@ const Weather = ({ data, selectedDate }: any) => {
           <div className='icon'>
             <WeatherImg>
               <img src={`${iconUp}`} alt='' style={{ width: '9.5rem' }} />
-              {/* <WiDaySunny style={{ fontSize: '10rem' }} /> */}
             </WeatherImg>
             <h2>{weatherData ? weatherData.weather : text}</h2>
           </div>

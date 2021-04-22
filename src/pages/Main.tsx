@@ -8,6 +8,7 @@ import { Link } from 'react-router-dom';
 import HoverCard from '../components/HoverCard';
 import CardLists from '../components/CardLists';
 import Weather from '../components/Weather';
+import CoverFlow from '../components/CoverFlow';
 
 import clear from '../img/clear.jpg';
 import rain from '../img/rain.jpg';
@@ -21,6 +22,10 @@ const Main = () => {
   const [showCard, setShowCard] = useState(false);
   const [data, setData] = useState(null);
   const [weather, setWeather] = useState(clear);
+  const [isHover, setIsHover] = useState(true);
+  const [isFlow, setIsFlow] = useState(false);
+  const [isHoriz, setisHoriz] = useState(false);
+  const [selected, setSelected] = useState(0);
 
   useEffect(() => {
     Axios({
@@ -150,13 +155,21 @@ const Main = () => {
           <DateInput>
             <input type='text' placeholder={selectedDate.split('/')[2]} />
           </DateInput>
-          <WeatherDetail>
-            <Weather data={data} selectedDate={selectedDate} />
-          </WeatherDetail>
-          {/* 카드 리스트 start */}
-          <HoverCard data={data} />
-          {/* <CardLists data={data} /> */}
-          {/* 카드 리스트 end */}
+          {isHover ? (
+            <>
+              <WeatherDetail>
+                <Weather data={data} selectedDate={selectedDate} />
+              </WeatherDetail>
+              <HoverCard
+                data={data}
+                setSelected={setSelected}
+                setIsFlow={setIsFlow}
+                setIsHover={setIsHover}
+              />
+            </>
+          ) : null}
+          {isFlow ? <CoverFlow data={data} selected={selected} /> : null}
+          {/* isHoriz?<HorizFlow data={data} /> : null */}
         </Background>
       ) : null}
     </>

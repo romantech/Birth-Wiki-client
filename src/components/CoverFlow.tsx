@@ -4,12 +4,15 @@ import styled from 'styled-components';
 import './CoverFlow.css';
 
 function CoverFlow(props: any) {
-  const data = props;
-  const issue = data.issue;
-  const death = data.death;
-  const birth = data.birth;
-  const music = data.music;
-  const movie = data.culture;
+  const data = props.data;
+  const issue = data.issueCard;
+  const death = data.deathCard;
+  const birth = data.birthCard;
+  const music = data.musicCard;
+  const movie = data.movieCard;
+
+  //const cardData = [issue, birth, death, movie, music, { image: recordCover }];
+  //const cardTitle = ['이슈', '탄생', '사망', '영화', '음악', '기록카드 작성'];
 
   const Container = styled.div`
     display: flex;
@@ -20,6 +23,13 @@ function CoverFlow(props: any) {
   return (
     <Container>
       <div className='slider'>
+        {/* {map((el, idx)=>{
+            if(props.selected === idx) {
+              return <input type='radio' name='testimonial' id={`t-${idx+1}`} checked/>
+            } else {
+              return <input type='radio' name='testimonial' id={`t-${idx+1}`} />
+            }
+        })} */}
         <input type='radio' name='testimonial' id='t-1' />
         <input type='radio' name='testimonial' id='t-2' />
         <input type='radio' name='testimonial' id='t-3' />
@@ -27,6 +37,9 @@ function CoverFlow(props: any) {
         <input type='radio' name='testimonial' id='t-5' />
 
         <div className='testimonials'>
+          {/* {map((el, idx)=>{
+           return <label className='item' htmlFor={`t-${idx+1}`} style={{ background: `url(${el.image})` }}></label>
+          })} */}
           <label className='item' htmlFor='t-1' style={{ background: `url(${issue.image})` }}>
             <p>
               Lorem ipsum dolor sit amet consectetur adipisicing elit. Eius sit, amet, impedit neque et ipsa
