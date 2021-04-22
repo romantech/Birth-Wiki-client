@@ -9,7 +9,7 @@ interface Props extends LikeCardsGeneral {
   showModal: boolean;
   setShowModal: React.Dispatch<React.SetStateAction<boolean>>;
   setUnlikeModal: React.Dispatch<React.SetStateAction<boolean>>;
-  setShareModalOfModal: React.Dispatch<React.SetStateAction<boolean>>;
+  setShareModalMain: React.Dispatch<React.SetStateAction<boolean>>;
   id: number;
 }
 
@@ -106,7 +106,7 @@ const FavoriteModal = ({ showModal, setShowModal, ...props }: Props): JSX.Elemen
                   <IconCircle
                     className='icon-circle second'
                     primary
-                    onClick={() => props.setShareModalOfModal((prev) => !prev)}
+                    onClick={() => props.setShareModalMain((prev) => !prev)}
                   >
                     <ShareIcon style={{ fontSize: '1.2rem' }} />
                   </IconCircle>

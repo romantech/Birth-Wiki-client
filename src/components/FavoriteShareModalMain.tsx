@@ -2,35 +2,35 @@ import React, { useRef, useEffect, useCallback } from 'react';
 import { useSpring, animated } from 'react-spring';
 import styled, { css } from 'styled-components';
 
-interface ShareModalOfModal {
-  shareModalOfModal: boolean;
-  setShareModalOfModal: React.Dispatch<React.SetStateAction<boolean>>;
+interface ShareModalMain {
+  shareModalMain: boolean;
+  setShareModalMain: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const ShareModalOfModal = ({ ...props }: ShareModalOfModal): JSX.Element => {
+const FavoriteShareModalMain = ({ ...props }: ShareModalMain): JSX.Element => {
   const modalRef = useRef<HTMLDivElement>(null);
 
   const animation = useSpring({
     config: {
       duration: 250,
     },
-    opacity: props.shareModalOfModal ? 1 : 0,
-    transform: props.shareModalOfModal ? `translateX(0%)` : `translateX(100%)`,
+    opacity: props.shareModalMain ? 1 : 0,
+    transform: props.shareModalMain ? `translateX(0%)` : `translateX(100%)`,
   });
 
   const closeModal = (e: React.MouseEvent<HTMLElement>) => {
     if (modalRef.current === e.target) {
-      props.setShareModalOfModal(false);
+      props.setShareModalMain(false);
     }
   };
 
   const keyPress = useCallback(
     (e) => {
-      if (e.key === 'Escape' && props.shareModalOfModal) {
-        props.setShareModalOfModal(false);
+      if (e.key === 'Escape' && props.shareModalMain) {
+        props.setShareModalMain(false);
       }
     },
-    [props.setShareModalOfModal, props.shareModalOfModal],
+    [props.setShareModalMain, props.shareModalMain],
   );
 
   useEffect(() => {
@@ -40,14 +40,14 @@ const ShareModalOfModal = ({ ...props }: ShareModalOfModal): JSX.Element => {
 
   return (
     <>
-      {props.shareModalOfModal ? (
+      {props.shareModalMain ? (
         <Background ref={modalRef} onClick={closeModal}>
           <animated.div style={animation}>
             <ModalWrapper>
               <ModalContent>
                 <p>🚀 in development...</p>
                 <ButtonWrapper>
-                  <button onClick={() => props.setShareModalOfModal((prev) => !prev)}>확인</button>
+                  <button onClick={() => props.setShareModalMain((prev) => !prev)}>확인</button>
                 </ButtonWrapper>
               </ModalContent>
             </ModalWrapper>
@@ -115,4 +115,4 @@ const ButtonWrapper = styled.div`
   }
 `;
 
-export default ShareModalOfModal;
+export default FavoriteShareModalMain;

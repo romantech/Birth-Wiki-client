@@ -2,9 +2,9 @@ import React, { useState, useRef } from 'react';
 import styled, { css } from 'styled-components';
 import { FiHeart, FiShare } from 'react-icons/fi';
 import FavoriteModal from '../components/FavoriteModal';
-import FavoriteShareModal from '../components/FavoriteShareModal';
+import FavoriteShareModalMini from './FavoriteShareModalMini';
+import FavoriteShareModalMain from './FavoriteShareModalMain';
 import UnlikeConfirmModal from '../components/UnlikeConfirmModal';
-import ShareModalOfModal from '../components/ShareModalOfModal';
 import { LikeCardsGeneral } from '../types/index';
 import getVerticalImg from '../utils/resizeImage';
 
@@ -18,10 +18,10 @@ const FavoriteCardList = ({ ...props }: SetFilteredArray): JSX.Element => {
   const contents = props.contents !== null ? props.contents : [];
   const category = props.category;
 
-  const [shareModalOfModal, setShareModalOfModal] = useState(false);
+  const [shareModalMain, setShareModalMain] = useState(false);
+  const [shareModalMini, setShareModalMini] = useState(false);
   const [unLikeModal, setUnlikeModal] = useState(false);
   const [showModal, setShowModal] = useState(false);
-  const [shareModal, setShareModal] = useState(false);
   const [xyPosition, setXYPosition] = useState({
     pageX: 0,
     pageY: 0,
@@ -37,7 +37,7 @@ const FavoriteCardList = ({ ...props }: SetFilteredArray): JSX.Element => {
     // const scrolledTopLength = window.pageYOffset;
     // const absoluteTop = scrolledTopLength + relativeTop;
 
-    setShareModal((prev) => !prev);
+    setShareModalMini((prev) => !prev);
     setXYPosition({
       pageX: e.pageX,
       pageY: e.pageY,
@@ -104,11 +104,11 @@ const FavoriteCardList = ({ ...props }: SetFilteredArray): JSX.Element => {
           </FlipCardBackGeneral>
         </FlipCardInner>
       </FlipCard>
-      <FavoriteShareModal
-        shareModal={shareModal}
-        setShareModal={setShareModal}
+      <FavoriteShareModalMini
+        shareModalMini={shareModalMini}
+        setShareModalMini={setShareModalMini}
         xyPosition={xyPosition}
-      ></FavoriteShareModal>
+      />
       <FavoriteModal
         id={props.id}
         like={props.like}
@@ -121,7 +121,7 @@ const FavoriteCardList = ({ ...props }: SetFilteredArray): JSX.Element => {
         korea={props.korea}
         world={props.world}
         setUnlikeModal={setUnlikeModal}
-        setShareModalOfModal={setShareModalOfModal}
+        setShareModalMain={setShareModalMain}
       />
       <UnlikeConfirmModal
         id={props.id}
@@ -130,7 +130,7 @@ const FavoriteCardList = ({ ...props }: SetFilteredArray): JSX.Element => {
         setFilteredArray={props.setFilteredArray}
         setUnlikeModal={setUnlikeModal}
       />
-      <ShareModalOfModal shareModalOfModal={shareModalOfModal} setShareModalOfModal={setShareModalOfModal} />
+      <FavoriteShareModalMain shareModalMain={shareModalMain} setShareModalMain={setShareModalMain} />
     </>
   );
 };
