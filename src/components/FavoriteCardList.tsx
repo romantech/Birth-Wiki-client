@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useRef } from 'react';
 import styled, { css } from 'styled-components';
 import { FiHeart, FiShare, FiZoomIn } from 'react-icons/fi';
 import FavoriteModal from '../components/FavoriteModal';
@@ -15,8 +15,8 @@ interface SetFilteredArray extends LikeCardsGeneral {
 }
 
 const FavoriteCardList = ({ ...props }: SetFilteredArray): JSX.Element => {
-  console.log('렌더');
   // const shareRef = useRef<HTMLDivElement>(null);
+  console.log('렌더');
   const contents = props.contents !== null ? props.contents : [];
   const category = props.category;
 
@@ -47,18 +47,16 @@ const FavoriteCardList = ({ ...props }: SetFilteredArray): JSX.Element => {
     });
   };
 
-  useEffect(() => {
-    if (!movieInfoKorean && !movieInfoWorld) {
-      if (props.category === 'movie') {
-        if (props.korea) {
-          getMovieRate(props.korea.title, 'korea');
-        }
-        if (props.world) {
-          getMovieRate(props.world.title, 'world');
-        }
+  if (!movieInfoKorean && !movieInfoWorld) {
+    if (props.category === 'movie') {
+      if (props.korea) {
+        getMovieRate(props.korea.title, 'korea');
+      }
+      if (props.world) {
+        getMovieRate(props.world.title, 'world');
       }
     }
-  });
+  }
 
   const openModal = () => {
     setShowModal((prev) => !prev);
@@ -180,6 +178,8 @@ const FavoriteCardList = ({ ...props }: SetFilteredArray): JSX.Element => {
         date={props.date}
         korea={props.korea}
         world={props.world}
+        movieInfoKorean={movieInfoKorean}
+        movieInfoWorld={movieInfoWorld}
         setUnlikeModal={setUnlikeModal}
         setShareModalMain={setShareModalMain}
       />

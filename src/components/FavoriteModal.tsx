@@ -2,7 +2,7 @@ import React, { useRef, useEffect, useCallback } from 'react';
 import { useSpring, animated } from 'react-spring';
 import styled, { css } from 'styled-components';
 import { MdClose } from 'react-icons/md';
-import { LikeCardsGeneral } from '../types/index';
+import { LikeCardsGeneral, MovieInfo } from '../types/index';
 import { IconCircle, ShareIcon, HeartIcon } from './FavoriteCardList';
 
 interface Props extends LikeCardsGeneral {
@@ -11,6 +11,8 @@ interface Props extends LikeCardsGeneral {
   setUnlikeModal: React.Dispatch<React.SetStateAction<boolean>>;
   setShareModalMain: React.Dispatch<React.SetStateAction<boolean>>;
   id: number;
+  movieInfoKorean?: MovieInfo;
+  movieInfoWorld?: MovieInfo;
 }
 
 const FavoriteModal = ({ showModal, setShowModal, ...props }: Props): JSX.Element => {
@@ -78,11 +80,20 @@ const FavoriteModal = ({ showModal, setShowModal, ...props }: Props): JSX.Elemen
                       <h4 style={{ marginBottom: '-10px' }}>한국 1위 영화</h4>
                       <p style={{ textAlign: 'center' }}>
                         {props.korea === undefined ? '정보가 없습니다 😢' : `<${props.korea?.title}>`}
+                        <br />
+                        {props.movieInfoKorean
+                          ? `${props.movieInfoKorean.vote_average}점 (${props.movieInfoKorean.vote_count}명 투표)`
+                          : ''}
                       </p>
+
                       <MediaImageWorld korea={mediaImageKorea} world={mediaImageWorld} />
                       <h4 style={{ marginBottom: '-10px' }}>해외 1위 영화</h4>
                       <p style={{ textAlign: 'center' }}>
                         {props.world === undefined ? '정보가 없습니다 😢' : `<${props.world?.title}>`}
+                        <br />
+                        {props.movieInfoWorld
+                          ? `${props.movieInfoWorld.vote_average}점 (${props.movieInfoWorld.vote_count}명 투표)`
+                          : ''}
                       </p>
                     </>
                   ) : (
