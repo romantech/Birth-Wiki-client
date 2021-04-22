@@ -16,9 +16,8 @@ import cloud from '../img/cloud.jpg';
 import solar from '../img/solar.jpg';
 import lightning from '../img/lightning.jpg';
 
-const Weather: React.FC = ({ match }: any) => {
-  const selectedDate = match.params.date.replace(/(\d{4})(\d{2})(\d{2})/g, '$1-$2-$3');
-  const selectedDate2 = new URL(window.location.href).pathname;
+const Weather = ({ setChangeCard }: any) => {
+  const selectedDate = new URL(window.location.href).pathname;
   const [weather, setWeather] = useState(clear);
   const [text, setText] = useState('화창한');
   const [showCard, setShowCard] = useState(false);
@@ -27,14 +26,14 @@ const Weather: React.FC = ({ match }: any) => {
 
   //data.weatherCard[0]
   useEffect(() => {
-    console.log(selectedDate);
+    // console.log(selectedDate);
 
     const fetchData = async () => {
       await Axios({
         url: 'https://server.birthwiki.space/data/date',
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        data: { date: `${selectedDate2.split('/')[2]}` },
+        data: { date: `${selectedDate.split('/')[2]}` },
       }).then((response) => {
         setData(response.data.data);
         setWeatherData(response.data.data.weatherCard.weather);

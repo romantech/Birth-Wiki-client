@@ -1,10 +1,11 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import styled from 'styled-components';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../store/index';
-import { setIsLogin, setUserInfo, setIsSidbar, setIsSignup } from '../actions/index';
+import { setIsLogin, setUserInfo, setIsSidbar, setIsEdit } from '../actions/index';
 import { useHistory, Link } from 'react-router-dom';
 import * as ColorIcon from 'react-icons/fc';
+import { AiOutlineClose } from 'react-icons/ai';
 import { validatePassword, matchPassword, validateNickName } from '../utils/validate';
 import axios from 'axios';
 
@@ -14,7 +15,7 @@ function SidebarEdit() {
   const dispatch = useDispatch();
   const history = useHistory();
   const [editUserInfo, setEditUserInfo] = useState(userInfo);
-  console.log('editUserInfo', editUserInfo);
+  const [changeInfo, setChangeInfo] = useState(false);
 
   const { password, password2, errorMsg } = editUserInfo;
 
@@ -24,13 +25,34 @@ function SidebarEdit() {
     nickName: false,
   });
 
+  useEffect(() => {
+    if (changeInfo) {
+      axios({
+        url: 'https://server.birthwiki.space/user/info',
+        method: 'POST',
+        data: {
+          userEmail: userInfo.userEmail,
+          accessToken: `Bearer ${userInfo.accessToken}`,
+        },
+      }).then((res) => {
+        console.log(res.data.data);
+        let newUserInfo = Object.assign({}, userInfo, {
+          nickName: res.data.data.nickName,
+          profileImage: res.data.data.profileImage,
+        });
+        dispatch(setUserInfo(newUserInfo));
+        dispatch(setIsEdit(false));
+        dispatch(setIsSidbar(true));
+      });
+    }
+  }, [changeInfo]);
+
   const inputHandler = async (key: string, e: any) => {
     setEditUserInfo({
       ...editUserInfo,
       [key]: e.target.value,
     });
 
-    console.log('password', password, 'password2', password2);
     if (key === 'password') {
       if (password2 === undefined) {
         if (validatePassword(e.target.value)) {
@@ -97,19 +119,25 @@ function SidebarEdit() {
     }
   };
 
-  const EidtRef: any = useRef<HTMLDivElement>(null);
-  const closeEidt = (e: React.SyntheticEvent) => {
-    if (EidtRef.current === (e.target as typeof e.target)) {
-      dispatch(setIsSidbar(!isSidebar));
-      dispatch(setIsSignup(false));
-    }
+  const closeEidt = () => {
+    dispatch(setIsSidbar(!isSidebar));
+    dispatch(setIsEdit(false));
   };
   return (
-    <Background ref={EidtRef} onClick={closeEidt}>
+    <Background>
       <EditWrapper>
+        <EditClose to='#'>
+          <AiOutlineClose onClick={closeEidt} />
+        </EditClose>
         <Title>회원 정보 수정</Title>
         <SubTitle>필수 사항</SubTitle>
-        <iframe name='frAttachFiles' className='invisable'></iframe>
+        <iframe
+          name='frAttachFiles'
+          className='invisable'
+          onLoad={() => {
+            setChangeInfo(true);
+          }}
+        ></iframe>
         {errorMsg ? <div className='alert-box'>{errorMsg}</div> : ''}
         <EditContainer
           action='https://server.birthwiki.space/user/update'
@@ -186,17 +214,7 @@ function SidebarEdit() {
           <InputCatecory>프로필 이미지 등록</InputCatecory>
           <EditInput type='file' name='profileImage' accept='image/*' />
           {(check.password && check.password2) || check.nickName ? (
-            <EditSubmit
-              type='submit'
-              value='회원 정보 수정'
-              onClick={() => {
-                setTimeout(() => {
-                  dispatch(setUserInfo(editUserInfo));
-                  dispatch(setIsSignup(false));
-                  dispatch(setIsSidbar(true));
-                }, 5000);
-              }}
-            ></EditSubmit>
+            <EditSubmit type='submit' value='회원 정보 수정'></EditSubmit>
           ) : (
             <SubmitDiv>회원 정보 수정</SubmitDiv>
           )}
@@ -238,7 +256,18 @@ const EditWrapper = styled.div`
     display: none;
   }
 `;
-
+const EditClose = styled(Link)`
+  display: flex;
+  align-items: center;
+  font-size: 30px;
+  margin: 10px;
+  position: absolute;
+  right: 32px;
+  height: 40px;
+  font-size: 2rem;
+  background: none;
+  color: #fff;
+`;
 const Title = styled.div`
   color: #eee;
   font-family: sans-serif;

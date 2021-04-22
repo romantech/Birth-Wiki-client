@@ -11,16 +11,13 @@ import { setIsSidbar, setIsLogin, setIsSignup, setUserInfo } from '../actions';
 import { FcLike } from 'react-icons/fc';
 import axios from 'axios';
 
-function Nav({ isLogin }: any) {
+function Nav() {
   const isSidebar = useSelector((state: RootState) => state.sidebarReducer.isSidebar);
   const userInfo = useSelector((state: RootState) => state.userInfoReducer.userInfo);
+  const isLogin = useSelector((state: RootState) => state.loginReducer.isLogin);
   const dispatch = useDispatch();
-  const showSidebar = () => {
-    dispatch(setIsSidbar(!isSidebar));
-  };
 
   useEffect(() => {
-    console.log(localStorage.getItem('source'));
     const url = new URL(window.location.href);
     const AuthorizationCode = url.searchParams.get('code');
 
@@ -34,13 +31,15 @@ function Nav({ isLogin }: any) {
         },
         withCredentials: true,
       }).then((res) => {
-        console.log(res);
         dispatch(setUserInfo(res.data.data));
         dispatch(setIsLogin(true));
-        //setAt(res.data.data.accessToken)
       });
     }
   }, []);
+
+  const showSidebar = () => {
+    dispatch(setIsSidbar(!isSidebar));
+  };
 
   const clickHandler = () => {
     window.location.replace('/');
@@ -48,12 +47,15 @@ function Nav({ isLogin }: any) {
 
   return (
     <Navbar>
-      <Home onClick={clickHandler}>BirthWiki</Home>
+      <Home onClick={clickHandler}>
+        <img className='logo' src='../logo_1.png' alt='logo' />
+      </Home>
       <SidebarsOpen to='#'>
         <FaBars onClick={showSidebar} />
       </SidebarsOpen>
 
       <Favorite to='/myFavorite'>
+        MyPage
         <FcLike />
       </Favorite>
 
@@ -101,12 +103,15 @@ const Home = styled.button`
   @media screen and (max-width: 600px) {
     flex-direction: column;
   }
+  & .logo {
+    width: 12rem;
+    vertical-align: middle;
+  }
 `;
 
 const SidebarsOpen = styled(Link)`
   display: flex;
   align-items: center;
-  font-size: 30px;
   margin: 10px;
   position: absolute;
   right: 32px;
@@ -131,7 +136,6 @@ const NavSidebar = styled.div`
   justify-content: flex-start;
   position: fixed;
   top: 0;
-  transition: 850ms;
   z-index: 100;
   @media screen and (max-width: 600px) {
     width: 100%;
@@ -154,13 +158,14 @@ const SidebarsClose = styled(Link)`
 const Favorite = styled(Link)`
   display: flex;
   align-items: center;
-  font-size: 30px;
   margin: 10px;
   position: absolute;
   right: 80px;
   height: 40px;
-  font-size: 2rem;
+  font-size: 25px;
   background: none;
+  color: #eee;
+  text-decoration: none;
   @media screen and (max-width: 600px) {
     flex-direction: column;
   }
