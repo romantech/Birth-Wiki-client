@@ -9,6 +9,7 @@ interface UnlikeConfirmModal {
   setFilteredArray: React.Dispatch<React.SetStateAction<LikeCardsGeneral[]>>;
   setUnlikeModal: React.Dispatch<React.SetStateAction<boolean>>;
   id: number;
+  category: string;
 }
 
 const UnlikeConfirmModal = ({ ...props }: UnlikeConfirmModal): JSX.Element => {

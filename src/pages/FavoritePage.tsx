@@ -21,7 +21,7 @@ interface Selected {
 
 let sliceStart = 0;
 let sliceEnd = 11;
-const FavoritePage = (category: any): JSX.Element => {
+const FavoritePage = (category: string): JSX.Element => {
   const isLogin = useSelector((state: RootState) => state.loginReducer.isLogin);
   const isGuest = useSelector((state: RootState) => state.guestReducer.isGuest);
   const { userInfo } = useSelector((state: RootState) => state.userInfoReducer);
@@ -92,9 +92,7 @@ const FavoritePage = (category: any): JSX.Element => {
         hasMore={renderArray.length < filteredArray.length}
         loader={<Loader />}
         endMessage={
-          <p style={{ textAlign: 'center', marginTop: '50px' }}>
-            <b>Yay! You have seen it all</b>
-          </p>
+          <h3 style={{ textAlign: 'center', marginTop: '50px', color: 'gray' }}>더 이상 카드가 없어요</h3>
         }
       >
         <MasLayout>
