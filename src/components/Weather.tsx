@@ -14,7 +14,7 @@ import rain from '../img/rain.jpg';
 import snow from '../img/snow.jpg';
 import cloud from '../img/cloud.jpg';
 
-const Weather = ({ setChangeCard }: any) => {
+const Weather = () => {
   const selectedDate = new URL(window.location.href).pathname;
   const [weather, setWeather] = useState(clear);
   const [text, setText] = useState('화창한');
@@ -22,7 +22,6 @@ const Weather = ({ setChangeCard }: any) => {
   const [data, setData] = useState(null);
   const [weatherData, setWeatherData] = useState(null);
 
-  //data.weatherCard[0]
   useEffect(() => {
     console.log(selectedDate.split('/')[2]);
 

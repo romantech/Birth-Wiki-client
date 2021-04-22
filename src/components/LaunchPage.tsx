@@ -12,10 +12,6 @@ export default function LaunchPage() {
   let curMonth = curNow.getMonth() + 1;
   let curYear = curNow.getFullYear();
 
-  useEffect(() => {
-    console.log('date', date);
-  });
-
   const pressHandler = (e: any, here: string, next: string) => {
     setWarning(false);
     let numValue = Number(e.target.value);
@@ -87,8 +83,7 @@ export default function LaunchPage() {
       if (here !== 'day') {
         document.getElementById(next)!.focus();
       } else {
-        //birthwikiHandler();
-        //포커스 날리기
+        birthwikiHandler();
       }
       console.log(date.year + '-' + date.month + '-' + date.day);
     }

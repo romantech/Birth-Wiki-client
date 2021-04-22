@@ -21,8 +21,9 @@ interface Selected {
 
 let sliceStart = 0;
 let sliceEnd = 11;
-const FavoritePage = (): JSX.Element => {
+const FavoritePage = (category: any): JSX.Element => {
   const isLogin = useSelector((state: RootState) => state.loginReducer.isLogin);
+  const isGuest = useSelector((state: RootState) => state.guestReducer.isGuest);
   const { userInfo } = useSelector((state: RootState) => state.userInfoReducer);
   const { likeCards } = userInfo;
 
@@ -76,7 +77,7 @@ const FavoritePage = (): JSX.Element => {
     676: 2,
   };
 
-  return isLogin ? (
+  return (
     <Container>
       <h1 className='Favorite-H1'>CATEGORY</h1>
       <Categories>
@@ -138,11 +139,6 @@ const FavoritePage = (): JSX.Element => {
         <ScrollIcon onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })} />
       </InfiniteScroll>
     </Container>
-  ) : (
-    <div>
-      로그인을 하세요
-      <SidebarLogin />
-    </div>
   );
 };
 

@@ -26,8 +26,6 @@ const SwiperCard = (props: any) => {
   const music = data.music;
   const movie = data.culture;
 
-  const isLogin = useSelector((state: RootState) => state.loginReducer.isLogin);
-
   const CardWrapper = styled.div`
     width: 85vw;
     transition: all 0.5s ease;
@@ -345,13 +343,11 @@ const SwiperCard = (props: any) => {
             </div>
           </SlideCard>
         </SwiperSlide>
-        {isLogin ? (
+        <SwiperSlide>
           <SwiperSlide>
-            <SwiperSlide>
-              <CardCreate />
-            </SwiperSlide>
+            <CardCreate />
           </SwiperSlide>
-        ) : null}
+        </SwiperSlide>
       </Swiper>
     </CardWrapper>
   );

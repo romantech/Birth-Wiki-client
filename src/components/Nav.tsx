@@ -10,12 +10,16 @@ import { RootState } from '../store/index';
 import { setIsSidbar, setIsLogin, setIsSignup, setUserInfo } from '../actions';
 import { FcLike } from 'react-icons/fc';
 import axios from 'axios';
+import GuestModal from './GuestModal';
 
 function Nav() {
   const isSidebar = useSelector((state: RootState) => state.sidebarReducer.isSidebar);
   const userInfo = useSelector((state: RootState) => state.userInfoReducer.userInfo);
   const isLogin = useSelector((state: RootState) => state.loginReducer.isLogin);
+  const isGuest = useSelector((state: RootState) => state.guestReducer.isGuest);
+  const isGuestModal = useSelector((state: RootState) => state.guestReducer.isGuestModal);
   const dispatch = useDispatch();
+  const [modalOpen, setModalOpen] = useState(false);
 
   useEffect(() => {
     const url = new URL(window.location.href);
@@ -44,6 +48,14 @@ function Nav() {
   const clickHandler = () => {
     window.location.replace('/');
   };
+  const modalHandler = () => {
+    if (!isLogin && !isGuestModal) {
+      setModalOpen(true);
+    }
+    if (isGuest || isLogin) {
+      window.location.href = 'https://localhost:3000/myFavorite';
+    }
+  };
 
   return (
     <Navbar>
@@ -52,16 +64,17 @@ function Nav() {
         <FaBars onClick={showSidebar} />
       </SidebarsOpen>
 
-      <Favorite to='/myFavorite'>
+      <Favorite onClick={modalHandler}>
         <FcLike />
       </Favorite>
+      {modalOpen ? <GuestModal /> : null}
 
       {isSidebar ? (
         <NavSidebar>
           <SidebarsClose to='#'>
             <AiOutlineClose onClick={showSidebar} />
           </SidebarsClose>
-          {isLogin ? <SidebarMypage /> : <SidebarLogin />}
+          {isLogin || isGuest ? <SidebarMypage /> : <SidebarLogin />}
         </NavSidebar>
       ) : (
         ''
@@ -150,7 +163,7 @@ const SidebarsClose = styled(Link)`
   color: #fff;
 `;
 
-const Favorite = styled(Link)`
+const Favorite = styled.button`
   display: flex;
   align-items: center;
   font-size: 30px;
