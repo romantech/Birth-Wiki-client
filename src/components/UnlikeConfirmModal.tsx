@@ -1,17 +1,22 @@
+import axios from 'axios';
 import React, { useRef, useEffect, useCallback } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { useSpring, animated } from 'react-spring';
 import styled, { css } from 'styled-components';
 import { LikeCardsGeneral } from '../types/index';
+import { RootState } from '../store/index';
+import { setUserInfo } from '../actions/index';
 
 interface UnlikeConfirmModal {
   unLikeModal: boolean;
-  filteredArray: LikeCardsGeneral[];
-  setFilteredArray: React.Dispatch<React.SetStateAction<LikeCardsGeneral[]>>;
   setUnlikeModal: React.Dispatch<React.SetStateAction<boolean>>;
   id: number;
+  category: string;
 }
 
 const UnlikeConfirmModal = ({ ...props }: UnlikeConfirmModal): JSX.Element => {
+  const userInfo = useSelector((state: RootState) => state.userInfoReducer.userInfo);
+  const dispatch = useDispatch();
   const modalRef = useRef<HTMLDivElement>(null);
 
   const animation = useSpring({
@@ -22,15 +27,27 @@ const UnlikeConfirmModal = ({ ...props }: UnlikeConfirmModal): JSX.Element => {
     transform: props.unLikeModal ? `translateX(0%)` : `translateX(100%)`,
   });
 
-  const setUnlike = () => {
-    const setLiked = props.filteredArray.map((el) => {
-      if (el.id === props.id) {
-        el.like = false;
-        return el;
-      }
-      return el;
+  const setUnlike = async () => {
+    await axios({
+      url: 'https://server.birthwiki.space/like',
+      method: 'post',
+      data: {
+        action: 'cancel',
+        nickName: userInfo.nickName,
+        cardId: props.id,
+        category: props.category,
+        accessToken: `Bearer ${userInfo.accessToken}`,
+      },
+    }).then((res) => {
+      dispatch(
+        setUserInfo({
+          ...userInfo,
+          likeCards: res.data.data.likeCards,
+          recordCards: res.data.data.recordCards,
+        }),
+      );
+      props.setUnlikeModal((prev) => !prev);
     });
-    props.setFilteredArray(setLiked);
   };
 
   const closeModal = (e: React.MouseEvent<HTMLElement>) => {

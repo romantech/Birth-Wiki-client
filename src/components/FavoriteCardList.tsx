@@ -8,12 +8,7 @@ import UnlikeConfirmModal from '../components/UnlikeConfirmModal';
 import { LikeCardsGeneral } from '../types/index';
 import getVerticalImg from '../utils/resizeImage';
 
-interface SetFilteredArray extends LikeCardsGeneral {
-  setFilteredArray: React.Dispatch<React.SetStateAction<LikeCardsGeneral[]>>;
-  filteredArray: LikeCardsGeneral[];
-}
-
-const FavoriteCardList = ({ ...props }: SetFilteredArray): JSX.Element => {
+const FavoriteCardList = ({ ...props }: LikeCardsGeneral): JSX.Element => {
   const shareRef = useRef<HTMLDivElement>(null);
   const contents = props.contents !== null ? props.contents : [];
   const category = props.category;
@@ -125,9 +120,8 @@ const FavoriteCardList = ({ ...props }: SetFilteredArray): JSX.Element => {
       />
       <UnlikeConfirmModal
         id={props.id}
+        category={props.category}
         unLikeModal={unLikeModal}
-        filteredArray={props.filteredArray}
-        setFilteredArray={props.setFilteredArray}
         setUnlikeModal={setUnlikeModal}
       />
       <FavoriteShareModalMain shareModalMain={shareModalMain} setShareModalMain={setShareModalMain} />

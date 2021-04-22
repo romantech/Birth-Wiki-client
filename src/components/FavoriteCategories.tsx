@@ -7,6 +7,8 @@ interface Props {
     categoryName: string;
     imagePath: string;
   };
+  setFilter: React.Dispatch<React.SetStateAction<string>>;
+  setEndCard: React.Dispatch<React.SetStateAction<number>>;
   selected: string;
   likeCards: LikeCardsGeneral[];
   setFilteredArray: React.Dispatch<React.SetStateAction<LikeCardsGeneral[]>>;
@@ -17,22 +19,16 @@ const FavoriteCategories = ({
   category,
   selected,
   likeCards,
+  setEndCard,
+  setFilter,
   setFilteredArray,
   setRenderArray,
 }: Props): JSX.Element => {
   const { imagePath, categoryName } = category;
 
   const handleClick = (categoryName: string) => {
-    setRenderArray([]);
-    if (categoryName.toLowerCase() === 'all') {
-      if (likeCards !== null) {
-        return setFilteredArray(likeCards);
-      }
-    } else {
-      if (likeCards !== null) {
-        return setFilteredArray(likeCards.filter((el) => el.category === categoryName.toLowerCase()));
-      }
-    }
+    setEndCard(11);
+    setFilter(categoryName.toLowerCase());
   };
 
   return (
