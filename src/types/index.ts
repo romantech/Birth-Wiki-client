@@ -2,15 +2,14 @@ export interface IsLogin {
   isLogin: boolean;
 }
 export interface UserInfo {
-  id?: Number;
-  userEmail: string;
-  password?: string;
-  nickName?: string;
-  profileImage?: string;
-  source: string;
-  accessToken?: string;
-  likeCards?: Array<string>;
-  recordCards?: Array<string>;
+  userEmail?: null | string | number;
+  password?: null | string;
+  nickName?: null | string;
+  profileImage?: null | string;
+  source?: null | string;
+  accessToken?: null | string;
+  likeCards?: null | Array<string>;
+  recordCards?: null | Array<string>;
 }
 
 export interface LikeCardsGeneral {

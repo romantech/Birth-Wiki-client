@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { useHistory, Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../store/index';
-import { setIsLogin, setUserInfo, setIsSidbar, setIsEdit } from '../actions/index';
+import { setIsLogin, setUserInfo, setIsSidbar, setIsEdit, setGuest, setGuestModal } from '../actions/index';
 import axios from 'axios';
 import initialState from '../reducers/initialState';
 import { setConstantValue } from 'typescript';
@@ -186,29 +186,33 @@ function SidebarMypage() {
   const dispatch = useDispatch();
   const [storyclicked, setStoryClicked] = useState(false);
   const [markclicked, setMarkClicked] = useState(false);
+  const isGuest = useSelector((state: RootState) => state.guestReducer.isGuest);
 
   const logoutHandler = () => {
-    console.log('Logout');
-    const birthwikiServer = 'https://server.birthwiki.space/user/logout';
-    axios({
-      url: birthwikiServer,
-      method: 'POST',
-      data: {
-        source: source,
-      },
-      headers: {
-        authorization: `Bearer ${accessToken}`,
-      },
-    })
-      .then((res) => {
-        console.log('Logout', res);
-        dispatch(setIsLogin(false));
-        dispatch(setIsSidbar(false));
-        dispatch(setUserInfo(initialState.userInfo));
-        window.location.replace('/');
+    if (isGuest) {
+      dispatch(setGuest(false));
+      dispatch(setGuestModal(false));
+    } else {
+      const birthwikiServer = 'https://server.birthwiki.space/user/logout';
+      axios({
+        url: birthwikiServer,
+        method: 'POST',
+        data: {
+          source: source,
+        },
+        headers: {
+          authorization: `Bearer ${accessToken}`,
+        },
       })
-      .then(() => console.log(userInfo))
-      .catch((error) => console.log('err', error.message));
+        .then((res) => {
+          console.log('Logout', res);
+          dispatch(setIsLogin(false));
+          dispatch(setIsSidbar(false));
+          //dispatch(setUserInfo(initialState.userInfo));
+        })
+        .then(() => console.log(userInfo))
+        .catch((error) => console.log('err', error.message));
+    }
   };
 
   const editHandler = () => {

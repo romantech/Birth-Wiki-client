@@ -35,7 +35,6 @@ function SidebarEdit() {
           accessToken: `Bearer ${userInfo.accessToken}`,
         },
       }).then((res) => {
-        console.log(res.data.data);
         let newUserInfo = Object.assign({}, userInfo, {
           nickName: res.data.data.nickName,
           profileImage: res.data.data.profileImage,
