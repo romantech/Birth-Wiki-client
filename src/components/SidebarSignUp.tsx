@@ -136,10 +136,10 @@ function SidebarSignUp() {
             ...check,
             errorMsg1: true,
           });
-          setduple({ ...duple, userEmail: true });
+          setduple({ ...duple, nickName: true });
         })
         .catch((err) => {
-          setduple({ ...duple, userEmail: false });
+          setduple({ ...duple, nickName: false });
           return !err.response
             ? (setSignUpInfo({
                 ...signUpInfo,
@@ -208,14 +208,14 @@ function SidebarSignUp() {
               checkedEmail();
             }}
           />
-          {/* {check.userEmail && duple.userEmail ? (
+          {check.userEmail && duple.userEmail ? (
             <TestDiv>사용 가능</TestDiv>
           ) : check.userEmail ? (
             <TestDiv>이미 사용 중인 이메일입니다</TestDiv>
           ) : (
             <TestDiv>올바른 이메일을 입력해주세요</TestDiv>
-          )} */}
-          {check.userEmail ? (
+          )}
+          {/* {check.userEmail ? (
             <Valid to='#'>
               <ColorIcon.FcApproval />
             </Valid>
@@ -223,7 +223,7 @@ function SidebarSignUp() {
             <Invalid to='#'>
               <ColorIcon.FcCancel />
             </Invalid>
-          )}
+          )} */}
           {errorMsg ? <ErrorMsg>{errorMsg}</ErrorMsg> : ''}
           <InputCatecory>닉네임</InputCatecory>
           <SignUpInput

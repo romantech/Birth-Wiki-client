@@ -6,6 +6,8 @@ import { RootState } from '../store/index';
 import { setIsLogin, setUserInfo, setIsSidbar, setIsEdit } from '../actions/index';
 import axios from 'axios';
 import initialState from '../reducers/initialState';
+import { setConstantValue } from 'typescript';
+import { LikeCardsGeneral } from '../types/index';
 
 const MypageContainer = styled.div`
   color: #fff;
@@ -172,7 +174,7 @@ const MyBookMarkList = styled.div`
   }
 `;
 
-const MyBookMark = styled.button`
+const MyBookMark = styled.div`
   display: flex;
   margin: 5px;
 `;
@@ -180,7 +182,6 @@ const MyBookMark = styled.button`
 function SidebarMypage() {
   const userInfo = useSelector((state: RootState) => state.userInfoReducer.userInfo);
   const { accessToken, source, profileImage, nickName, userEmail, likeCards, recordCards } = userInfo;
-  console.log('source', source);
   const sidebar = useSelector((state: RootState) => state.sidebarReducer.isSidebar);
   const dispatch = useDispatch();
   const [storyclicked, setStoryClicked] = useState(false);
@@ -203,7 +204,8 @@ function SidebarMypage() {
         console.log('Logout', res);
         dispatch(setIsLogin(false));
         dispatch(setIsSidbar(false));
-        //dispatch(setUserInfo(initialState.userInfo));
+        dispatch(setUserInfo(initialState.userInfo));
+        window.location.replace('/');
       })
       .then(() => console.log(userInfo))
       .catch((error) => console.log('err', error.message));
@@ -257,7 +259,13 @@ function SidebarMypage() {
 
         <MyBookMarkList>
           <p onClick={clickMarkHandler}> 나의 찜 리스트 </p>
-          <div></div>
+          {markclicked
+            ? likeCards.map((card: any, index: any) => (
+                <MyBookMark key={index}>
+                  {index + 1} {card.category} {card.date}
+                </MyBookMark>
+              ))
+            : ''}
         </MyBookMarkList>
       </MyStoryContainer>
     </MypageContainer>

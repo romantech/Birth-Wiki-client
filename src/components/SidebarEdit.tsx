@@ -5,6 +5,7 @@ import { RootState } from '../store/index';
 import { setIsLogin, setUserInfo, setIsSidbar, setIsEdit } from '../actions/index';
 import { useHistory, Link } from 'react-router-dom';
 import * as ColorIcon from 'react-icons/fc';
+import { AiOutlineClose } from 'react-icons/ai';
 import { validatePassword, matchPassword, validateNickName } from '../utils/validate';
 import axios from 'axios';
 
@@ -118,16 +119,16 @@ function SidebarEdit() {
     }
   };
 
-  const EidtRef: any = useRef<HTMLDivElement>(null);
-  const closeEidt = (e: React.SyntheticEvent) => {
-    if (EidtRef.current === (e.target as typeof e.target)) {
-      dispatch(setIsSidbar(!isSidebar));
-      dispatch(setIsEdit(false));
-    }
+  const closeEidt = () => {
+    dispatch(setIsSidbar(!isSidebar));
+    dispatch(setIsEdit(false));
   };
   return (
-    <Background ref={EidtRef} onClick={closeEidt}>
+    <Background>
       <EditWrapper>
+        <EditClose to='#'>
+          <AiOutlineClose onClick={closeEidt} />
+        </EditClose>
         <Title>회원 정보 수정</Title>
         <SubTitle>필수 사항</SubTitle>
         <iframe
@@ -255,7 +256,18 @@ const EditWrapper = styled.div`
     display: none;
   }
 `;
-
+const EditClose = styled(Link)`
+  display: flex;
+  align-items: center;
+  font-size: 30px;
+  margin: 10px;
+  position: absolute;
+  right: 32px;
+  height: 40px;
+  font-size: 2rem;
+  background: none;
+  color: #fff;
+`;
 const Title = styled.div`
   color: #eee;
   font-family: sans-serif;
