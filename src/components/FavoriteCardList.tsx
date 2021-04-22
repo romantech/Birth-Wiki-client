@@ -33,7 +33,6 @@ const FavoriteCardList = ({ ...props }: LikeCardsGeneral): JSX.Element => {
         query: movieTitle,
       },
     }).then((res) => {
-      console.log(res);
       if (region === 'korea') {
         setMovieInfoKorean(res.data.results[0]);
       }
@@ -122,7 +121,9 @@ const FavoriteCardList = ({ ...props }: LikeCardsGeneral): JSX.Element => {
                 <h3 style={{ marginBottom: '-10px' }}>한국 1위 영화</h3>
                 <p>{props.korea === undefined ? '정보가 없습니다 😢' : `<${props.korea?.title}>`}</p>
                 {movieInfoKorean ? (
-                  <p style={{ marginTop: '-10px' }}>{`${movieInfoKorean.vote_average}점`}</p>
+                  <p
+                    style={{ marginTop: '-10px' }}
+                  >{`${movieInfoKorean.vote_average}점 (${movieInfoKorean.vote_count}명 투표)`}</p>
                 ) : (
                   ''
                 )}
