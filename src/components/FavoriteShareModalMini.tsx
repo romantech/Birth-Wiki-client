@@ -3,27 +3,27 @@ import { useSpring, animated } from 'react-spring';
 import styled from 'styled-components';
 
 interface Props {
-  shareModal: boolean;
-  setShareModal: React.Dispatch<React.SetStateAction<boolean>>;
+  shareModalMini: boolean;
+  setShareModalMini: React.Dispatch<React.SetStateAction<boolean>>;
   xyPosition: {
     pageX: number;
     pageY: number;
   };
 }
 
-const FavoriteShareModal = ({ shareModal, setShareModal, xyPosition }: Props) => {
+const FavoriteShareModalMini = ({ shareModalMini, setShareModalMini, xyPosition }: Props) => {
   const animation = useSpring({
     config: {
       duration: 250,
     },
-    opacity: shareModal ? 1 : 0,
+    opacity: shareModalMini ? 1 : 0,
   });
 
   return (
     <>
-      {shareModal ? (
+      {shareModalMini ? (
         <animated.div style={animation}>
-          <ModalWrapper xyPosition={xyPosition} onMouseLeave={() => setShareModal((prev) => !prev)}>
+          <ModalWrapper xyPosition={xyPosition} onMouseLeave={() => setShareModalMini((prev) => !prev)}>
             🚀 in development...
           </ModalWrapper>
         </animated.div>
@@ -46,4 +46,4 @@ const ModalWrapper = styled.div<{ xyPosition: { pageY: number; pageX: number } }
   line-height: 100px;
 `;
 
-export default FavoriteShareModal;
+export default FavoriteShareModalMini;

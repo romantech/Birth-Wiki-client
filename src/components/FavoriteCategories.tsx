@@ -16,8 +16,8 @@ interface Props {
 const FavoriteCategories = ({
   category,
   selected,
-  setFilteredArray,
   likeCards,
+  setFilteredArray,
   setRenderArray,
 }: Props): JSX.Element => {
   const { imagePath, categoryName } = category;
@@ -25,9 +25,13 @@ const FavoriteCategories = ({
   const handleClick = (categoryName: string) => {
     setRenderArray([]);
     if (categoryName.toLowerCase() === 'all') {
-      return setFilteredArray(likeCards);
+      if (likeCards !== null) {
+        return setFilteredArray(likeCards);
+      }
     } else {
-      setFilteredArray(likeCards.filter((el) => el.category === categoryName.toLowerCase()));
+      if (likeCards !== null) {
+        return setFilteredArray(likeCards.filter((el) => el.category === categoryName.toLowerCase()));
+      }
     }
   };
 

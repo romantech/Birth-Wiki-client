@@ -170,7 +170,7 @@ const Weather = ({ setChangeCard }: any) => {
           <WeatherDetail>
             <WeatherText>
               <h3>
-                {`${selectedDate2.split('/')[2]}`} <br /> 그때에는 {`${text} 날입니다.`}
+                {`${selectedDate.split('/')[2]}`} <br /> 그때에는 {`${text} 날입니다.`}
               </h3>
             </WeatherText>
             <WikiCulture data={data} />
