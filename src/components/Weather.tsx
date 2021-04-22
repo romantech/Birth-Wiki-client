@@ -13,6 +13,8 @@ import clear from '../img/clear.jpg';
 import rain from '../img/rain.jpg';
 import snow from '../img/snow.jpg';
 import cloud from '../img/cloud.jpg';
+import solar from '../img/solar.jpg';
+import lightning from '../img/lightning.jpg';
 
 const Weather: React.FC = ({ match }: any) => {
   const selectedDate = match.params.date.replace(/(\d{4})(\d{2})(\d{2})/g, '$1-$2-$3');
@@ -25,7 +27,7 @@ const Weather: React.FC = ({ match }: any) => {
 
   //data.weatherCard[0]
   useEffect(() => {
-    console.log(selectedDate2.split('/')[2]);
+    console.log(selectedDate);
 
     const fetchData = async () => {
       await Axios({
@@ -46,17 +48,25 @@ const Weather: React.FC = ({ match }: any) => {
     if (weatherData === '맑음') {
       setWeather(clear);
       setText('화창한');
+    } else if (weatherData === '햇무리') {
+      setWeather(solar);
+      setText('햇무리가 진');
     } else if (weatherData === '비') {
       setWeather(rain);
-      setText('비 내리는');
-    } else if (weatherData === '눈') {
+      setText('비가 내리는');
+    } else if (weatherData === '눈' || weatherData === '진눈깨비') {
       setWeather(snow);
-      setText('눈 내리는');
+      setText('눈이 내리는');
     } else if (weatherData === '안개') {
       setWeather(cloud);
-      setText('안개 끼는');
+      setText('안개가 많이 낀');
+    } else if (weatherData === '뇌전') {
+      setWeather(lightning);
+      setText('번개가 치는');
+    } else if (weatherData === '우박') {
+      setWeather(snow);
+      setText('우박이 내린');
     }
-    // 햇무리 / 달무리 / 채운 / 우박 / 진눈깨비 / 눈 / 뇌전 / 비 / 안개 / 맑음
   }, [weatherData]);
 
   const Background = styled.div`
@@ -65,7 +75,6 @@ const Weather: React.FC = ({ match }: any) => {
     align-items: center;
     flex-direction: column;
     width: 100%;
-    height: 100vh;
     overflow: hidden;
     object-fit: contain;
     background: linear-gradient(
@@ -103,18 +112,32 @@ const Weather: React.FC = ({ match }: any) => {
     }
   `;
 
-  const WeatherText = styled.div`
-    border-radius: 25px;
-    background: rgba(0, 0, 0, 0.7);
+  const WeatherDetail = styled.div`
+    width: 35vw;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.19), 0 6px 6px rgba(0, 0, 0, 0.23);
+    background: rgba(0, 0, 0, 0.6);
+    border-radius: 14px;
     color: #fff;
+    text-align: center;
+    padding: 20px;
 
-    p {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      margin: 10px;
-      font-size: 1.1rem;
-      font-weight: 800;
+    @media (max-width: 920px) {
+      width: 45vw;
+    }
+
+    @media (max-width: 600px) {
+      width: 90%;
+    }
+  `;
+
+  const WeatherText = styled.div`
+    padding: 1.2rem;
+    font-size: 1.1rem;
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.3);
+
+    & h3 {
+      margin: 0;
     }
   `;
 
@@ -145,10 +168,14 @@ const Weather: React.FC = ({ match }: any) => {
           <DateInput>
             <input type='text' placeholder={selectedDate} />
           </DateInput>
-          <WeatherText>
-            <p>{`${text} 날씨에 태어나셨습니다.`}</p>
-          </WeatherText>
-          <WikiCulture data={data} />
+          <WeatherDetail>
+            <WeatherText>
+              <h3>
+                {`${selectedDate2.split('/')[2]}`} <br /> 그때에는 {`${text} 날입니다.`}
+              </h3>
+            </WeatherText>
+            <WikiCulture data={data} />
+          </WeatherDetail>
           {/* 카드 리스트 start */}
           <Card data={data} weather={weather} />
           {/* 카드 리스트 end */}

@@ -36,6 +36,8 @@ const WikiCulture = (props: any) => {
       setIconUp(cloud);
     } else if (wIcon === '눈' || wIcon === '진눈깨비') {
       setIconUp(snow);
+    } else if (wIcon === '뇌전') {
+      setIconUp(lightning);
     } else {
       setIconUp(null);
     }
@@ -44,16 +46,24 @@ const WikiCulture = (props: any) => {
   return (
     <TopCulture>
       {weatherData ? (
-        <div>
-          <WeatherImg>
-            <img src={`${iconUp}`} alt='' style={{ width: '10rem' }} />
-            {/* <WiDaySunny style={{ fontSize: '10rem' }} /> */}
-          </WeatherImg>
-          <h2>{weatherData.weather}</h2>
-          <div>
-            <span>평균기온: {avgTemp['평균기온']}</span>
-            <span>평균기온: {maxTemp['최고기온']}</span>
-            <span>평균기온: {lowTemp['최저기온']}</span>
+        <div className='container'>
+          <div className='temp'>
+            <p>
+              평균기온 : <span>{avgTemp['평균기온']}</span>
+            </p>
+            <p>
+              최고기온 : <span>{maxTemp['최고기온']}</span>
+            </p>
+            <p>
+              최저기온 : <span>{lowTemp['최저기온']}</span>
+            </p>
+          </div>
+          <div className='icon'>
+            <WeatherImg>
+              <img src={`${iconUp}`} alt='' style={{ width: '9.5rem' }} />
+              {/* <WiDaySunny style={{ fontSize: '10rem' }} /> */}
+            </WeatherImg>
+            <h2>{weatherData.weather}</h2>
           </div>
         </div>
       ) : (
@@ -64,12 +74,43 @@ const WikiCulture = (props: any) => {
 };
 
 const TopCulture = styled.div`
-  min-width: 400px;
-  margin: 20px;
-  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.19), 0 6px 6px rgba(0, 0, 0, 0.23);
-  background: rgba(0, 0, 0, 0.6);
-  border-radius: 16px;
-  color: #fff;
+  & .container {
+    display: flex;
+    margin-top: 20px;
+
+    @media (max-width: 920px) {
+      flex-flow: column-reverse;
+
+      & h2 {
+        margin: 0;
+      }
+    }
+  }
+
+  & .icon {
+    flex: 1;
+  }
+
+  & .temp {
+    flex: 1;
+    font-size: 1.1rem;
+    font-weight: 700;
+
+    @media (max-width: 920px) {
+      & p {
+        margin: 0;
+      }
+    }
+
+    & p {
+      margin-bottom: 0;
+    }
+    & span {
+      padding-left: 10px;
+      font-size: 2rem;
+      font-weight: 700;
+    }
+  }
 `;
 
 const WeatherImg = styled.div``;
