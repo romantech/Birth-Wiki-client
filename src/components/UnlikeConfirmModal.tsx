@@ -63,7 +63,7 @@ const UnlikeConfirmModal = ({ ...props }: UnlikeConfirmModal): JSX.Element => {
                 <p>
                   좋아요를 취소하시겠습니까?
                   <br />
-                  취소 후엔 마이페이지에서 볼 수 없어요 🥺
+                  취소 후엔 즐겨찾기에서 볼 수 없어요 🥺
                 </p>
                 <ButtonWrapper>
                   <button onClick={setUnlike} style={{ marginRight: '10px' }}>
