@@ -17,7 +17,7 @@ import cloud from '../img/cloud.jpg';
 import solar from '../img/solar.jpg';
 import lightning from '../img/lightning.jpg';
 
-const Weather = ({ setChangeCard }: any) => {
+const Weather = () => {
   const selectedDate = new URL(window.location.href).pathname;
   const [weather, setWeather] = useState(clear);
   const [text, setText] = useState('화창한');
@@ -25,7 +25,6 @@ const Weather = ({ setChangeCard }: any) => {
   const [data, setData] = useState(null);
   const [weatherData, setWeatherData] = useState(null);
 
-  //data.weatherCard[0]
   useEffect(() => {
     // console.log(selectedDate);
 

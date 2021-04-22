@@ -1,27 +1,27 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
-import { useDispatch, useSelector } from 'react-redux';
-import { RootState } from '../store/index';
+import { useDispatch } from 'react-redux';
 import { setIsLogin, setUserInfo, setIsSidbar, setIsSignup } from '../actions/index';
-import { useHistory, Link } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import * as ColorIcon from 'react-icons/fc';
 import { AiOutlineClose } from 'react-icons/ai';
 import { validateEmail, validatePassword, matchPassword, validateNickName } from '../utils/validate';
 import axios from 'axios';
 
 function SidebarSignUp() {
-  const isLogin = useSelector((state: RootState) => state.loginReducer.isLogin);
-  const userInfo = useSelector((state: RootState) => state.userInfoReducer.userInfo);
-  const isSidebar = useSelector((state: RootState) => state.sidebarReducer.isSidebar);
   const dispatch = useDispatch();
+
+  const [signUpInfo, setSignUpInfo] = useState({
+    userEmail: '',
+    password: '',
+    password2: '',
+  });
 
   const [check, setCheck] = useState({
     userEmail: false,
     password: false,
     password2: false,
     nickName: false,
-    errorMsg: false,
-    errorMsg1: false,
   });
 
   const [duple, setduple] = useState({
@@ -29,17 +29,7 @@ function SidebarSignUp() {
     nickName: false,
   });
 
-  const [signUpInfo, setSignUpInfo] = useState({
-    userEmail: '',
-    password: '',
-    password2: '',
-    nickName: '',
-    profileImage: '',
-    errorMsg: '',
-    errorMsg1: '',
-  });
-
-  const { password, password2, errorMsg, errorMsg1 } = signUpInfo;
+  const { password, password2 } = signUpInfo;
 
   const inputHandler = async (key: string, e: any) => {
     setSignUpInfo({
@@ -49,8 +39,8 @@ function SidebarSignUp() {
 
     if (key === 'userEmail') {
       validateEmail(e.target.value)
-        ? await setCheck({ ...check, userEmail: true })
-        : await setCheck({ ...check, userEmail: false });
+        ? await dupleCheck(key, e.target.value)
+        : setCheck({ ...check, userEmail: false });
     }
 
     if (key === 'password') {
@@ -77,86 +67,41 @@ function SidebarSignUp() {
 
     if (key === 'nickName') {
       validateNickName(e.target.value)
-        ? setCheck({ ...check, nickName: true })
+        ? await dupleCheck(key, e.target.value)
         : setCheck({ ...check, nickName: false });
     }
   };
 
-  const checkedEmail = () => {
-    if (check.userEmail) {
-      axios({
+  const dupleCheck = async (event: string, value: string) => {
+    if (event === 'userEmail') {
+      setCheck({ ...check, userEmail: true });
+      await axios({
         url: 'https://server.birthwiki.space/user/exist',
         params: {
-          userEmail: signUpInfo.userEmail,
+          userEmail: value,
         },
       })
-        .then((res) => {
-          setSignUpInfo({
-            ...signUpInfo,
-            errorMsg: '',
-          });
+        .then(() => {
           setduple({ ...duple, userEmail: true });
         })
         .catch((err) => {
           setduple({ ...duple, userEmail: false });
-          return !err.response
-            ? (setSignUpInfo({
-                ...signUpInfo,
-                errorMsg: '❗️ 서버 오류, 잠시 후 다시 시도해주세요',
-              }),
-              setCheck({
-                ...check,
-                errorMsg: false,
-              }))
-            : (setSignUpInfo({
-                ...signUpInfo,
-                errorMsg: '❗️ 이미 가입된 이메일입니다',
-              }),
-              setCheck({
-                ...check,
-                errorMsg: false,
-              }));
         });
     }
-  };
-  const checkedNickName = () => {
-    if (check.nickName) {
-      axios({
+
+    if (event === 'nickName') {
+      setCheck({ ...check, nickName: true });
+      await axios({
         url: 'https://server.birthwiki.space/user/exist',
         params: {
-          nickName: signUpInfo.nickName,
+          nickName: value,
         },
       })
-        .then((res) => {
-          setSignUpInfo({
-            ...signUpInfo,
-            errorMsg1: '',
-          });
-          setCheck({
-            ...check,
-            errorMsg1: true,
-          });
+        .then(() => {
           setduple({ ...duple, nickName: true });
         })
         .catch((err) => {
           setduple({ ...duple, nickName: false });
-          return !err.response
-            ? (setSignUpInfo({
-                ...signUpInfo,
-                errorMsg1: '❗️ 서버 오류, 잠시 후 다시 시도해주세요',
-              }),
-              setCheck({
-                ...check,
-                errorMsg1: false,
-              }))
-            : (setSignUpInfo({
-                ...signUpInfo,
-                errorMsg1: '❗️ 이미 사용중인 닉네임입니다',
-              }),
-              setCheck({
-                ...check,
-                errorMsg1: false,
-              }));
         });
     }
   };
@@ -169,9 +114,8 @@ function SidebarSignUp() {
   return (
     <Background>
       <SignUpWrapper>
-        <SigninClose to='#'>
-          <AiOutlineClose onClick={closeSignin} />
-        </SigninClose>
+        <SigninClose onClick={closeSignin} />
+
         <Title>Welcome!</Title>
         <SubTitle>필수 사항</SubTitle>
         <iframe
@@ -189,7 +133,6 @@ function SidebarSignUp() {
             dispatch(setIsLogin(true));
           }}
         ></iframe>
-        {errorMsg ? <div className='alert-box'>{errorMsg}</div> : ''}
         <SignUpContainer
           action='https://server.birthwiki.space/user/signup'
           method='post'
@@ -205,26 +148,15 @@ function SidebarSignUp() {
             maxLength={30}
             onKeyUp={(e) => {
               inputHandler('userEmail', e);
-              checkedEmail();
             }}
           />
-          {check.userEmail && duple.userEmail ? (
-            <TestDiv>사용 가능</TestDiv>
-          ) : check.userEmail ? (
+          {!check.userEmail ? (
+            <TestDiv>올바른 이메일을 입력해주세요</TestDiv>
+          ) : !duple.userEmail ? (
             <TestDiv>이미 사용 중인 이메일입니다</TestDiv>
           ) : (
-            <TestDiv>올바른 이메일을 입력해주세요</TestDiv>
+            <TestDiv>사용 가능</TestDiv>
           )}
-          {/* {check.userEmail ? (
-            <Valid to='#'>
-              <ColorIcon.FcApproval />
-            </Valid>
-          ) : (
-            <Invalid to='#'>
-              <ColorIcon.FcCancel />
-            </Invalid>
-          )} */}
-          {errorMsg ? <ErrorMsg>{errorMsg}</ErrorMsg> : ''}
           <InputCatecory>닉네임</InputCatecory>
           <SignUpInput
             type='text'
@@ -234,18 +166,14 @@ function SidebarSignUp() {
             onKeyUp={(e) => {
               inputHandler('nickName', e);
             }}
-            onBlur={checkedNickName}
           />
-          {check.nickName ? (
-            <Valid to='#'>
-              <ColorIcon.FcApproval />
-            </Valid>
+          {!check.nickName ? (
+            <TestDiv>닉네임을 입력해주세요</TestDiv>
+          ) : !duple.nickName ? (
+            <TestDiv>이미 사용 중인 닉네임입니다</TestDiv>
           ) : (
-            <Invalid to='#'>
-              <ColorIcon.FcCancel />
-            </Invalid>
+            <TestDiv>사용 가능</TestDiv>
           )}
-          {errorMsg1 ? <ErrorMsg>{errorMsg1}</ErrorMsg> : ''}
           <InputCatecory>password</InputCatecory>
           <SignUpInput
             type='password'
@@ -340,7 +268,7 @@ const Title = styled.div`
   font-weight: 600;
   margin-top: 10px;
 `;
-const SigninClose = styled(Link)`
+const SigninClose = styled(AiOutlineClose)`
   display: flex;
   align-items: center;
   font-size: 30px;

@@ -7,6 +7,8 @@ export const SET_IS_LOGIN = 'SET_IS_LOGIN';
 export const SET_IS_SIDEBAR = 'SET_IS_SIDEBAR';
 export const SET_IS_SIGNUP = 'SET_IS_SIGNUP';
 export const SET_IS_EDIT = 'SET_IS_EDIT';
+export const SET_GUEST = 'SET_GUEST';
+export const SET_GUEST_MODAL = 'SET_GUEST_MODAL';
 
 export const setUserInfo = (userInfo: UserInfo) => {
   return {
@@ -53,6 +55,20 @@ export const setIsEdit = (isEdit: boolean) => {
   return {
     type: SET_IS_EDIT,
     payload: isEdit,
+  };
+};
+
+export const setGuest = (isGuest: boolean) => {
+  return {
+    type: SET_GUEST,
+    payload: isGuest,
+  };
+};
+
+export const setGuestModal = (isModal: boolean) => {
+  return {
+    type: SET_GUEST_MODAL,
+    payload: isModal,
   };
 };
 

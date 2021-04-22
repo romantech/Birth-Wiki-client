@@ -3,6 +3,8 @@ export default {
   isSidebar: false,
   isSignup: false,
   isEdit: false,
+  isGuest: false,
+  isGuestModal: false,
   userInfo: {
     userEmail: null || '',
     nickName: null || '',
