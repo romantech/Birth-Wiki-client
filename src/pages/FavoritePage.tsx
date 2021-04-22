@@ -13,46 +13,53 @@ import { RootState } from '../store';
 import { LikeCardsGeneral } from '../types/index';
 import { ArrowLeft, ArrowRight } from '../components/ArrowIcon';
 import { FaArrowCircleUp } from 'react-icons/fa';
-import SidebarLogin from '../components/SidebarLogin';
 
 interface Selected {
   selected: string | number | null;
 }
 
-let sliceStart = 0;
-let sliceEnd = 11;
-const FavoritePage = (category: string): JSX.Element => {
+const FavoritePage = (): JSX.Element => {
   const isLogin = useSelector((state: RootState) => state.loginReducer.isLogin);
   const isGuest = useSelector((state: RootState) => state.guestReducer.isGuest);
-  const { userInfo } = useSelector((state: RootState) => state.userInfoReducer);
-  const { likeCards } = userInfo;
+  const userInfo = useSelector((state: RootState) => state.userInfoReducer.userInfo);
 
   const [renderArray, setRenderArray] = useState<LikeCardsGeneral[]>([]);
   const [filteredArray, setFilteredArray] = useState<LikeCardsGeneral[]>(
-    likeCards !== null ? likeCards.filter((el: { like: boolean }) => el.like === true) : [],
+    userInfo.likeCards ? userInfo.likeCards : [],
   );
+  const [filter, setFilter] = useState('all');
   const [selected, setSelected] = useState<Selected>({ selected: '' });
+  const [endCard, setEndCard] = useState(11);
 
   const onSelect = (key: string | number | null) => {
     setSelected({ selected: key });
   };
 
-  const getLikeCards = (start: number, end: number) => {
-    const sliced = filteredArray.slice(start, end);
-    if (sliced.length) {
-      setRenderArray(renderArray.concat(...sliced));
-      sliceStart = sliceEnd;
-      sliceEnd = sliceEnd + 11;
-    }
+  const getLikeCards = () => {
+    const sliced = filteredArray.slice(0, endCard);
+    setRenderArray(sliced);
+    setEndCard(endCard + 11);
   };
 
   useEffect(() => {
-    if (renderArray.length === 0) {
-      sliceStart = 0;
-      sliceEnd = 11;
-      getLikeCards(sliceStart, sliceEnd);
+    getLikeCards();
+  }, [filteredArray]);
+
+  useEffect(() => {
+    if (userInfo.likeCards) {
+      filter === 'all'
+        ? setFilteredArray(userInfo.likeCards)
+        : setFilteredArray(
+            userInfo.likeCards.filter((el: any) => {
+              if (el.category === filter) {
+                return el;
+              }
+            }),
+          );
+    } else {
+      setFilteredArray([]);
     }
-  }, [renderArray, filteredArray]);
+  }, [filter, userInfo]);
 
   const breakPoints = {
     default: 6,
@@ -74,8 +81,10 @@ const FavoritePage = (category: string): JSX.Element => {
               category={category}
               key={category.categoryName}
               setFilteredArray={setFilteredArray}
-              likeCards={likeCards}
+              setEndCard={setEndCard}
+              likeCards={userInfo.likeCards}
               setRenderArray={setRenderArray}
+              setFilter={setFilter}
             />
           ))}
           arrowLeft={ArrowLeft}
@@ -88,7 +97,7 @@ const FavoritePage = (category: string): JSX.Element => {
       <h1 className='Favorite-H1'>YOUR CARDS</h1>
       <InfiniteScroll
         dataLength={renderArray.length}
-        next={() => setTimeout(() => getLikeCards(sliceStart, sliceEnd), 1200)}
+        next={() => setTimeout(() => getLikeCards(), 1200)}
         hasMore={renderArray.length < filteredArray.length}
         loader={<Loader />}
         endMessage={
@@ -107,23 +116,19 @@ const FavoritePage = (category: string): JSX.Element => {
               profileImage={userInfo.profileImage}
             />
             {renderArray.map((card, index) => {
-              if (card.like === true) {
-                return (
-                  <FavoriteCardList
-                    id={card.id}
-                    like={card.like}
-                    date={card.date}
-                    category={card.category}
-                    contents={card.contents}
-                    image={card.image}
-                    korea={card.korea}
-                    world={card.world}
-                    key={index}
-                    setFilteredArray={setFilteredArray}
-                    filteredArray={filteredArray}
-                  />
-                );
-              }
+              return (
+                <FavoriteCardList
+                  id={card.id}
+                  like={card.like}
+                  date={card.date}
+                  category={card.category}
+                  contents={card.contents}
+                  image={card.image}
+                  korea={card.korea}
+                  world={card.world}
+                  key={index}
+                />
+              );
             })}
           </Masonry>
         </MasLayout>

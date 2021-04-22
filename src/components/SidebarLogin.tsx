@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { useHistory, Link } from 'react-router-dom';
 import * as IconName from 'react-icons/fc';
 import axios from 'axios';
@@ -57,13 +57,18 @@ function SidebarLogin() {
 
   const { userEmail, password, errorMsg, source } = loginInfo;
 
-  const inputHandler = (key: string) => (e: React.ChangeEvent<HTMLInputElement>) => {
+  const inputHandler = (category: string, e: React.KeyboardEvent<HTMLInputElement>) => {
+    const target = e.target as HTMLInputElement;
     localStorage.setItem('source', 'home');
     setLoginInfo({
       ...loginInfo,
-      [key]: e.target.value,
+      [category]: target.value,
       source: 'home',
     });
+
+    if (e.key === 'Enter') {
+      homeLoginHandler();
+    }
   };
 
   const homeLoginHandler = async () => {
@@ -108,18 +113,20 @@ function SidebarLogin() {
           E-Mail
           <InputField
             type='email'
-            value={userEmail}
             placeholder='이메일을 입력하세요'
             maxLength={30}
-            onChange={inputHandler('userEmail')}
+            onKeyUp={(e) => {
+              inputHandler('userEmail', e);
+            }}
           ></InputField>
           Password
           <InputField
             type='password'
-            value={password}
             placeholder='비밀번호를 입력하세요'
             maxLength={16}
-            onChange={inputHandler('password')}
+            onKeyUp={(e) => {
+              inputHandler('password', e);
+            }}
           />
           <HomeLogin type='submit' onClick={homeLoginHandler}>
             Login
