@@ -76,7 +76,8 @@ const FavoritePage = (): JSX.Element => {
     676: 2,
   };
 
-  return isLogin ? (
+  return (
+    // isLogin ? (
     <Container>
       <h1 className='Favorite-H1'>CATEGORY</h1>
       <Categories>
@@ -138,11 +139,11 @@ const FavoritePage = (): JSX.Element => {
         <ScrollIcon onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })} />
       </InfiniteScroll>
     </Container>
-  ) : (
-    <div>
-      로그인을 하세요
-      <SidebarLogin />
-    </div>
+    // ) : (
+    //   <div>
+    //     로그인을 하세요
+    //     <SidebarLogin />
+    //   </div>
   );
 };
 
