@@ -60,22 +60,21 @@ function Nav() {
   return (
     <Navbar>
       <Home onClick={clickHandler}>
-        <img className='logo' src='../logo_1.png' alt='logo' />
+        <img className='logo' src='../logo.png' alt='logo' />
       </Home>
-      <SidebarsOpen to='#'>
-        <FaBars onClick={showSidebar} />
-      </SidebarsOpen>
+      <SidebarsOpen onClick={showSidebar} />
 
       <Favorite onClick={modalHandler}>
-        <FcLike />
+        <span className='mypage'>MyPage</span>
+        <span className='mypage2'>
+          <FcLike />
+        </span>
       </Favorite>
       {modalOpen ? <GuestModal /> : null}
 
       {isSidebar ? (
         <NavSidebar>
-          <SidebarsClose to='#'>
-            <AiOutlineClose onClick={showSidebar} />
-          </SidebarsClose>
+          <SidebarsClose onClick={showSidebar} />
           {isLogin || isGuest ? <SidebarMypage /> : <SidebarLogin />}
         </NavSidebar>
       ) : (
@@ -96,7 +95,6 @@ const Navbar = styled.nav`
   justify-content: space-between;
   @media screen and (max-width: 600px) {
     width: 100%;
-    flex-direction: column;
   }
 `;
 
@@ -116,15 +114,14 @@ const Home = styled.button`
     flex-direction: column;
   }
   & .logo {
-    width: 12rem;
+    width: 10rem;
     vertical-align: middle;
   }
 `;
 
-const SidebarsOpen = styled(Link)`
+const SidebarsOpen = styled(FaBars)`
   display: flex;
   align-items: center;
-  margin: 10px;
   position: absolute;
   right: 32px;
   height: 40px;
@@ -132,7 +129,7 @@ const SidebarsOpen = styled(Link)`
   background: none;
   color: #fff;
   @media screen and (max-width: 600px) {
-    flex-direction: column;
+    right: 10px;
   }
 `;
 
@@ -154,7 +151,7 @@ const NavSidebar = styled.div`
   }
 `;
 
-const SidebarsClose = styled(Link)`
+const SidebarsClose = styled(AiOutlineClose)`
   display: flex;
   align-items: center;
   font-size: 30px;
@@ -174,11 +171,22 @@ const Favorite = styled.button`
   position: absolute;
   right: 80px;
   height: 40px;
-  font-size: 25px;
+  font-size: 30px;
   background: none;
   color: #eee;
   text-decoration: none;
+  border: none;
+  outline: none;
+  cursor: pointer;
+
   @media screen and (max-width: 600px) {
-    flex-direction: column;
+    margin: 10px 5px;
+    right: 50px;
+    & .mypage {
+      display: none;
+    }
+    & .mypage2 {
+      display: flex;
+    }
   }
 `;
