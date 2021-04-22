@@ -146,8 +146,8 @@ const Card = (props: any) => {
       {showCard ? (
         <CardBg ref={cardRef} onClick={closeCard}>
           <animated.div style={animation}>
-            {/* <SwiperCard issue={issue} music={music} culture={culture} birth={birth} death={death} /> */}
-            <CoverFlow issue={issue} music={music} culture={culture} birth={birth} death={death} />
+            <SwiperCard issue={issue} music={music} culture={culture} birth={birth} death={death} />
+            {/* <CoverFlow issue={issue} music={music} culture={culture} birth={birth} death={death} /> */}
           </animated.div>
         </CardBg>
       ) : null}
