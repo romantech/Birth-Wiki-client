@@ -3,6 +3,50 @@ import styled from 'styled-components';
 import { useSelector } from 'react-redux';
 import { RootState } from '../store/index';
 
+function CardCreate() {
+  const userInfo = useSelector((state: RootState) => state.userInfoReducer.userInfo);
+
+  const currentDate = new Date().toISOString().substring(0, 10);
+
+  return (
+    <CreateCard>
+      <div className='create'>
+        <h2>나의 기록카드 만들기</h2>
+        <iframe name='frAttachFiles' className='invisable'></iframe>
+        <form
+          target='frAttachFiles'
+          action='https://server.birthwiki.space/record/create'
+          name='record-form'
+          method='POST'
+          encType='multipart/form-data'
+        >
+          <input
+            className='access'
+            name='accessToken'
+            type='text'
+            value={`Bearer ${userInfo.accessToken}`}
+            style={{ display: 'none' }}
+          />
+          <input type='text' name='nickName' value={`${userInfo.nickName}`} style={{ display: 'none' }} />
+          <input type='text' name='date' value={`${currentDate}`} style={{ display: 'none' }} />
+          <div className='crtCard'>
+            {/* <label className='input-file-button' htmlFor='input-file'>
+              이미지 업로드
+            </label> */}
+            <input type='file' name='cardImage' id='input-file' />
+          </div>
+          <div className='crtCard'>
+            <textarea className='card-desc' name='cardDesc' placeholder='내용을 입력하세요' />
+          </div>
+          <div>
+            <input type='submit' value='카드 생성' className='createBtn' />
+          </div>
+        </form>
+      </div>
+    </CreateCard>
+  );
+}
+
 const CreateCard = styled.div`
   border-radius: 10px;
   width: 100%;
@@ -61,48 +105,5 @@ const CreateCard = styled.div`
     display: none;
   }
 `;
-function CardCreate() {
-  const userInfo = useSelector((state: RootState) => state.userInfoReducer.userInfo);
-
-  const currentDate = new Date().toISOString().substring(0, 10);
-
-  return (
-    <CreateCard>
-      <div className='create'>
-        <h2>나의 기록카드 만들기</h2>
-        <iframe name='frAttachFiles' className='invisable'></iframe>
-        <form
-          target='frAttachFiles'
-          action='https://server.birthwiki.space/record/create'
-          name='record-form'
-          method='POST'
-          encType='multipart/form-data'
-        >
-          <input
-            className='access'
-            name='accessToken'
-            type='text'
-            value={`Bearer ${userInfo.accessToken}`}
-            style={{ display: 'none' }}
-          />
-          <input type='text' name='nickName' value={`${userInfo.nickName}`} style={{ display: 'none' }} />
-          <input type='text' name='date' value={`${currentDate}`} style={{ display: 'none' }} />
-          <div className='crtCard'>
-            {/* <label className='input-file-button' htmlFor='input-file'>
-              이미지 업로드
-            </label> */}
-            <input type='file' name='cardImage' id='input-file' />
-          </div>
-          <div className='crtCard'>
-            <textarea className='card-desc' name='cardDesc' placeholder='내용을 입력하세요' />
-          </div>
-          <div>
-            <input type='submit' value='카드 생성' className='createBtn' />
-          </div>
-        </form>
-      </div>
-    </CreateCard>
-  );
-}
 
 export default CardCreate;
