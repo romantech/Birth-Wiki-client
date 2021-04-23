@@ -6,4 +6,5 @@ export default {
   accessToken: null,
   likeCards: null,
   recordCards: null,
+  isReject: false,
 };

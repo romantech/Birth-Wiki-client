@@ -129,6 +129,7 @@ const Container = styled.div`
   align-items: center;
   min-width: 100vw;
   min-height: 100vh;
+  z-index: 2;
 
   & .cardTitle {
     background: rgba(0, 0, 0, 0.3);

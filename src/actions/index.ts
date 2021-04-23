@@ -9,6 +9,7 @@ export const SET_IS_SIGNUP = 'SET_IS_SIGNUP';
 export const SET_IS_EDIT = 'SET_IS_EDIT';
 export const SET_GUEST = 'SET_GUEST';
 export const SET_GUEST_MODAL = 'SET_GUEST_MODAL';
+export const SET_GUEST_REJECT = 'SET_GUEST_REJECT';
 
 export const setUserInfo = (userInfo: UserInfo) => {
   return {
@@ -69,6 +70,13 @@ export const setGuestModal = (isModal: boolean) => {
   return {
     type: SET_GUEST_MODAL,
     payload: isModal,
+  };
+};
+
+export const setGuestReject = (isReject: boolean) => {
+  return {
+    type: SET_GUEST_REJECT,
+    payload: isReject,
   };
 };
 

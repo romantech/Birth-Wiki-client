@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { useHistory, Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../store/index';
-import { setIsLogin, setUserInfo, setIsSidbar, setIsEdit, setGuest, setGuestModal } from '../actions/index';
+import { setIsLogin, setUserInfo, setIsSidbar, setIsEdit, setGuest, setGuestReject } from '../actions/index';
 import axios from 'axios';
 import initialState from '../reducers/initialState';
 import SidebarMystory from './SidebarMystory';
@@ -197,11 +197,11 @@ function SidebarMypage() {
   const logoutHandler = () => {
     if (isGuest) {
       dispatch(setGuest(false));
-      dispatch(setGuestModal(false));
+      dispatch(setIsSidbar(false));
+      dispatch(setUserInfo(initialState.userInfo));
     } else {
-      const birthwikiServer = 'https://server.birthwiki.space/user/logout';
       axios({
-        url: birthwikiServer,
+        url: 'https://server.birthwiki.space/user/logout',
         method: 'POST',
         data: {
           source: source,
@@ -210,8 +210,7 @@ function SidebarMypage() {
           authorization: `Bearer ${accessToken}`,
         },
       })
-        .then((res) => {
-          console.log('Logout', res);
+        .then(() => {
           dispatch(setIsLogin(false));
           dispatch(setIsSidbar(false));
           dispatch(setUserInfo(initialState.userInfo));
@@ -222,8 +221,12 @@ function SidebarMypage() {
   };
 
   const editHandler = () => {
-    dispatch(setIsSidbar(false));
-    dispatch(setIsEdit(true));
+    if (isGuest) {
+      dispatch(setGuestReject(true));
+    } else {
+      dispatch(setIsSidbar(false));
+      dispatch(setIsEdit(true));
+    }
   };
 
   const clickedStoryHandler = () => {
@@ -233,6 +236,7 @@ function SidebarMypage() {
   const clickMarkHandler = () => {
     setMarkClicked(!markclicked);
   };
+
   return (
     <MypageContainer>
       Mypage

@@ -14,7 +14,7 @@ export default function BirthWikiSearch({ year, month, day }: any) {
 
   const pressHandler = (e: any, here: string, next: string) => {
     setWarning(false);
-    let numValue = Number(e.target.value);
+    let numValue = Number(e.target.value) === 0 ? '' : Number(e.target.value);
 
     if (here === 'year') {
       e.target.value = numValue > curYear ? String(curYear) : String(numValue);
@@ -116,6 +116,9 @@ export default function BirthWikiSearch({ year, month, day }: any) {
           onKeyPress={(e) => {
             enterHandler(e, 'year', 'month');
           }}
+          onFocus={(e) => {
+            e.target.value = '';
+          }}
         ></InputDate>{' '}
         <span>년</span>
         <InputDate
@@ -133,6 +136,9 @@ export default function BirthWikiSearch({ year, month, day }: any) {
           onKeyPress={(e) => {
             enterHandler(e, 'month', 'day');
           }}
+          onFocus={(e) => {
+            e.target.value = '';
+          }}
         ></InputDate>{' '}
         <span>월</span>
         <InputDate
@@ -149,6 +155,9 @@ export default function BirthWikiSearch({ year, month, day }: any) {
           }}
           onKeyPress={(e) => {
             enterHandler(e, 'day', '');
+          }}
+          onFocus={(e) => {
+            e.target.value = '';
           }}
         ></InputDate>{' '}
         <span>일</span>
