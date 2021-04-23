@@ -1,7 +1,7 @@
 .slider {
   width: 100%;
 }
-.slider input {
+.slider .slideInput {
   display: none;
 }
 .testimonials {
@@ -13,29 +13,31 @@
   perspective: 1000px;
   overflow: hidden;
 }
+
 .testimonials .item {
   top: 0;
   position: absolute;
   box-sizing: border-box;
-  padding: 30px;
   width: 450px;
   border-radius: 10px;
-  height: 300px;
+  height: 330px;
   text-align: center;
   transition: transform 0.4s;
   transform-style: preserve-3d;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
   user-select: none;
-  cursor: pointer;
 }
-.testimonials .item img {
+
+@media only screen and (max-width: 768px) {
+  .testimonials .item {
+    width: 100%;
+  }
 }
+
 .testimonials .item p {
   color: #ddd;
 }
-.testimonials .item h2 {
-  font-size: 14px;
-}
+
 .dots {
   display: flex;
   justify-content: center;
@@ -43,12 +45,12 @@
 }
 .dots label {
   display: block;
-  height: 5px;
-  width: 5px;
+  height: 10px;
+  width: 10px;
   border-radius: 50%;
   cursor: pointer;
   background-color: #413b52;
-  margin: 7px;
+  margin: 10px;
   transition: transform 0.2s, color 0.2s;
 }
 /* First */
@@ -76,6 +78,10 @@
 }
 #t-1:checked ~ .testimonials label[for='t-5'] {
   transform: translateX(1200px) translateZ(-360px) rotateY(-45deg);
+}
+
+#t-1:checked ~ .testimonials label[for='t-6'] {
+  transform: translateX(1500px) translateZ(-450px) rotateY(-55deg);
 }
 /* Second */
 #t-2:checked ~ .dots label[for='t-1'] {
@@ -105,6 +111,12 @@
 #t-2:checked ~ .testimonials label[for='t-5'] {
   transform: translateX(900px) translateZ(-270px) rotateY(-35deg);
 }
+
+#t-2:checked ~ .testimonials label[for='t-6'] {
+  transform: translateX(1200px) translateZ(-360px) rotateY(-45deg);
+  z-index: -1;
+}
+
 /* Third */
 #t-3:checked ~ .dots label[for='t-2'] {
   transform: scale(1.5);
@@ -132,6 +144,12 @@
 #t-3:checked ~ .testimonials label[for='t-5'] {
   transform: translateX(600px) translateZ(-180px) rotateY(-25deg);
 }
+
+#t-3:checked ~ .testimonials label[for='t-6'] {
+  transform: translateX(900px) translateZ(-270px) rotateY(-35deg);
+  z-index: -1;
+}
+
 /* Fourth */
 #t-4:checked ~ .dots label[for='t-3'] {
   transform: scale(1.5);
@@ -159,6 +177,12 @@
 #t-4:checked ~ .testimonials label[for='t-5'] {
   transform: translateX(300px) translateZ(-90px) rotateY(-15deg);
 }
+
+#t-4:checked ~ .testimonials label[for='t-6'] {
+  transform: translateX(600px) translateZ(-180px) rotateY(-25deg);
+  z-index: -1;
+}
+
 /* Fifth */
 #t-5:checked ~ .dots label[for='t-4'] {
   transform: scale(1.5);
@@ -166,6 +190,10 @@
 #t-5:checked ~ .dots label[for='t-5'] {
   transform: scale(2);
   background-color: #fff;
+}
+
+#t-5:checked ~ .dots label[for='t-6'] {
+  transform: scale(1.5);
 }
 #t-5:checked ~ .testimonials label[for='t-1'] {
   transform: translateX(-1200px) translateZ(-360px) rotateY(45deg);
@@ -183,5 +211,41 @@
   z-index: 3;
 }
 #t-5:checked ~ .testimonials label[for='t-5'] {
+  z-index: 4;
+}
+
+#t-5:checked ~ .testimonials label[for='t-6'] {
+  transform: translateX(300px) translateZ(-90px) rotateY(-15deg);
+  z-index: 3;
+}
+
+/* Sixth */
+#t-6:checked ~ .dots label[for='t-5'] {
+  transform: scale(1.5);
+}
+#t-6:checked ~ .dots label[for='t-6'] {
+  transform: scale(2);
+  background-color: #fff;
+}
+#t-6:checked ~ .testimonials label[for='t-1'] {
+  transform: translateX(-1200px) translateZ(-450px) rotateY(55deg);
+}
+#t-6:checked ~ .testimonials label[for='t-2'] {
+  transform: translateX(-900px) translateZ(-360px) rotateY(45deg);
+}
+#t-6:checked ~ .testimonials label[for='t-3'] {
+  transform: translateX(-600px) translateZ(-270px) rotateY(35deg);
+  z-index: 1;
+}
+#t-6:checked ~ .testimonials label[for='t-4'] {
+  transform: translateX(-600px) translateZ(-180px) rotateY(25deg);
+  z-index: 2;
+}
+#t-6:checked ~ .testimonials label[for='t-5'] {
+  transform: translateX(-300px) translateZ(-90px) rotateY(15deg);
+  z-index: 3;
+}
+
+#t-6:checked ~ .testimonials label[for='t-6'] {
   z-index: 4;
 }
