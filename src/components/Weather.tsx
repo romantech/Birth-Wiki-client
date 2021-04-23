@@ -22,6 +22,7 @@ const Weather = ({ data, selectedDate }: any) => {
     lightning: string;
     moon: string;
   }
+
   const weatherData = data.weatherCard ? data.weatherCard : null;
   const temprature: tempOBJ = weatherData
     ? Object.assign({}, weatherData.temperature[0], weatherData.temperature[1], weatherData.temperature[2])

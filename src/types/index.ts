@@ -12,6 +12,20 @@ export interface UserInfo {
   recordCards?: null | Array<string>;
 }
 
+export interface MovieInfo {
+  adult: boolean;
+  backdrop_path: string;
+  genre_ids: number[];
+  id: number;
+  popularity: number;
+  poaster_path: string;
+  release_date: string;
+  title: string;
+  video: boolean;
+  vote_average: number;
+  vote_count: number;
+}
+
 export interface LikeCardsGeneral {
   id: number;
   like: boolean;
