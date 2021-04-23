@@ -50,6 +50,8 @@ const UnlikeConfirmModal = ({ ...props }: UnlikeConfirmModal): JSX.Element => {
         accessToken: `Bearer ${userInfo.accessToken}`,
       },
     }).then((res) => {
+      console.log('userInfo', userInfo);
+      console.log('res', res);
       dispatch(
         setUserInfo({
           ...userInfo,

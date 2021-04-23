@@ -100,10 +100,16 @@ export default function LaunchPage() {
   };
   return (
     <LaunchScreen>
-      <WordsContainner>
+      <div className='videoContiner'>
+        <video className='video' muted loop autoPlay={true}>
+          <source src='../background.mp4' type='video/mp4'></source>
+        </video>
+      </div>
+      {/* <WordsContainner>
         <Words>What happened</Words>
         <Words>on Your BirthDay!</Words>
-      </WordsContainner>
+      </WordsContainner> */}
+
       <InputContiner>
         <InputSubmit>
           <InputDate
@@ -207,22 +213,41 @@ const WordsContainner = styled.div`
 const LaunchScreen = styled.div`
   font-family: sans-serif;
   background: #fff;
-  padding: 0;
-  margin: 0;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   flex-wrap: wrap;
-  width: 100%;
   height: 100vh;
   background-repeat: repeat-x;
-  /* background-image: url('../movie.png'); */
-  background-position: x y;
   background-size: 100%;
 
   & .warning {
     margin: 10px;
+  }
+
+  & .videoContiner {
+    width: 100%;
+    height: 100%;
+    background: black;
+    & .video {
+      max-width: 100%;
+      display: block;
+      transform: translateX(0%) translateY(0%);
+    }
+  }
+  @media screen and (max-width: 600px) {
+    width: 100%;
+    & .videoContiner {
+      width: 100%;
+      height: 100%;
+      background: #fff;
+      & .video {
+        max-width: 100%;
+        display: block;
+        transform: translateX(0%) translateY(0%);
+      }
+    }
   }
 `;
 
@@ -231,6 +256,16 @@ const InputContiner = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  position: absolute;
+  margin: 20px;
+  padding: 10px;
+  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.5);
+  /* transform: translate(-50%, -50%); */
+  @media screen and (max-width: 600px) {
+    width: 100%;
+    position: fixed;
+  }
 `;
 
 const InputSubmit = styled.form`

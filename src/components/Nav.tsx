@@ -19,7 +19,7 @@ function Nav() {
   const isGuestModal = useSelector((state: RootState) => state.guestReducer.isGuestModal);
   const dispatch = useDispatch();
   const [modalOpen, setModalOpen] = useState(false);
-
+  console.log(userInfo);
   useEffect(() => {
     const url = new URL(window.location.href);
     const AuthorizationCode = url.searchParams.get('code');
@@ -109,7 +109,7 @@ const Home = styled.button`
   display: flex;
   align-items: center;
   font-size: 30px;
-  margin: 10px 30px;
+  margin: 10px 20px;
   outline: none;
   border: none;
   cursor: pointer;
@@ -118,6 +118,7 @@ const Home = styled.button`
   font-weight: bold;
   @media screen and (max-width: 600px) {
     flex-direction: column;
+    margin: 10px 20px;
   }
   & .logo {
     width: 10rem;
@@ -129,20 +130,19 @@ const SidebarsOpen = styled(FaBars)`
   display: flex;
   align-items: center;
   position: absolute;
-  right: 32px;
+  right: 30px;
   height: 40px;
   font-size: 2rem;
   background: none;
   color: #fff;
   cursor: pointer;
   @media screen and (max-width: 600px) {
-    right: 10px;
+    right: 20px;
   }
 `;
 
 const NavSidebar = styled.div`
   background-color: rgba(6, 11, 38, 0.8);
-
   display: none;
   width: 350px;
   right: 0;
@@ -152,7 +152,7 @@ const NavSidebar = styled.div`
   justify-content: flex-start;
   position: fixed;
   top: 0;
-  z-index: 100;
+  z-index: 1;
   @media screen and (max-width: 600px) {
     width: 100%;
   }
@@ -175,9 +175,8 @@ const SidebarsClose = styled(AiOutlineClose)`
 const Favorite = styled.button`
   display: flex;
   align-items: center;
-  margin: 10px;
   position: absolute;
-  right: 80px;
+  right: 70px;
   height: 40px;
   font-size: 30px;
   background: none;
@@ -188,8 +187,7 @@ const Favorite = styled.button`
   cursor: pointer;
 
   @media screen and (max-width: 600px) {
-    margin: 10px 5px;
-    right: 50px;
+    right: 60px;
     & .mypage {
       display: none;
     }
@@ -201,8 +199,8 @@ const Favorite = styled.button`
 
 const UserPoto = styled.img`
   font-size: 60px;
-  height: 50px;
-  width: 50px;
+  height: 40px;
+  width: 40px;
   color: #fff;
   border-radius: 25px;
   display: flex;

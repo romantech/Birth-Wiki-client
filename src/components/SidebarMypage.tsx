@@ -7,6 +7,7 @@ import { setIsLogin, setUserInfo, setIsSidbar, setIsEdit, setGuest, setGuestModa
 import axios from 'axios';
 import initialState from '../reducers/initialState';
 import SidebarMystory from './SidebarMystory';
+import { LikeCardsGeneral } from '../types/index';
 
 const MypageContainer = styled.div`
   color: #fff;
@@ -193,7 +194,9 @@ function SidebarMypage() {
   const isGuest = useSelector((state: RootState) => state.guestReducer.isGuest);
   const [shareModalMain, setShareModalMain] = useState(false);
   const [unLikeModal, setUnlikeModal] = useState(false);
-
+  const [filteredArray, setFilteredArray] = useState<LikeCardsGeneral[]>(
+    likeCards !== null ? likeCards.filter((el: { like: boolean }) => el.like === true) : [],
+  );
   const logoutHandler = () => {
     if (isGuest) {
       dispatch(setGuest(false));
@@ -216,7 +219,10 @@ function SidebarMypage() {
           dispatch(setIsSidbar(false));
           dispatch(setUserInfo(initialState.userInfo));
         })
-        .then(() => console.log(userInfo))
+        .then(() => {
+          console.log(userInfo);
+          window.location.href = 'https://localhost:3000/';
+        })
         .catch((error) => console.log('err', error.message));
     }
   };
@@ -282,6 +288,8 @@ function SidebarMypage() {
                     korea={card.korea}
                     world={card.world}
                     key={index}
+                    setFilteredArray={setFilteredArray}
+                    filteredArray={filteredArray}
                   />
                 ))
               : ''
