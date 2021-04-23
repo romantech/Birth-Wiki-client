@@ -2,7 +2,7 @@ import React, { useRef, useEffect, useCallback } from 'react';
 import { useSpring, animated } from 'react-spring';
 import styled, { css } from 'styled-components';
 import { MdClose } from 'react-icons/md';
-import { LikeCardsGeneral } from '../types/index';
+import { LikeCardsGeneral, MovieInfo } from '../types/index';
 import { IconCircle, ShareIcon, HeartIcon } from './FavoriteCardList';
 
 interface Props extends LikeCardsGeneral {
@@ -11,6 +11,8 @@ interface Props extends LikeCardsGeneral {
   setUnlikeModal: React.Dispatch<React.SetStateAction<boolean>>;
   setShareModalMain: React.Dispatch<React.SetStateAction<boolean>>;
   id: number;
+  movieInfoKorean?: MovieInfo;
+  movieInfoWorld?: MovieInfo;
 }
 
 const FavoriteModal = ({ showModal, setShowModal, ...props }: Props): JSX.Element => {
@@ -23,8 +25,13 @@ const FavoriteModal = ({ showModal, setShowModal, ...props }: Props): JSX.Elemen
     transform: showModal ? `translateY(0%)` : `translateY(100%)`,
   });
 
-  const contents = props.contents !== null ? props.contents : [];
   const category = props.category;
+  const mediaImageKorea = props.korea?.poster
+    ? props.korea?.poster
+    : `${process.env.PUBLIC_URL}/img/question.png`;
+  const mediaImageWorld = props.world?.poster
+    ? props.world?.poster
+    : `${process.env.PUBLIC_URL}/img/question.png`;
 
   const closeModal = (e: React.MouseEvent<HTMLElement>) => {
     if (modalRef.current === e.target) {
@@ -69,28 +76,41 @@ const FavoriteModal = ({ showModal, setShowModal, ...props }: Props): JSX.Elemen
                     props.contents?.map((issue, index) => <p key={index}>{`${issue[0]} - ${issue[1]}`}</p>)
                   ) : category === 'movie' ? (
                     <>
+                      <MediaImageKorea korea={mediaImageKorea} world={mediaImageWorld} />
                       <h4 style={{ marginBottom: '-10px' }}>한국 1위 영화</h4>
                       <p style={{ textAlign: 'center' }}>
                         {props.korea === undefined ? '정보가 없습니다 😢' : `<${props.korea?.title}>`}
+                        <br />
+                        {props.movieInfoKorean
+                          ? `${props.movieInfoKorean.vote_average}점 (${props.movieInfoKorean.vote_count}명 투표)`
+                          : ''}
                       </p>
+
+                      <MediaImageWorld korea={mediaImageKorea} world={mediaImageWorld} />
                       <h4 style={{ marginBottom: '-10px' }}>해외 1위 영화</h4>
                       <p style={{ textAlign: 'center' }}>
                         {props.world === undefined ? '정보가 없습니다 😢' : `<${props.world?.title}>`}
+                        <br />
+                        {props.movieInfoWorld
+                          ? `${props.movieInfoWorld.vote_average}점 (${props.movieInfoWorld.vote_count}명 투표)`
+                          : ''}
                       </p>
                     </>
                   ) : (
                     <>
+                      <MediaImageKorea korea={mediaImageKorea} world={mediaImageWorld} />
                       <h4 style={{ marginBottom: '-10px' }}>한국 1위 음악</h4>
                       <p style={{ textAlign: 'center' }}>
                         {props.korea === undefined ? '정보가 없습니다 😢' : `<${props.korea?.title}>`}
                         <br />
-                        {props.korea === undefined ? '' : `— ${props.korea?.singer}`}
+                        {props.korea === undefined ? '' : `${props.korea?.singer}`}
                       </p>
+                      <MediaImageWorld korea={mediaImageKorea} world={mediaImageWorld} />
                       <h4 style={{ marginBottom: '-10px' }}>해외 1위 음악</h4>
                       <p style={{ textAlign: 'center' }}>
                         {props.world === undefined ? '정보가 없습니다 😢' : `<${props.world?.title}>`}
                         <br />
-                        {props.world === undefined ? '' : `— ${props.world?.singer}`}
+                        {props.world === undefined ? '' : `${props.world?.singer}`}
                       </p>
                     </>
                   )}
@@ -182,7 +202,20 @@ const ModalWrapper = styled.div`
   }
 `;
 
-const MediaImageWrapper = styled.div<{ korea: string; world: string }>``;
+const MediaImageKorea = styled.div<{ korea: string; world: string }>`
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background: url(${(props) => props.korea});
+  background-size: cover;
+  margin: auto auto -15px auto;
+`;
+
+const MediaImageWorld = styled(MediaImageKorea)`
+  background: url(${(props) => props.world});
+  background-size: cover;
+  margin: 20px auto -15px auto;
+`;
 
 const ModalImg = styled.img`
   width: 100%;
