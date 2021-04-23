@@ -35,7 +35,7 @@ const HoverCard = (props: any) => {
     border-radius: 15px;
     background-size: cover;
     position: relative;
-    height: 150px;
+    height: 30vh;
     top: 40px;
     color: #fff;
     cursor: pointer;

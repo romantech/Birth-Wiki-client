@@ -55,7 +55,6 @@ function FavoriteButton(props: any) {
       likeCards: newCards,
     });
 
-    console.log(newUserInfo);
     if (isGuest) {
       dispatch(setUserInfo(newUserInfo));
     }
