@@ -9,6 +9,7 @@ import HoverCard from '../components/HoverCard';
 import CardLists from '../components/CardLists';
 import Weather from '../components/Weather';
 import CoverFlow from '../components/CoverFlow';
+import BirthWikiSearch from '../components/BirthWikiSearch';
 
 import clear from '../img/clear.jpg';
 import rain from '../img/rain.jpg';
@@ -26,6 +27,10 @@ const Main = () => {
   const [isFlow, setIsFlow] = useState(false);
   const [isHoriz, setisHoriz] = useState(false);
   const [selected, setSelected] = useState(0);
+  const date = selectedDate.split('/')[2];
+  const year = date.split('-')[0];
+  const month = date.split('-')[1];
+  const day = date.split('-')[2];
 
   useEffect(() => {
     Axios({
@@ -153,7 +158,7 @@ const Main = () => {
       {data ? (
         <Background>
           <DateInput>
-            <input type='text' placeholder={selectedDate.split('/')[2]} />
+            <BirthWikiSearch year={year} month={month} day={day} />
           </DateInput>
           {isHover ? (
             <>
