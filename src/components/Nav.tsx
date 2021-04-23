@@ -8,7 +8,6 @@ import SidebarLogin from './SidebarLogin';
 import SidebarMypage from './SidebarMypage';
 import { RootState } from '../store/index';
 import { setIsSidbar, setIsLogin, setIsSignup, setUserInfo } from '../actions';
-import { FcLike } from 'react-icons/fc';
 import axios from 'axios';
 import GuestModal from './GuestModal';
 
@@ -65,10 +64,17 @@ function Nav() {
       <SidebarsOpen onClick={showSidebar} />
 
       <Favorite onClick={modalHandler}>
-        <span className='mypage'>MyPage</span>
-        <span className='mypage2'>
-          <FcLike />
-        </span>
+        {isLogin ? (
+          <div>
+            {userInfo.profileImage ? (
+              <UserPoto src={`${userInfo.profileImage}`} />
+            ) : (
+              <UserPoto src={`${process.env.PUBLIC_URL}/img/profile.png`} />
+            )}
+          </div>
+        ) : (
+          <span>Guest</span>
+        )}
       </Favorite>
       {modalOpen ? <GuestModal /> : null}
 
@@ -128,6 +134,7 @@ const SidebarsOpen = styled(FaBars)`
   font-size: 2rem;
   background: none;
   color: #fff;
+  cursor: pointer;
   @media screen and (max-width: 600px) {
     right: 10px;
   }
@@ -162,6 +169,7 @@ const SidebarsClose = styled(AiOutlineClose)`
   font-size: 2rem;
   background: none;
   color: #fff;
+  cursor: pointer;
 `;
 
 const Favorite = styled.button`
@@ -189,4 +197,16 @@ const Favorite = styled.button`
       display: flex;
     }
   }
+`;
+
+const UserPoto = styled.img`
+  font-size: 60px;
+  height: 50px;
+  width: 50px;
+  color: #fff;
+  border-radius: 25px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
 `;

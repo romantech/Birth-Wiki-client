@@ -1,11 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
-import DatePicker from 'react-datepicker';
-import BirthWikiSearch from './BirthWikiSearch';
 
-export default function LaunchPage() {
-  const [date, setDate] = useState({ year: '0', month: '0', day: '0' });
+export default function BirthWikiSearch({ year, month, day }: any) {
+  const [date, setDate] = useState({ year: year, month: month, day: day });
   const [warning, setWarning] = useState(false);
 
   let curNow = new Date();
@@ -98,115 +96,73 @@ export default function LaunchPage() {
       setWarning(true);
     }
   };
+
   return (
-    <LaunchScreen>
-      <WordsContainner>
-        <Words>What happened</Words>
-        <Words>on Your BirthDay!</Words>
-      </WordsContainner>
+    <BirthwikiSearch>
       <InputContiner>
-        <InputSubmit>
-          <InputDate
-            type='number'
-            id='year'
-            min='1'
-            max={curYear}
-            placeholder='1990'
-            onKeyUp={(e) => {
-              pressHandler(e, 'year', 'month');
-            }}
-            onBlur={(e) => {
-              blurHandler(e, 'year', 'month');
-            }}
-            onKeyPress={(e) => {
-              enterHandler(e, 'year', 'month');
-            }}
-          ></InputDate>{' '}
-          <span>년</span>
-          <InputDate
-            type='number'
-            id='month'
-            max='12'
-            min='1'
-            placeholder='1'
-            onKeyUp={(e) => {
-              pressHandler(e, 'month', 'day');
-            }}
-            onBlur={(e) => {
-              blurHandler(e, 'month', 'day');
-            }}
-            onKeyPress={(e) => {
-              enterHandler(e, 'month', 'day');
-            }}
-          ></InputDate>{' '}
-          <span>월</span>
-          <InputDate
-            type='number'
-            id='day'
-            min='1'
-            max='31'
-            placeholder='1'
-            onKeyUp={(e) => {
-              pressHandler(e, 'day', '');
-            }}
-            onBlur={(e) => {
-              blurHandler(e, 'day', '');
-            }}
-            onKeyPress={(e) => {
-              enterHandler(e, 'day', '');
-            }}
-          ></InputDate>{' '}
-          <span>일</span>
-        </InputSubmit>
-        {warning ? (
-          <div className='warning'>날짜를 다시 입력해 주세요</div>
-        ) : (
-          <div className='warning'>&nbsp;</div>
-        )}
-        <BirthwikiBtn onClick={birthwikiHandler}>Birth Wiki!</BirthwikiBtn>
+        <InputDate
+          type='number'
+          id='year'
+          min='1'
+          max={curYear}
+          defaultValue={year}
+          onKeyUp={(e) => {
+            pressHandler(e, 'year', 'month');
+          }}
+          onBlur={(e) => {
+            blurHandler(e, 'year', 'month');
+          }}
+          onKeyPress={(e) => {
+            enterHandler(e, 'year', 'month');
+          }}
+        ></InputDate>{' '}
+        <span>년</span>
+        <InputDate
+          type='number'
+          id='month'
+          max='12'
+          min='1'
+          defaultValue={month}
+          onKeyUp={(e) => {
+            pressHandler(e, 'month', 'day');
+          }}
+          onBlur={(e) => {
+            blurHandler(e, 'month', 'day');
+          }}
+          onKeyPress={(e) => {
+            enterHandler(e, 'month', 'day');
+          }}
+        ></InputDate>{' '}
+        <span>월</span>
+        <InputDate
+          type='number'
+          id='day'
+          min='1'
+          max='31'
+          defaultValue={day}
+          onKeyUp={(e) => {
+            pressHandler(e, 'day', '');
+          }}
+          onBlur={(e) => {
+            blurHandler(e, 'day', '');
+          }}
+          onKeyPress={(e) => {
+            enterHandler(e, 'day', '');
+          }}
+        ></InputDate>{' '}
+        <span>일</span>
       </InputContiner>
-    </LaunchScreen>
+      <BirthwikiBtn onClick={birthwikiHandler}>Birth Wiki!</BirthwikiBtn>
+      {warning ? (
+        <span className='warning'>날짜를 다시 입력해 주세요</span>
+      ) : (
+        <span className='warning'></span>
+      )}
+    </BirthwikiSearch>
   );
 }
-
-const Words = styled.span`
-  color: #000;
-  text-transform: uppercase;
-  display: block;
-  font-size: 40px;
-  font-weight: 700;
-  letter-spacing: 3px;
-  margin-bottom: 30px;
-  position: relative;
-  animation: text 3s 1;
-
-  @keyframes text {
-    0% {
-      color: black;
-      margin-bottom: -10px;
-    }
-    30% {
-      letter-spacing: 25px;
-      margin-bottom: -10px;
-    }
-    85% {
-      letter-spacing: 8px;
-      margin-bottom: -15px;
-    }
-  }
-`;
-const WordsContainner = styled.div`
-  text-align: center;
-  position: absolute;
-  top: 40%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 100%;
-`;
-
-const LaunchScreen = styled.div`
+const BirthwikiSearch = styled.div`
   font-family: sans-serif;
-  background: #fff;
   padding: 0;
   margin: 0;
   display: flex;
@@ -214,8 +170,6 @@ const LaunchScreen = styled.div`
   justify-content: center;
   align-items: center;
   flex-wrap: wrap;
-  width: 100%;
-  height: 100vh;
   background-repeat: repeat-x;
   /* background-image: url('../movie.png'); */
   background-position: x y;
@@ -226,28 +180,21 @@ const LaunchScreen = styled.div`
   }
 `;
 
-const InputContiner = styled.div`
+const InputContiner = styled.form`
   display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-`;
-
-const InputSubmit = styled.form`
-  display: block;
   justify-content: space-between;
-  padding: 5px;
 `;
 
 const InputDate = styled.input`
   box-sizing: border-box;
   color: #060b26;
   outline: 0;
-  padding: 0 10px 0;
+  padding: 0 20px 0;
   border: none;
   border-bottom: 2px solid #060b26;
   background-color: rgba(255, 255, 255, 0);
   margin: 5px;
+  width: 100px;
   height: 30px;
   font-size: 1.7rem;
   text-align: center;
@@ -261,13 +208,13 @@ const InputDate = styled.input`
 const BirthwikiBtn = styled.button`
   background: #060b26;
   border-radius: 50px;
-  padding: 16px 20px;
+  white-space: nowrap;
+  padding: 16px 64px;
   color: #fff;
   font-size: 16px;
   outline: none;
   border: none;
   cursor: pointer;
-  width: 120px;
   transition: all 0.2s ease-in-out;
   text-decoration: none;
   &:hover {

@@ -7,7 +7,6 @@ import { setIsLogin, setUserInfo, setIsSidbar, setIsEdit, setGuest, setGuestModa
 import axios from 'axios';
 import initialState from '../reducers/initialState';
 import SidebarMystory from './SidebarMystory';
-import FavoriteModal from './FavoriteModal';
 
 const MypageContainer = styled.div`
   color: #fff;
@@ -60,7 +59,6 @@ const UserInfo = styled.div`
   align-items: center;
   margin-left: 10px;
   width: 100%;
-  overflow: auto;
 `;
 
 const UserInfoEdit = styled.button`
@@ -173,7 +171,16 @@ const LikeCardsList = styled.div`
     margin: 0;
   }
 `;
-const Categories = styled.button``;
+
+const Likecard = styled(Link)`
+  display: flex;
+  margin: 5px;
+`;
+
+const MyBookMark = styled.button`
+  display: flex;
+  margin: 5px;
+`;
 
 function SidebarMypage() {
   const userInfo = useSelector((state: RootState) => state.userInfoReducer.userInfo);
@@ -182,7 +189,10 @@ function SidebarMypage() {
   const dispatch = useDispatch();
   const [storyclicked, setStoryClicked] = useState(false);
   const [markclicked, setMarkClicked] = useState(false);
+  const [showModal, setShowModal] = useState(false);
   const isGuest = useSelector((state: RootState) => state.guestReducer.isGuest);
+  const [shareModalMain, setShareModalMain] = useState(false);
+  const [unLikeModal, setUnlikeModal] = useState(false);
 
   const logoutHandler = () => {
     if (isGuest) {
@@ -223,16 +233,15 @@ function SidebarMypage() {
   const clickMarkHandler = () => {
     setMarkClicked(!markclicked);
   };
-
   return (
     <MypageContainer>
       Mypage
       <ProfileContainer>
         <Profile>
           {profileImage ? (
-            <UserPoto src={`${profileImage}`}></UserPoto>
+            <UserPoto src={`${profileImage}`} />
           ) : (
-            <UserPoto src={`${process.env.PUBLIC_URL}/img/profile.png`}></UserPoto>
+            <UserPoto src={`${process.env.PUBLIC_URL}/img/profile.png`} />
           )}
 
           <UserInfoContainer>
@@ -248,25 +257,35 @@ function SidebarMypage() {
       <MyStoryContainer>
         <RecordCardsList>
           <p onClick={clickedStoryHandler}> 나만의 기록리스트 </p>
-          {/* {storyclicked
-            ? recordCards.map((data: any) => (
-                <MyStory to='/' key={data.id}>
-                  {data}
-                </MyStory>
-              ))
-            : ''} */}
+          {recordCards !== null
+            ? storyclicked
+              ? recordCards.map((data: any) => (
+                  <MyStory to='/' key={data.id}>
+                    {data}
+                  </MyStory>
+                ))
+              : ''
+            : ''}
         </RecordCardsList>
         <LikeCardsList>
-          <p> 내가 찜한 카드 </p>
-          <Categories className='issue' />
-          <div>issue</div>
-          <Categories className='birth' />
-          <div>birth</div>
-
-          {likeCards.map((card: any, idx: any) => {
-            return console.log(card);
-            // <FavoriteModal  />
-          })}
+          <p onClick={clickMarkHandler}> 내가 찜한 카드 </p>
+          {likeCards !== null
+            ? markclicked
+              ? likeCards.map((card: any, index: any) => (
+                  <SidebarMystory
+                    id={card.id}
+                    like={card.like}
+                    date={card.date}
+                    category={card.category}
+                    contents={card.contents}
+                    image={card.image}
+                    korea={card.korea}
+                    world={card.world}
+                    key={index}
+                  />
+                ))
+              : ''
+            : ''}
         </LikeCardsList>
       </MyStoryContainer>
     </MypageContainer>

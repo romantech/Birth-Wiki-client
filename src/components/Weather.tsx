@@ -8,6 +8,7 @@ import { Link } from 'react-router-dom';
 import Card from './Card';
 import CardLists from './CardLists';
 import WikiCulture from './WikiCulture';
+import BirthWikiSearch from './BirthWikiSearch';
 
 // 배경 이미지
 import clear from '../img/clear.jpg';
@@ -24,6 +25,10 @@ const Weather = () => {
   const [showCard, setShowCard] = useState(false);
   const [data, setData] = useState(null);
   const [weatherData, setWeatherData] = useState(null);
+  const date = selectedDate.split('/')[2];
+  const year = date.split('-')[0];
+  const month = date.split('-')[1];
+  const day = date.split('-')[2];
 
   useEffect(() => {
     // console.log(selectedDate);
@@ -165,7 +170,7 @@ const Weather = () => {
       {data ? (
         <Background>
           <DateInput>
-            <input type='text' placeholder={selectedDate.split('/')[2]} />
+            <BirthWikiSearch year={year} month={month} day={day} />
           </DateInput>
           <WeatherDetail>
             <WeatherText>
