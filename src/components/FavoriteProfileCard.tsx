@@ -30,6 +30,8 @@ const ProfileImg = styled.img.attrs<ImgPath>(({ imgPath }) => ({
   display: block;
   max-width: 150px;
   max-height: 150px;
+  border-radius: 50%;
+  object-fit: cover;
 `;
 
 const ProfileCard = ({ ...props }: UserProfileCard): JSX.Element => {
