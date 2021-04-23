@@ -21,26 +21,6 @@ function FavoriteButton(props: any) {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    if (changeCard) {
-      axios({
-        url: 'https://server.birthwiki.space/user/card',
-        method: 'POST',
-        data: {
-          nickName: userInfo.nickName,
-          accessToken: `Bearer ${userInfo.accessToken}`,
-        },
-      }).then((res) => {
-        let newUserInfo = Object.assign({}, userInfo, {
-          likeCards: res.data.data.likeCards,
-          recordCards: res.data.data.recordCards,
-        });
-        dispatch(setUserInfo(newUserInfo));
-        setChangeCard(false);
-      });
-    }
-  }, [changeCard]);
-
-  useEffect(() => {
     if (userInfo.likeCards) {
       userInfo.likeCards.forEach((card: any) => {
         if (card.id === props.cardData.id && card.category === props.cardData.category) {
@@ -59,11 +39,24 @@ function FavoriteButton(props: any) {
       setIsLikeAdd(!isLikeAdd);
     }
 
-    if (isGuest) {
-      let newCards = userInfo.likeCards ? [...userInfo.likeCards, props.cardData] : [props.cardData];
-      let newUserInfo = Object.assign({}, userInfo, {
-        likeCards: newCards,
+    let newCards;
+    let newUserInfo: any;
+
+    if (action === 'like') {
+      newCards = userInfo.likeCards ? [...userInfo.likeCards, props.cardData] : [props.cardData];
+    } else {
+      newCards = userInfo.likeCards.filter((el: any) => {
+        if (el.id !== props.cardData.id || el.category !== props.cardData.category) {
+          return el;
+        }
       });
+    }
+    newUserInfo = Object.assign({}, userInfo, {
+      likeCards: newCards,
+    });
+
+    console.log(newUserInfo);
+    if (isGuest) {
       dispatch(setUserInfo(newUserInfo));
     }
 
@@ -80,7 +73,7 @@ function FavoriteButton(props: any) {
           accessToken: `Bearer ${userInfo.accessToken}`,
         },
       }).then(() => {
-        setChangeCard(true);
+        dispatch(setUserInfo(newUserInfo));
       });
     }
   };
