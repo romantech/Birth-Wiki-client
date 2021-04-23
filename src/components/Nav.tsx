@@ -52,7 +52,7 @@ function Nav() {
       setModalOpen(true);
     }
     if (isGuest || isLogin) {
-      window.location.href = 'https://localhost:3000/myFavorite';
+      window.location.href = `${process.env.REACT_APP_CLIENT_URL}/myFavorite`;
     }
   };
 

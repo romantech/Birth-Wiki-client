@@ -16,7 +16,7 @@ function SidebarLogin() {
     localStorage.setItem('source', 'google');
     const url = 'https://accounts.google.com/o/oauth2/auth';
     const client_id = `client_id=${process.env.REACT_APP_G_CLIENTID}`;
-    const redirect_uri = `redirect_uri=https://localhost:3000`;
+    const redirect_uri = `redirect_uri=${process.env.REACT_APP_URI_REDIRECT}`;
     const scope =
       'scope=https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/userinfo.profile';
     const response_type = 'response_type=code';

@@ -12,7 +12,7 @@ function CardCreate() {
     <CreateCard>
       <div className='create'>
         <h2>나의 기록카드 만들기</h2>
-        <iframe name='frAttachFiles' className='invisable'></iframe>
+        <iframe name='frAttachFiles' className='invisable' onLoad={() => {}}></iframe>
         <form
           target='frAttachFiles'
           action='https://server.birthwiki.space/record/create'
@@ -30,9 +30,6 @@ function CardCreate() {
           <input type='text' name='nickName' value={`${userInfo.nickName}`} style={{ display: 'none' }} />
           <input type='text' name='date' value={`${currentDate}`} style={{ display: 'none' }} />
           <div className='crtCard'>
-            {/* <label className='input-file-button' htmlFor='input-file'>
-              이미지 업로드
-            </label> */}
             <input type='file' name='cardImage' id='input-file' />
           </div>
           <div className='crtCard'>
