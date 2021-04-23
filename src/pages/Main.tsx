@@ -6,7 +6,6 @@ import { useSelector } from 'react-redux';
 import { RootState } from '../store';
 import { Link } from 'react-router-dom';
 import HoverCard from '../components/HoverCard';
-import CardLists from '../components/CardLists';
 import Weather from '../components/Weather';
 import CoverFlow from '../components/CoverFlow';
 import BirthWikiSearch from '../components/BirthWikiSearch';
@@ -89,49 +88,6 @@ const Main = () => {
     transition: 0.5s ease;
   `;
 
-  const DateInput = styled.div`
-    width: 100%;
-    margin: 0 auto 35px;
-    display: flex;
-    justify-content: center;
-
-    input {
-      display: block;
-      font-size: 1.3rem;
-      padding: 10px;
-      background: none;
-      appearance: none;
-      border: none;
-      outline: none;
-      background-color: rgba(255, 255, 255, 1);
-      border-radius: 0 0 16px 16px;
-      box-shadow: 0px 5px rgba(0, 0, 0, 0.2);
-      transition: 0.4s ease;
-
-      &:focus {
-        background-color: rgba(255, 255, 255, 0.75);
-      }
-    }
-  `;
-
-  const WeatherDetail = styled.div`
-    width: 35vw;
-    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.19), 0 6px 6px rgba(0, 0, 0, 0.23);
-    background: rgba(0, 0, 0, 0.6);
-    border-radius: 14px;
-    color: #fff;
-    text-align: center;
-    padding: 20px;
-
-    @media (max-width: 920px) {
-      width: 45vw;
-    }
-
-    @media (max-width: 600px) {
-      width: 90%;
-    }
-  `;
-
   const openCard = () => {
     setShowCard((prev) => !prev);
   };
@@ -173,12 +129,60 @@ const Main = () => {
               />
             </>
           ) : null}
-          {isFlow ? <CoverFlow data={data} selected={selected} /> : null}
+          {isFlow ? (
+            <CoverFlow data={data} selected={selected} setIsFlow={setIsFlow} setIsHover={setIsHover} />
+          ) : null}
           {/* isHoriz?<HorizFlow data={data} /> : null */}
         </Background>
       ) : null}
     </>
   );
 };
+
+const DateInput = styled.div`
+  padding: 10px 10px 10px 10;
+  margin: 10px;
+  border-radius: 16px;
+  display: flex;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.3);
+
+  input {
+    display: block;
+    font-size: 1.3rem;
+    height: 25px;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    border: none;
+    outline: none;
+    box-shadow: 0px 3px rgb(0 0 0 / 50%);
+    -webkit-transition: 0.4s ease;
+    transition: 0.4s ease;
+    margin-bottom: 20px;
+
+    &:focus {
+      background-color: rgba(255, 255, 255, 0.75);
+    }
+  }
+`;
+
+const WeatherDetail = styled.div`
+  width: 35vw;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.19), 0 6px 6px rgba(0, 0, 0, 0.23);
+  background: rgba(0, 0, 0, 0.6);
+  border-radius: 14px;
+  color: #fff;
+  text-align: center;
+  padding: 20px;
+
+  @media (max-width: 920px) {
+    width: 45vw;
+  }
+
+  @media (max-width: 600px) {
+    width: 90%;
+  }
+`;
 
 export default Main;

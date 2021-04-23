@@ -13,10 +13,7 @@ function SidebarEdit() {
   const isSidebar = useSelector((state: RootState) => state.sidebarReducer.isSidebar);
   const userInfo = useSelector((state: RootState) => state.userInfoReducer.userInfo);
   const dispatch = useDispatch();
-  const history = useHistory();
   const [editUserInfo, setEditUserInfo] = useState(userInfo);
-  const [changeInfo, setChangeInfo] = useState(false);
-
   const { password, password2, errorMsg } = editUserInfo;
 
   const [check, setCheck] = useState({
@@ -25,26 +22,24 @@ function SidebarEdit() {
     nickName: false,
   });
 
-  useEffect(() => {
-    if (changeInfo) {
-      axios({
-        url: 'https://server.birthwiki.space/user/info',
-        method: 'POST',
-        data: {
-          userEmail: userInfo.userEmail,
-          accessToken: `Bearer ${userInfo.accessToken}`,
-        },
-      }).then((res) => {
-        let newUserInfo = Object.assign({}, userInfo, {
-          nickName: res.data.data.nickName,
-          profileImage: res.data.data.profileImage,
-        });
-        dispatch(setUserInfo(newUserInfo));
-        dispatch(setIsEdit(false));
-        dispatch(setIsSidbar(true));
+  const changeInfo = () => {
+    axios({
+      url: 'https://server.birthwiki.space/user/info',
+      method: 'POST',
+      data: {
+        userEmail: userInfo.userEmail,
+        accessToken: `Bearer ${userInfo.accessToken}`,
+      },
+    }).then((res) => {
+      let newUserInfo = Object.assign({}, userInfo, {
+        nickName: res.data.data.nickName,
+        profileImage: res.data.data.profileImage,
       });
-    }
-  }, [changeInfo]);
+      dispatch(setUserInfo(newUserInfo));
+      dispatch(setIsEdit(false));
+      dispatch(setIsSidbar(true));
+    });
+  };
 
   const inputHandler = async (key: string, e: any) => {
     setEditUserInfo({
@@ -132,7 +127,7 @@ function SidebarEdit() {
           name='frAttachFiles'
           className='invisable'
           onLoad={() => {
-            setChangeInfo(true);
+            changeInfo();
           }}
         ></iframe>
         {errorMsg ? <div className='alert-box'>{errorMsg}</div> : ''}

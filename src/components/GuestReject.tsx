@@ -1,28 +1,15 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
-import { setGuest, setUserInfo, setGuestModal } from '../actions';
-import guestState from '../reducers/guestState';
+import { setGuestReject } from '../actions';
 
-function GuestModal() {
+function GuestReject() {
   const modalRef = useRef<HTMLDivElement>(null);
   const dispatch = useDispatch();
 
-  const accept = () => {
-    console.log('수락');
-    dispatch(setGuest(true));
-    dispatch(setUserInfo(guestState));
-    dispatch(setGuestModal(false));
-  };
-
   const reject = () => {
-    console.log('거절');
-    dispatch(setGuestModal(false));
+    dispatch(setGuestReject(false));
   };
-
-  useEffect(() => {
-    console.log('모달오픈');
-  }, []);
 
   return (
     <Background ref={modalRef} onClick={reject}>
@@ -31,13 +18,10 @@ function GuestModal() {
           <p>
             게스트 모드에서는
             <br />
-            변경 사항이 저장되지 않습니다 🥺
+            사용할 수 없는 기능입니다 🥺
           </p>
           <ButtonWrapper>
-            <button onClick={accept} style={{ marginRight: '10px' }}>
-              확인!
-            </button>
-            <button onClick={reject}>취소</button>
+            <button onClick={reject}>확인!</button>
           </ButtonWrapper>
         </ModalContent>
       </ModalWrapper>
@@ -45,7 +29,7 @@ function GuestModal() {
   );
 }
 
-export default GuestModal;
+export default GuestReject;
 
 const Background = styled.div`
   width: 100%;
@@ -69,18 +53,17 @@ const ModalWrapper = styled.div`
   color: #000;
   box-shadow: 0 5px 16px rgba(0, 0, 0, 0.2);
   border-radius: 15px;
-  z-index: 3;
   position: relative;
 `;
 
 const ModalContent = styled.div`
+  position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
   color: #141414;
   padding: 35px;
   overflow: auto;
-  z-index: 5;
   p {
     text-align: center;
   }

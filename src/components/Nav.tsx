@@ -7,7 +7,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import SidebarLogin from './SidebarLogin';
 import SidebarMypage from './SidebarMypage';
 import { RootState } from '../store/index';
-import { setIsSidbar, setIsLogin, setIsSignup, setUserInfo } from '../actions';
+import { setIsSidbar, setIsLogin, setIsSignup, setUserInfo, setGuestModal } from '../actions';
 import axios from 'axios';
 import GuestModal from './GuestModal';
 
@@ -16,10 +16,7 @@ function Nav() {
   const userInfo = useSelector((state: RootState) => state.userInfoReducer.userInfo);
   const isLogin = useSelector((state: RootState) => state.loginReducer.isLogin);
   const isGuest = useSelector((state: RootState) => state.guestReducer.isGuest);
-  const isGuestModal = useSelector((state: RootState) => state.guestReducer.isGuestModal);
   const dispatch = useDispatch();
-  const [modalOpen, setModalOpen] = useState(false);
-  console.log(userInfo);
   useEffect(() => {
     const url = new URL(window.location.href);
     const AuthorizationCode = url.searchParams.get('code');
@@ -47,12 +44,13 @@ function Nav() {
   const clickHandler = () => {
     window.location.replace('/');
   };
+
   const modalHandler = () => {
-    if (!isLogin && !isGuestModal) {
-      setModalOpen(true);
+    if (!isLogin && !isGuest) {
+      dispatch(setGuestModal(true));
     }
     if (isGuest || isLogin) {
-      window.location.href = 'https://localhost:3000/myFavorite';
+      window.location.href = `${process.env.REACT_APP_CLIENT_URL}/myFavorite`;
     }
   };
 
@@ -64,20 +62,16 @@ function Nav() {
       <SidebarsOpen onClick={showSidebar} />
 
       <Favorite onClick={modalHandler}>
-        {isLogin ? (
-          <div>
-            {userInfo.profileImage ? (
+        <div>
+          {isGuest || isLogin ? (
+            userInfo.profileImage ? (
               <UserPoto src={`${userInfo.profileImage}`} />
             ) : (
               <UserPoto src={`${process.env.PUBLIC_URL}/img/profile.png`} />
-            )}
-          </div>
-        ) : (
-          <span>Guest</span>
-        )}
+            )
+          ) : null}
+        </div>
       </Favorite>
-      {modalOpen ? <GuestModal /> : null}
-
       {isSidebar ? (
         <NavSidebar>
           <SidebarsClose onClick={showSidebar} />
@@ -143,6 +137,7 @@ const SidebarsOpen = styled(FaBars)`
 
 const NavSidebar = styled.div`
   background-color: rgba(6, 11, 38, 0.8);
+  position: relative;
   display: none;
   width: 350px;
   right: 0;
@@ -152,7 +147,7 @@ const NavSidebar = styled.div`
   justify-content: flex-start;
   position: fixed;
   top: 0;
-  z-index: 1;
+  z-index: 3;
   @media screen and (max-width: 600px) {
     width: 100%;
   }

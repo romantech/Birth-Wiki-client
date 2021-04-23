@@ -1,18 +1,49 @@
-import React, { useState } from 'react';
+import React from 'react';
 import styled from 'styled-components';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../store/index';
+import { setGuestModal, setGuestReject, setUserInfo } from '../actions';
+import axios from 'axios';
 
 function CardCreate() {
   const userInfo = useSelector((state: RootState) => state.userInfoReducer.userInfo);
+  const isLogin = useSelector((state: RootState) => state.loginReducer.isLogin);
+  const isGuest = useSelector((state: RootState) => state.guestReducer.isGuest);
+  const dispatch = useDispatch();
 
   const currentDate = new Date().toISOString().substring(0, 10);
+
+  const guestCreate = () => {
+    if (isGuest) {
+      dispatch(setGuestReject(true));
+    } else {
+      dispatch(setGuestModal(true));
+    }
+  };
+
+  const changeInfo = () => {
+    axios({
+      url: 'https://server.birthwiki.space/record/look',
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      data: {
+        nickName: userInfo.nickName,
+        accessToken: `Bearer ${userInfo.accessToken}`,
+      },
+    }).then((res) => {
+      let newCards = userInfo.recordCards
+        ? [...userInfo.recordCards, res.data.data.recordCards]
+        : [res.data.data.recordCards][res.data.data.recordCards];
+      let newInfo = Object.assign({}, userInfo, { recordCards: newCards });
+      dispatch(setUserInfo(newInfo));
+    });
+  };
 
   return (
     <CreateCard>
       <div className='create'>
         <h2>나의 기록카드 만들기</h2>
-        <iframe name='frAttachFiles' className='invisable'></iframe>
+        <iframe name='frAttachFiles' className='invisable' onLoad={changeInfo}></iframe>
         <form
           target='frAttachFiles'
           action='https://server.birthwiki.space/record/create'
@@ -30,16 +61,19 @@ function CardCreate() {
           <input type='text' name='nickName' value={`${userInfo.nickName}`} style={{ display: 'none' }} />
           <input type='text' name='date' value={`${currentDate}`} style={{ display: 'none' }} />
           <div className='crtCard'>
-            {/* <label className='input-file-button' htmlFor='input-file'>
-              이미지 업로드
-            </label> */}
             <input type='file' name='cardImage' id='input-file' />
           </div>
           <div className='crtCard'>
             <textarea className='card-desc' name='cardDesc' placeholder='내용을 입력하세요' />
           </div>
           <div>
-            <input type='submit' value='카드 생성' className='createBtn' />
+            {isLogin ? (
+              <input type='submit' value='카드 생성' className='createBtn' />
+            ) : (
+              <button className='createBtn' onClick={guestCreate}>
+                카드 생성
+              </button>
+            )}
           </div>
         </form>
       </div>

@@ -24,8 +24,6 @@ const HoverCard = (props: any) => {
     width: 100%;
     padding: 4% 2% 0;
     box-sizing: border-box;
-    height: 60vh;
-    background: linear-gradient(rgba(204, 255, 255, 0) 30%, rgba(248, 251, 233, 1) 60%);
   `;
 
   const CardContents = styled.div`
@@ -37,24 +35,28 @@ const HoverCard = (props: any) => {
     border-radius: 15px;
     background-size: cover;
     position: relative;
-    top: 100px;
+    height: 30vh;
+    top: 40px;
     color: #fff;
     cursor: pointer;
-    @media only screen and (width: 500px) {
-      display: none;
-    }
+
     & h2 {
+      opacity: 1;
+      position: relative;
       font-size: 3.2vh;
       display: block;
       text-align: center;
       height: 6vh;
-      line-height: 1.6;
-      color: #fff;
+      line-height: 1;
+      color: white;
       text-transform: uppercase;
+      transition: 0.2s;
     }
     &:hover {
       flex: 0 0 25%;
       top: 0px;
+      & h2 {
+      }
     }
     & img:hover {
       width: 100%;

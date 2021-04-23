@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import DatePicker from 'react-datepicker';
 import BirthWikiSearch from './BirthWikiSearch';
+import 'dotenv/config';
 
 export default function LaunchPage() {
   const [date, setDate] = useState({ year: '0', month: '0', day: '0' });
@@ -15,7 +16,7 @@ export default function LaunchPage() {
 
   const pressHandler = (e: any, here: string, next: string) => {
     setWarning(false);
-    let numValue = Number(e.target.value);
+    let numValue = Number(e.target.value) === 0 ? '' : Number(e.target.value);
 
     if (here === 'year') {
       e.target.value = numValue > curYear ? String(curYear) : String(numValue);
@@ -93,7 +94,7 @@ export default function LaunchPage() {
   const birthwikiHandler = () => {
     let selectDate = date.year + '-' + date.month + '-' + date.day;
     if (date.year !== '0' && date.month !== '0' && date.day !== '0') {
-      window.location.href = `https://localhost:3000/main/${selectDate}`;
+      window.location.href = `${process.env.REACT_APP_CLIENT_URL}/main/${selectDate}`;
     } else {
       setWarning(true);
     }
@@ -104,73 +105,83 @@ export default function LaunchPage() {
         <video className='video' muted loop autoPlay={true}>
           <source src='../background.mp4' type='video/mp4'></source>
         </video>
-      </div>
-      {/* <WordsContainner>
+
+        {/* <WordsContainner>
         <Words>What happened</Words>
         <Words>on Your BirthDay!</Words>
       </WordsContainner> */}
 
-      <InputContiner>
-        <InputSubmit>
-          <InputDate
-            type='number'
-            id='year'
-            min='1'
-            max={curYear}
-            placeholder='1990'
-            onKeyUp={(e) => {
-              pressHandler(e, 'year', 'month');
-            }}
-            onBlur={(e) => {
-              blurHandler(e, 'year', 'month');
-            }}
-            onKeyPress={(e) => {
-              enterHandler(e, 'year', 'month');
-            }}
-          ></InputDate>{' '}
-          <span>년</span>
-          <InputDate
-            type='number'
-            id='month'
-            max='12'
-            min='1'
-            placeholder='1'
-            onKeyUp={(e) => {
-              pressHandler(e, 'month', 'day');
-            }}
-            onBlur={(e) => {
-              blurHandler(e, 'month', 'day');
-            }}
-            onKeyPress={(e) => {
-              enterHandler(e, 'month', 'day');
-            }}
-          ></InputDate>{' '}
-          <span>월</span>
-          <InputDate
-            type='number'
-            id='day'
-            min='1'
-            max='31'
-            placeholder='1'
-            onKeyUp={(e) => {
-              pressHandler(e, 'day', '');
-            }}
-            onBlur={(e) => {
-              blurHandler(e, 'day', '');
-            }}
-            onKeyPress={(e) => {
-              enterHandler(e, 'day', '');
-            }}
-          ></InputDate>{' '}
-          <span>일</span>
-        </InputSubmit>
-        {warning ? (
-          <div className='warning'>날짜를 다시 입력해 주세요</div>
-        ) : (
-          <div className='warning'>&nbsp;</div>
-        )}
-        <BirthwikiBtn onClick={birthwikiHandler}>Birth Wiki!</BirthwikiBtn>
-      </InputContiner>
+        <InputContiner>
+          <InputSubmit>
+            <InputDate
+              type='number'
+              id='year'
+              min='1'
+              max={curYear}
+              placeholder='1990'
+              onKeyUp={(e) => {
+                pressHandler(e, 'year', 'month');
+              }}
+              onBlur={(e) => {
+                blurHandler(e, 'year', 'month');
+              }}
+              onKeyPress={(e) => {
+                enterHandler(e, 'year', 'month');
+              }}
+              onFocus={(e) => {
+                e.target.value = '';
+              }}
+            ></InputDate>{' '}
+            <span>년</span>
+            <InputDate
+              type='number'
+              id='month'
+              max='12'
+              min='1'
+              placeholder='1'
+              onKeyUp={(e) => {
+                pressHandler(e, 'month', 'day');
+              }}
+              onBlur={(e) => {
+                blurHandler(e, 'month', 'day');
+              }}
+              onKeyPress={(e) => {
+                enterHandler(e, 'month', 'day');
+              }}
+              onFocus={(e) => {
+                e.target.value = '';
+              }}
+            ></InputDate>{' '}
+            <span>월</span>
+            <InputDate
+              type='number'
+              id='day'
+              min='1'
+              max='31'
+              placeholder='1'
+              onKeyUp={(e) => {
+                pressHandler(e, 'day', '');
+              }}
+              onBlur={(e) => {
+                blurHandler(e, 'day', '');
+              }}
+              onKeyPress={(e) => {
+                enterHandler(e, 'day', '');
+              }}
+              onFocus={(e) => {
+                e.target.value = '';
+              }}
+            ></InputDate>{' '}
+            <span>일</span>
+          </InputSubmit>
+          {warning ? (
+            <div className='warning'>날짜를 다시 입력해 주세요</div>
+          ) : (
+            <div className='warning'>&nbsp;</div>
+          )}
+          <BirthwikiBtn onClick={birthwikiHandler}>Birth Wiki!</BirthwikiBtn>
+        </InputContiner>
+      </div>
     </LaunchScreen>
   );
 }
