@@ -1,12 +1,12 @@
 import React, { useState, useRef } from 'react';
 import styled from 'styled-components';
 import FavoriteModal from '../components/FavoriteModal';
-import { LikeCardsGeneral } from '../types/index';
+
 import UnlikeConfirmModal from '../components/UnlikeConfirmModal';
 import FavoriteShareModalMini from './FavoriteShareModalMini';
 import FavoriteShareModalMain from './FavoriteShareModalMain';
 
-const SidebarMystory = ({ ...props }: LikeCardsGeneral): JSX.Element => {
+const SidebarMystory = ({ ...props }: any): JSX.Element => {
   const contents = props.contents !== null ? props.contents : [];
   const category = props.category;
 
@@ -51,8 +51,9 @@ const SidebarMystory = ({ ...props }: LikeCardsGeneral): JSX.Element => {
         id={props.id}
         category={props.category}
         unLikeModal={unLikeModal}
+        filteredArray={props.filteredArray}
+        setFilteredArray={props.setFilteredArray}
         setUnlikeModal={setUnlikeModal}
-        setShowModal={setShowModal}
       />
       <FavoriteShareModalMain shareModalMain={shareModalMain} setShareModalMain={setShareModalMain} />
     </>
