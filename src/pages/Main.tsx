@@ -77,6 +77,7 @@ const Main = () => {
     align-items: center;
     flex-direction: column;
     width: 100%;
+    height: 100vh;
     overflow: hidden;
     object-fit: contain;
     background: linear-gradient(
