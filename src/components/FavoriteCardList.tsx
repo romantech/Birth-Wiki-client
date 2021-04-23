@@ -8,6 +8,7 @@ import UnlikeConfirmModal from '../components/UnlikeConfirmModal';
 import { LikeCardsGeneral, MovieInfo } from '../types/index';
 import getVerticalImg from '../utils/resizeImage';
 import TMDB_API from '../utils/TMDB_API';
+import { MovieRateStarBlack, MovieRateStarGray } from '../components/FavoriteModal';
 
 interface SetFilteredArray extends LikeCardsGeneral {
   setFilteredArray: React.Dispatch<React.SetStateAction<LikeCardsGeneral[]>>;
@@ -16,7 +17,7 @@ interface SetFilteredArray extends LikeCardsGeneral {
 
 const FavoriteCardList = ({ ...props }: SetFilteredArray): JSX.Element => {
   // const shareRef = useRef<HTMLDivElement>(null);
-  console.log('렌더');
+
   const contents = props.contents !== null ? props.contents : [];
   const category = props.category;
 
@@ -86,6 +87,38 @@ const FavoriteCardList = ({ ...props }: SetFilteredArray): JSX.Element => {
     props.image = getVerticalImg(props.image, props.category, contentsLength);
   }
 
+  const getMovieRateStar = (rate: number) => {
+    console.log(rate);
+    let starNum = 0;
+    if (rate >= 0 && rate <= 2.9) {
+      starNum = 1;
+    } else if (rate >= 3 && rate <= 4.9) {
+      starNum = 2;
+    } else if (rate >= 5 && rate <= 6.9) {
+      starNum = 3;
+    } else if (rate >= 7 && rate <= 8.9) {
+      starNum = 4;
+    } else if (rate >= 9) {
+      starNum = 5;
+    }
+    const grayNum = 5 - starNum;
+    const arr = [];
+    for (let i = 0; i < starNum; i++) {
+      arr.push(['black']);
+    }
+    for (let i = 0; i < grayNum; i++) {
+      arr.push(['gray']);
+    }
+
+    return arr.map((el, index) => {
+      if (el[0] === 'black') {
+        return <MovieRateStarBlack style={{ color: 'white' }} key={index} />;
+      } else {
+        return <MovieRateStarGray style={{ color: 'gray' }} key={index} />;
+      }
+    });
+  };
+
   return (
     <>
       <FlipCard>
@@ -124,9 +157,9 @@ const FavoriteCardList = ({ ...props }: SetFilteredArray): JSX.Element => {
                 <h3 style={{ marginBottom: '-10px' }}>한국 1위 영화</h3>
                 <p>{props.korea === undefined ? '정보가 없습니다 😢' : `<${props.korea?.title}>`}</p>
                 {movieInfoKorean ? (
-                  <p
-                    style={{ marginTop: '-10px' }}
-                  >{`${movieInfoKorean.vote_average}점 (${movieInfoKorean.vote_count}명 투표)`}</p>
+                  <p style={{ marginTop: '-10px' }}>
+                    {movieInfoKorean.vote_average ? getMovieRateStar(movieInfoKorean.vote_average) : ''}
+                  </p>
                 ) : (
                   ''
                 )}
@@ -135,9 +168,9 @@ const FavoriteCardList = ({ ...props }: SetFilteredArray): JSX.Element => {
                   {props.world === undefined ? '정보가 없습니다 😢' : `<${props.world?.title}>`}
                 </p>
                 {movieInfoWorld ? (
-                  <p
-                    style={{ marginTop: '-15px' }}
-                  >{`${movieInfoWorld.vote_average}점 (${movieInfoWorld.vote_count}명 투표)`}</p>
+                  <p style={{ marginTop: '-15px' }}>
+                    {movieInfoWorld.vote_average ? getMovieRateStar(movieInfoWorld.vote_average) : ''}
+                  </p>
                 ) : (
                   ''
                 )}
