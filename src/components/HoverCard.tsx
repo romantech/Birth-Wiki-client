@@ -1,11 +1,10 @@
 import React, { useState, useRef } from 'react';
 import { useSpring, animated } from 'react-spring';
 import styled from 'styled-components';
-import SwiperCard from './SwiperCard';
-import CoverFlow from './CoverFlow';
 import movieCover from '../img/subData/movieCover.jpg';
 import musicCover from '../img/subData/musicCover.jpg';
 import recordCover from '../img/subData/recordCover.jpeg';
+import click from '../img/icons/click.jpg';
 
 const HoverCard = (props: any) => {
   const data = props.data;
@@ -17,7 +16,7 @@ const HoverCard = (props: any) => {
   const movie = data.movieCard ? data.movieCard : { image: movieCover };
   const music = data.musicCard ? data.musicCard : { image: musicCover };
   const cardData = [issue, birth, death, movie, music, { image: recordCover }];
-  const cardTitle = ['이슈', '탄생', '사망', '영화', '음악', '기록카드 작성'];
+  const cardTitle = ['ISSUE', 'BIRTH', 'DEATH', 'MOVIE', 'MUSIC', 'RECORD'];
 
   const CardLists = styled.div`
     display: flex;
@@ -25,7 +24,6 @@ const HoverCard = (props: any) => {
     width: 100%;
     padding: 4% 2% 0;
     box-sizing: border-box;
-    height: 40vh;
   `;
 
   const CardContents = styled.div`
@@ -37,14 +35,13 @@ const HoverCard = (props: any) => {
     border-radius: 15px;
     background-size: cover;
     position: relative;
-    top: 100px;
+    height: 150px;
+    top: 40px;
     color: #fff;
     cursor: pointer;
-
     @media only screen and (width: 500px) {
       display: none;
     }
-
     & h2 {
       font-size: 3.2vh;
       display: block;
@@ -54,12 +51,10 @@ const HoverCard = (props: any) => {
       color: #fff;
       text-transform: uppercase;
     }
-
     &:hover {
       flex: 0 0 25%;
       top: 0px;
     }
-
     & img:hover {
       width: 100%;
       height: 100%;
