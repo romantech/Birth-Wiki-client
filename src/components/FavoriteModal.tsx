@@ -6,6 +6,7 @@ import { MdClose } from 'react-icons/md';
 import { LikeCardsGeneral, MovieInfo } from '../types/index';
 import { IconCircle, ShareIcon, HeartIcon } from './FavoriteCardList';
 import { FaStar } from 'react-icons/fa';
+import getMovieRateStar from '../utils/getMovieRateStar';
 
 interface Props extends LikeCardsGeneral {
   showModal: boolean;
@@ -83,38 +84,6 @@ const FavoriteModal = ({ showModal, setShowModal, ...props }: Props): JSX.Elemen
     return () => document.removeEventListener('keydown', keyPress);
   }, [keyPress]);
 
-  const getMovieRateStar = (rate: number) => {
-    console.log(rate);
-    let starNum = 0;
-    if (rate >= 0 && rate <= 2.9) {
-      starNum = 1;
-    } else if (rate >= 3 && rate <= 4.9) {
-      starNum = 2;
-    } else if (rate >= 5 && rate <= 6.9) {
-      starNum = 3;
-    } else if (rate >= 7 && rate <= 8.9) {
-      starNum = 4;
-    } else if (rate >= 9) {
-      starNum = 5;
-    }
-    const grayNum = 5 - starNum;
-    const arr = [];
-    for (let i = 0; i < starNum; i++) {
-      arr.push(['black']);
-    }
-    for (let i = 0; i < grayNum; i++) {
-      arr.push(['gray']);
-    }
-
-    return arr.map((el, index) => {
-      if (el[0] === 'black') {
-        return <MovieRateStarBlack key={index} />;
-      } else {
-        return <MovieRateStarGray key={index} />;
-      }
-    });
-  };
-
   return (
     <>
       {showModal ? (
@@ -143,7 +112,15 @@ const FavoriteModal = ({ showModal, setShowModal, ...props }: Props): JSX.Elemen
                       <p style={{ textAlign: 'center' }}>
                         {props.korea === undefined ? '정보가 없습니다 😢' : `<${props.korea?.title}>`}
                         <br />
-                        {props.movieInfoKorean ? getMovieRateStar(props.movieInfoKorean.vote_average) : ''}
+                        {props.movieInfoKorean
+                          ? getMovieRateStar(props.movieInfoKorean.vote_average).map((el, index) => {
+                              if (el[0] === 'black') {
+                                return <MovieRateStarBlack key={index} />;
+                              } else {
+                                return <MovieRateStarGray key={index} />;
+                              }
+                            })
+                          : ''}
                       </p>
 
                       <MediaImageWorld korea={mediaImageKorea} world={mediaImageWorld} />
@@ -151,7 +128,15 @@ const FavoriteModal = ({ showModal, setShowModal, ...props }: Props): JSX.Elemen
                       <p style={{ textAlign: 'center' }}>
                         {props.world === undefined ? '정보가 없습니다 😢' : `<${props.world?.title}>`}
                         <br />
-                        {props.movieInfoWorld ? getMovieRateStar(props.movieInfoWorld.vote_average) : ''}
+                        {props.movieInfoWorld
+                          ? getMovieRateStar(props.movieInfoWorld.vote_average).map((el, index) => {
+                              if (el[0] === 'black') {
+                                return <MovieRateStarBlack key={index} />;
+                              } else {
+                                return <MovieRateStarGray key={index} />;
+                              }
+                            })
+                          : ''}
                       </p>
                     </>
                   ) : (
