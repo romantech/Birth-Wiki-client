@@ -94,6 +94,7 @@ function FavoriteButton(props: any) {
     top: 0;
     right: 0;
     z-index: 100;
+    color: #fff;
     cursor: pointer;
   `;
 
