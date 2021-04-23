@@ -9,10 +9,14 @@ import FavoritePage from './pages/FavoritePage';
 import LaunchPage from './components/LaunchPage';
 import SidebarSignUp from './components/SidebarSignUp';
 import SidebarEdit from './components/SidebarEdit';
+import GuestModal from './components/GuestModal';
+import GuestReject from './components/GuestReject';
 
 function App(): JSX.Element {
   const isSignup = useSelector((state: RootState) => state.signupReducer.isSignup);
   const isEdit = useSelector((state: RootState) => state.signupReducer.isEdit);
+  const isGuestModal = useSelector((state: RootState) => state.guestReducer.isGuestModal);
+  const isReject = useSelector((state: RootState) => state.guestReducer.isReject);
 
   return (
     <Router>
@@ -26,6 +30,8 @@ function App(): JSX.Element {
           <Route exact path='/myFavorite' component={FavoritePage} />
         </Switch>
       ) : null}
+      {isGuestModal ? <GuestModal /> : null}
+      {isReject ? <GuestReject /> : null}
     </Router>
   );
 }

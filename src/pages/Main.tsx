@@ -6,7 +6,6 @@ import { useSelector } from 'react-redux';
 import { RootState } from '../store';
 import { Link } from 'react-router-dom';
 import HoverCard from '../components/HoverCard';
-import CardLists from '../components/CardLists';
 import Weather from '../components/Weather';
 import CoverFlow from '../components/CoverFlow';
 import BirthWikiSearch from '../components/BirthWikiSearch';
