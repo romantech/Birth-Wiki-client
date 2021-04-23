@@ -52,6 +52,7 @@ const SidebarMystory = ({ ...props }: LikeCardsGeneral): JSX.Element => {
         category={props.category}
         unLikeModal={unLikeModal}
         setUnlikeModal={setUnlikeModal}
+        setShowModal={setShowModal}
       />
       <FavoriteShareModalMain shareModalMain={shareModalMain} setShareModalMain={setShareModalMain} />
     </>

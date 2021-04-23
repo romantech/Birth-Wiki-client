@@ -1,138 +1,71 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
-import Axios from 'axios';
-import { useSpring, animated } from 'react-spring';
-import { useSelector } from 'react-redux';
-import { RootState } from '../store';
-import { Link } from 'react-router-dom';
-import Card from './Card';
-import CardLists from './CardLists';
-import WikiCulture from './WikiCulture';
-import BirthWikiSearch from './BirthWikiSearch';
+import { WiDaySunny } from 'react-icons/wi';
+import sun from '../img/icons/sun.png';
+import rain from '../img/icons/rain.png';
+import cloud from '../img/icons/cloud.png';
+import lightning from '../img/icons/lightning.png';
+import snow from '../img/icons/snow.png';
 
-// 배경 이미지
-import clear from '../img/clear.jpg';
-import rain from '../img/rain.jpg';
-import snow from '../img/snow.jpg';
-import cloud from '../img/cloud.jpg';
-import solar from '../img/solar.jpg';
-import lightning from '../img/lightning.jpg';
+interface tempOBJ {
+  평균기온?: string;
+  최고기온?: string;
+  최저기온?: string;
+}
 
-const Weather = () => {
-  const selectedDate = new URL(window.location.href).pathname;
-  const [weather, setWeather] = useState(clear);
-  const [text, setText] = useState('화창한');
-  const [showCard, setShowCard] = useState(false);
-  const [data, setData] = useState(null);
-  const [weatherData, setWeatherData] = useState(null);
-  const date = selectedDate.split('/')[2];
-  const year = date.split('-')[0];
-  const month = date.split('-')[1];
-  const day = date.split('-')[2];
+const Weather = ({ data, selectedDate }: any) => {
+  interface weatherIcon {
+    sun: string;
+    rain: string;
+    cloud: string;
+    snow: string;
+    lightning: string;
+    moon: string;
+  }
 
-  useEffect(() => {
-    // console.log(selectedDate);
+  const weatherData = data.weatherCard ? data.weatherCard : null;
+  const temprature: tempOBJ = weatherData
+    ? Object.assign({}, weatherData.temperature[0], weatherData.temperature[1], weatherData.temperature[2])
+    : { 평균기온: '정보가 없습니다', 최고기온: '정보가 없습니다', 최저기온: '정보가 없습니다' };
 
-    const fetchData = async () => {
-      await Axios({
-        url: 'https://server.birthwiki.space/data/date',
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        data: { date: `${selectedDate.split('/')[2]}` },
-      }).then((response) => {
-        setData(response.data.data);
-        setWeatherData(response.data.data.weatherCard.weather);
-        // console.log(response.data.data.weatherCard[0]);
-      });
-    };
-    fetchData();
-  }, []);
+  const [iconUp, setIconUp] = useState<weatherIcon | null>(null) as any;
+  const [text, setText] = useState('날씨 정보가 없습니다.');
 
   useEffect(() => {
-    if (weatherData === '맑음') {
-      setWeather(clear);
-      setText('화창한');
-    } else if (weatherData === '햇무리') {
-      setWeather(solar);
-      setText('햇무리가 진');
-    } else if (weatherData === '비') {
-      setWeather(rain);
-      setText('비가 내리는');
-    } else if (weatherData === '눈' || weatherData === '진눈깨비') {
-      setWeather(snow);
-      setText('눈이 내리는');
-    } else if (weatherData === '안개') {
-      setWeather(cloud);
-      setText('안개가 많이 낀');
-    } else if (weatherData === '뇌전') {
-      setWeather(lightning);
-      setText('번개가 치는');
-    } else if (weatherData === '우박') {
-      setWeather(snow);
-      setText('우박이 내린');
-    }
-  }, [weatherData]);
-
-  const Background = styled.div`
-    display: flex;
-    justify-content: space-around;
-    align-items: center;
-    flex-direction: column;
-    width: 100%;
-    overflow: hidden;
-    object-fit: contain;
-    background: linear-gradient(
-        90deg,
-        rgba(255, 255, 255, 0.3) 0%,
-        rgba(255, 255, 255, 0.3) 50%,
-        rgba(255, 255, 255, 0.3) 100%
-      ),
-      url(${weather}) center center/cover no-repeat;
-    transition: 0.5s ease;
-  `;
-
-  const DateInput = styled.div`
-    width: 100%;
-    margin: 0 auto 35px;
-    display: flex;
-    justify-content: center;
-
-    input {
-      display: block;
-      font-size: 1.3rem;
-      padding: 10px;
-      background: none;
-      appearance: none;
-      border: none;
-      outline: none;
-      background-color: rgba(255, 255, 255, 1);
-      border-radius: 0 0 16px 16px;
-      box-shadow: 0px 5px rgba(0, 0, 0, 0.2);
-      transition: 0.4s ease;
-
-      &:focus {
-        background-color: rgba(255, 255, 255, 0.75);
+    if (weatherData) {
+      switch (weatherData.weather) {
+        case '맑음':
+          setText('화창한 날입니다.');
+          setIconUp(sun);
+          break;
+        case '햇무리':
+          setText('햇무리가 진 날입니다.');
+          setIconUp(sun);
+          break;
+        case '비':
+          setText('비가 내리는 날입니다.');
+          setIconUp(rain);
+          break;
+        case '눈':
+        case '진눈깨비':
+          setText('눈이 내리는 날입니다.');
+          setIconUp(snow);
+          break;
+        case '안개':
+          setText('안개가 많이 낀 날입니다.');
+          setIconUp(cloud);
+          break;
+        case '뇌전':
+          setText('번개가 치는 날입니다.');
+          setIconUp(lightning);
+          break;
+        case '우박':
+          setText('우박이 내린 날입니다.');
+          setIconUp(rain); //우박 아이콘이 없을까요?
+          break;
       }
     }
-  `;
-
-  const WeatherDetail = styled.div`
-    width: 35vw;
-    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.19), 0 6px 6px rgba(0, 0, 0, 0.23);
-    background: rgba(0, 0, 0, 0.6);
-    border-radius: 14px;
-    color: #fff;
-    text-align: center;
-    padding: 20px;
-
-    @media (max-width: 920px) {
-      width: 45vw;
-    }
-
-    @media (max-width: 600px) {
-      width: 90%;
-    }
-  `;
+  }, []);
 
   const WeatherText = styled.div`
     padding: 1.2rem;
@@ -145,49 +78,79 @@ const Weather = () => {
     }
   `;
 
-  const openCard = () => {
-    setShowCard((prev) => !prev);
-  };
-
-  const cardRef: any = useRef<HTMLDivElement>(null);
-  const animation: any = useSpring({
-    //카드 클릭시 에니메이션 효과
-    config: {
-      duration: 200,
-    },
-    opacity: showCard ? 1 : 0,
-    transform: showCard ? `translateY(0%)` : `translateY(100%)`,
-  });
-
-  const closeCard = (e: React.SyntheticEvent) => {
-    //배경 클릭시 카드 off
-    if (cardRef.current === (e.target as typeof e.target)) {
-      setShowCard(false);
-    }
-  };
   return (
-    <>
-      {data ? (
-        <Background>
-          <DateInput>
-            <BirthWikiSearch year={year} month={month} day={day} />
-          </DateInput>
-          <WeatherDetail>
-            <WeatherText>
-              <h3>
-                {`${selectedDate.split('/')[2]}`} <br /> 그때에는 {`${text} 날입니다.`}
-              </h3>
-            </WeatherText>
-            <WikiCulture data={data} />
-          </WeatherDetail>
-          {/* 카드 리스트 start */}
-          <Card data={data} weather={weather} />
-          {/* <CardLists data={data} /> */}
-          {/* 카드 리스트 end */}
-        </Background>
-      ) : null}
-    </>
+    <TopCulture>
+      <div>
+        <WeatherText>
+          <h3>
+            {`${selectedDate.split('/')[2]}`} <br /> {text}
+          </h3>
+        </WeatherText>
+
+        <div className='container'>
+          <div className='temp'>
+            <p>
+              평균기온 : <span>{temprature['평균기온']}</span>
+            </p>
+            <p>
+              최고기온 : <span>{temprature['최고기온']}</span>
+            </p>
+            <p>
+              최저기온 : <span>{temprature['최저기온']}</span>
+            </p>
+          </div>
+          <div className='icon'>
+            <WeatherImg>
+              <img src={`${iconUp}`} alt='' style={{ width: '9.5rem' }} />
+            </WeatherImg>
+            <h2>{weatherData ? weatherData.weather : text}</h2>
+          </div>
+        </div>
+      </div>
+    </TopCulture>
   );
 };
+
+const TopCulture = styled.div`
+  & .container {
+    display: flex;
+    margin-top: 20px;
+
+    @media (max-width: 920px) {
+      flex-flow: column-reverse;
+
+      & h2 {
+        margin: 0;
+      }
+    }
+  }
+
+  & .icon {
+    flex: 1;
+  }
+
+  & .temp {
+    flex: 1;
+    font-size: 1.1rem;
+    font-weight: 700;
+
+    @media (max-width: 920px) {
+      & p {
+        margin: 0;
+      }
+    }
+
+    & p {
+      margin-bottom: 0;
+    }
+    & span {
+      padding-left: 10px;
+      font-size: 2rem;
+      font-weight: 700;
+    }
+  }
+`;
+
+const WeatherImg = styled.div``;
 
 export default Weather;
