@@ -1,4 +1,5 @@
-import React, { useRef, useEffect, useCallback } from 'react';
+import React, { useRef, useEffect, useState, useCallback } from 'react';
+import TMDB_API from '../utils/TMDB_API';
 import { useSpring, animated } from 'react-spring';
 import styled, { css } from 'styled-components';
 import { MdClose } from 'react-icons/md';
@@ -16,6 +17,7 @@ interface Props extends LikeCardsGeneral {
 }
 
 const FavoriteModal = ({ showModal, setShowModal, ...props }: Props): JSX.Element => {
+  const [worldSingerImgPath, setWorldSingerImgPath] = useState('');
   const modalRef = useRef<HTMLDivElement>(null);
   const animation = useSpring({
     config: {
@@ -25,12 +27,41 @@ const FavoriteModal = ({ showModal, setShowModal, ...props }: Props): JSX.Elemen
     transform: showModal ? `translateY(0%)` : `translateY(100%)`,
   });
 
+  const getWorldSingerImg = (name: string) => {
+    if (name) {
+      TMDB_API.get('/person', {
+        params: {
+          query: name,
+        },
+      }).then((res) => {
+        if (res.data.total_results !== 0) {
+          if (res.data.results[0].profile_path) {
+            const path = 'https://image.tmdb.org/t/p/w500' + res.data.results[0].profile_path;
+            setWorldSingerImgPath(path);
+          }
+        } else {
+          return '';
+        }
+      });
+    }
+  };
+
+  if (!worldSingerImgPath && props.world?.singer) {
+    console.log(props.world?.poster);
+    getWorldSingerImg(props.world.singer);
+  }
+
+  let singerName = '';
+  if (props.world?.singer) {
+    singerName = props.world.singer;
+  }
+
   const category = props.category;
   const mediaImageKorea = props.korea?.poster
     ? props.korea?.poster
     : `${process.env.PUBLIC_URL}/img/question.png`;
-  const mediaImageWorld = props.world?.poster
-    ? props.world?.poster
+  const mediaImageWorld = worldSingerImgPath
+    ? worldSingerImgPath
     : `${process.env.PUBLIC_URL}/img/question.png`;
 
   const closeModal = (e: React.MouseEvent<HTMLElement>) => {

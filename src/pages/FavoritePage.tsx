@@ -40,7 +40,7 @@ const FavoritePage = (): JSX.Element => {
       sliceEnd = 11;
       getLikeCards(sliceStart, sliceEnd);
     }
-  }, [renderArray, filteredArray, userInfo]);
+  }, [filteredArray]);
 
   const breakPoints = {
     default: 6,
