@@ -17,9 +17,7 @@ import { FaArrowCircleUp } from 'react-icons/fa';
 let sliceStart = 0;
 let sliceEnd = 11;
 const FavoritePage = (): JSX.Element => {
-  const isLogin = useSelector((state: RootState) => state.loginReducer.isLogin);
-  const isGuest = useSelector((state: RootState) => state.guestReducer.isGuest);
-  const { userInfo } = useSelector((state: RootState) => state.userInfoReducer);
+  const userInfo = useSelector((state: RootState) => state.userInfoReducer.userInfo);
   const { likeCards } = userInfo;
 
   const [renderArray, setRenderArray] = useState<LikeCardsGeneral[]>([]);
@@ -42,7 +40,7 @@ const FavoritePage = (): JSX.Element => {
       sliceEnd = 11;
       getLikeCards(sliceStart, sliceEnd);
     }
-  }, [renderArray, filteredArray]);
+  }, [renderArray, filteredArray, userInfo]);
 
   const breakPoints = {
     default: 6,

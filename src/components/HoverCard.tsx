@@ -35,25 +35,28 @@ const HoverCard = (props: any) => {
     border-radius: 15px;
     background-size: cover;
     position: relative;
-    height: 150px;
+    height: 30vh;
     top: 40px;
     color: #fff;
     cursor: pointer;
-    @media only screen and (width: 500px) {
-      display: none;
-    }
+
     & h2 {
+      opacity: 1;
+      position: relative;
       font-size: 3.2vh;
       display: block;
       text-align: center;
       height: 6vh;
-      line-height: 1.6;
-      color: #fff;
+      line-height: 1;
+      color: white;
       text-transform: uppercase;
+      transition: 0.2s;
     }
     &:hover {
       flex: 0 0 25%;
       top: 0px;
+      & h2 {
+      }
     }
     & img:hover {
       width: 100%;

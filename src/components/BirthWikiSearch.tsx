@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
+import 'dotenv/config';
 
 export default function BirthWikiSearch({ year, month, day }: any) {
   const [date, setDate] = useState({ year: year, month: month, day: day });
@@ -91,7 +92,7 @@ export default function BirthWikiSearch({ year, month, day }: any) {
   const birthwikiHandler = () => {
     let selectDate = date.year + '-' + date.month + '-' + date.day;
     if (date.year !== '0' && date.month !== '0' && date.day !== '0') {
-      window.location.href = `https://localhost:3000/main/${selectDate}`;
+      window.location.href = `${process.env.REACT_APP_CLIENT_URL}/main/${selectDate}`;
     } else {
       setWarning(true);
     }
