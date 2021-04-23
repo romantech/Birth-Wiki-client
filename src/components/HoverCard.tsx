@@ -24,8 +24,6 @@ const HoverCard = (props: any) => {
     width: 100%;
     padding: 4% 2% 0;
     box-sizing: border-box;
-    height: 60vh;
-    background: linear-gradient(rgba(204, 255, 255, 0) 30%, rgba(248, 251, 233, 1) 60%);
   `;
 
   const CardContents = styled.div`
@@ -37,7 +35,8 @@ const HoverCard = (props: any) => {
     border-radius: 15px;
     background-size: cover;
     position: relative;
-    top: 100px;
+    height: 150px;
+    top: 40px;
     color: #fff;
     cursor: pointer;
 

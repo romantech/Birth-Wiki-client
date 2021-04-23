@@ -1,5 +1,7 @@
 .slider {
   width: 100%;
+  position: relative;
+  z-index: 1000;
 }
 .slider .slideInput {
   display: none;

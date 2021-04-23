@@ -8,6 +8,7 @@ import CreateCard from './CardCreate';
 import movieCover from '../img/subData/movieCover.jpg';
 import musicCover from '../img/subData/musicCover.jpg';
 import recordCover from '../img/subData/recordCover.jpeg';
+import { check } from 'prettier';
 
 function CoverFlow(props: any) {
   const data = props.data;
@@ -112,6 +113,13 @@ function CoverFlow(props: any) {
           <label htmlFor='t-6'></label>
         </div>
       </div>
+      <div
+        className='slideBG'
+        onClick={() => {
+          props.setIsFlow(false);
+          props.setIsHover(true);
+        }}
+      ></div>
     </Container>
   );
 }
@@ -166,7 +174,7 @@ const Container = styled.div`
     }
 
     & li span {
-      width: 60px;
+      width: 20%;
       height: 22px;
       text-align: center;
       line-height: 22px;
@@ -206,6 +214,15 @@ const Container = styled.div`
       height: 100%;
       object-fit: contain;
     }
+  }
+
+  & .slideBG {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 1;
   }
 `;
 
