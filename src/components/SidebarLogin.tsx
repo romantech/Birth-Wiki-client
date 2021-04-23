@@ -4,7 +4,7 @@ import { useDispatch } from 'react-redux';
 import { useHistory, Link } from 'react-router-dom';
 import * as IconName from 'react-icons/fc';
 import axios from 'axios';
-import { setIsLogin, setUserInfo, setIsSidbar, setIsSignup } from '../actions/index';
+import { setIsLogin, setUserInfo, setIsSidbar, setIsSignup, setGuestModal } from '../actions/index';
 import { RootState } from '../store/index';
 import dotenv from 'dotenv';
 dotenv.config();
@@ -105,6 +105,9 @@ function SidebarLogin() {
     dispatch(setIsSignup(true));
   };
 
+  const guestHandler = () => {
+    dispatch(setGuestModal(true));
+  };
   return (
     <LoginContainer>
       Login
@@ -131,6 +134,7 @@ function SidebarLogin() {
           <HomeLogin type='submit' onClick={homeLoginHandler}>
             Login
           </HomeLogin>
+          <GuestLogin onClick={guestHandler}>Guest</GuestLogin>
           <HomeSignUp onClick={signupHandler}>Sign up</HomeSignUp>
           {errorMsg ? <ErrorMsg>{errorMsg}</ErrorMsg> : ''}
         </div>
@@ -237,6 +241,27 @@ const HomeLogin = styled.button`
   }
 `;
 
+const GuestLogin = styled.button`
+  border-radius: 12px;
+  background: rgba(6, 11, 38, 0.8);
+  white-space: nowrap;
+  width: 100px;
+  padding: 10px 25px;
+  margin: 10px;
+  color: #fff;
+  font-size: 16px;
+  outline: none;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+  text-decoration: none;
+  font-weight: normal;
+  &:hover {
+    transition: all 0.2s ease-in-out;
+    background: rgba(255, 255, 255, 0.8);
+    color: #000;
+  }
+`;
 const HomeSignUp = styled.button`
   border-radius: 12px;
   background: rgba(6, 11, 38, 0.8);
