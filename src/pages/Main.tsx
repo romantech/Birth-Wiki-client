@@ -89,7 +89,7 @@ const Main = () => {
     transition: 0.5s ease;
 
     @media (max-width: 1400px) {
-      height: 100%;
+      height: auto;
     }
   `;
 
@@ -135,7 +135,8 @@ const Main = () => {
 
 const DateInput = styled.div`
   padding: 10px 10px 10px 10;
-  margin: 10px;
+  margin-top: 140px;
+  margin-bottom: 20px;
   border-radius: 16px;
   display: flex;
   justify-content: center;
