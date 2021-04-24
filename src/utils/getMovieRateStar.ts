@@ -12,15 +12,16 @@ const getMovieRateStar = (rate: number) => {
     starNum = 5;
   }
   const grayNum = 5 - starNum;
-  const arr = [];
+  const starColorString = [];
+
   for (let i = 0; i < starNum; i++) {
-    arr.push(['black']);
+    starColorString.push(['black']);
   }
   for (let i = 0; i < grayNum; i++) {
-    arr.push(['gray']);
+    starColorString.push(['gray']);
   }
 
-  return arr;
+  return starColorString;
 };
 
 export default getMovieRateStar;

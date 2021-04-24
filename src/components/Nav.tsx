@@ -95,6 +95,9 @@ const Navbar = styled.nav`
   @media screen and (max-width: 600px) {
     width: 100%;
   }
+  z-index: 1;
+  width: 100%;
+  position: fixed;
 `;
 
 const Home = styled.button`

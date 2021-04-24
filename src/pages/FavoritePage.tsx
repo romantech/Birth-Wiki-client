@@ -18,7 +18,15 @@ let sliceStart = 0;
 let sliceEnd = 11;
 const FavoritePage = (): JSX.Element => {
   const { userInfo } = useSelector((state: RootState) => state.userInfoReducer);
-  const { likeCards } = useSelector((state: RootState) => state.userInfoReducer.userInfo);
+  let { likeCards } = useSelector((state: RootState) => state.userInfoReducer.userInfo);
+
+  likeCards = likeCards.map((el: { like: boolean }) => {
+    if (el.like === undefined) {
+      el['like'] = true;
+      return el;
+    }
+    return el;
+  });
 
   const [renderArray, setRenderArray] = useState<LikeCardsGeneral[]>([]);
   const [filteredArray, setFilteredArray] = useState<LikeCardsGeneral[]>(likeCards !== null ? likeCards : []);
@@ -26,7 +34,7 @@ const FavoritePage = (): JSX.Element => {
   const getLikeCards = (start: number, end: number) => {
     const sliced = filteredArray.slice(start, end);
     if (sliced.length) {
-      setRenderArray(renderArray.concat(...sliced));
+      setRenderArray(renderArray.concat(sliced));
       sliceStart = sliceEnd;
       sliceEnd = sliceEnd + 11;
     }

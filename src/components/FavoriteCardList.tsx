@@ -10,6 +10,7 @@ import getVerticalImg from '../utils/resizeImage';
 import TMDB_API from '../utils/TMDB_API';
 import { MovieRateStarBlack, MovieRateStarGray } from '../components/FavoriteModal';
 import getMovieRateStar from '../utils/getMovieRateStar';
+import axios from 'axios';
 
 interface SetFilteredArray extends LikeCardsGeneral {
   setFilteredArray: React.Dispatch<React.SetStateAction<LikeCardsGeneral[]>>;
@@ -32,7 +33,17 @@ const FavoriteCardList = ({ ...props }: SetFilteredArray): JSX.Element => {
   });
   const [movieInfoKorean, setMovieInfoKorean] = useState<MovieInfo>();
   const [movieInfoWorld, setMovieInfoWorld] = useState<MovieInfo>();
-  const [loading, setLoading] = useState(false);
+  const [fetchStatus, setFetchStatus] = useState(false);
+
+  const fetchImage = (url: string) => {
+    axios.get(url).then((res) => {
+      if (res.status === 200) {
+        setFetchStatus(true);
+      }
+    });
+  };
+
+  fetchImage(props.image);
 
   const getMovieRate = (movieTitle: string, region: string) => {
     TMDB_API.get('/movie', {
@@ -91,11 +102,15 @@ const FavoriteCardList = ({ ...props }: SetFilteredArray): JSX.Element => {
   return (
     <>
       <FlipCard>
-        <FlipCardInner imgPath={props.image} category={category}>
+        <FlipCardInner fetchStatus={fetchStatus} imgPath={props.image} category={category}>
           <FlipCardFront>
             <CategoryName category={category}>{category}</CategoryName>
             <CardYear category={category}>{props.date}</CardYear>
-            <img src={props.image} alt={category} />
+            {!fetchStatus ? (
+              <LoadingBackground category={category} />
+            ) : (
+              <img loading='lazy' src={props.image} alt={category} />
+            )}
           </FlipCardFront>
           <FlipCardBackGeneral>
             <IconWrapper>
@@ -124,7 +139,11 @@ const FavoriteCardList = ({ ...props }: SetFilteredArray): JSX.Element => {
             ) : category === 'movie' ? (
               <>
                 <h3 style={{ marginBottom: '-10px' }}>한국 1위 영화</h3>
-                <p>{props.korea === undefined ? '정보가 없습니다 😢' : `<${props.korea?.title}>`}</p>
+                <p>
+                  {props.korea === null || props.korea === undefined
+                    ? '정보가 없습니다 😢'
+                    : `<${props.korea?.title}>`}
+                </p>
                 {movieInfoKorean ? (
                   <p style={{ marginTop: '-10px' }}>
                     {movieInfoKorean.vote_average
@@ -142,7 +161,9 @@ const FavoriteCardList = ({ ...props }: SetFilteredArray): JSX.Element => {
                 )}
                 <h3 style={{ marginBottom: '-10px' }}>해외 1위 영화</h3>
                 <p style={{ marginBottom: '20px' }}>
-                  {props.world === undefined ? '정보가 없습니다 😢' : `<${props.world?.title}>`}
+                  {props.world === null || props.world === undefined
+                    ? '정보가 없습니다 😢'
+                    : `<${props.world?.title}>`}
                 </p>
                 {movieInfoWorld ? (
                   <p style={{ marginTop: '-15px' }}>
@@ -164,15 +185,19 @@ const FavoriteCardList = ({ ...props }: SetFilteredArray): JSX.Element => {
               <>
                 <h3 style={{ marginBottom: '-10px' }}>한국 1위 음악</h3>
                 <p>
-                  {props.korea === undefined ? '정보가 없습니다 😢' : `<${props.korea?.title}>`}
+                  {props.korea === null || props.korea === undefined
+                    ? '정보가 없습니다 😢'
+                    : `<${props.korea?.title}>`}
                   <br />
-                  {props.korea === undefined ? '' : `— ${props.korea?.singer}`}
+                  {props.korea === null || props.korea === undefined ? '' : `— ${props.korea?.singer}`}
                 </p>
                 <h3 style={{ marginBottom: '-10px' }}>해외 1위 음악</h3>
                 <p style={{ marginBottom: '20px' }}>
-                  {props.world === undefined ? '정보가 없습니다 😢' : `<${props.world?.title}>`}
+                  {props.world === null || props.world === undefined
+                    ? '정보가 없습니다 😢'
+                    : `<${props.world?.title}>`}
                   <br />
-                  {props.world === undefined ? '' : `— ${props.world?.singer}`}
+                  {props.world === null || props.world === undefined ? '' : `— ${props.world?.singer}`}
                 </p>
               </>
             )}
@@ -213,6 +238,19 @@ const FavoriteCardList = ({ ...props }: SetFilteredArray): JSX.Element => {
     </>
   );
 };
+
+const LoadingBackground = styled.button<{ category: string }>`
+  background: lightgray;
+  border-radius: 20px;
+  border: none;
+  height: ${(props) => {
+    if (props.category === 'music') {
+      return '250px';
+    }
+    return '350px';
+  }};
+  width: 100%;
+`;
 
 const ModalView = styled.button`
   min-width: 100px;
@@ -348,18 +386,12 @@ const FlipCardBackGeneral = styled.div`
   }
 `;
 
-const FlipCardInner = styled.div<{ imgPath: string; category: string }>`
+const FlipCardInner = styled.div<{ imgPath: string; category: string; fetchStatus: boolean }>`
   width: 100%;
   height: 100%;
   transition: transform 0.6s;
   transform-style: preserve-3d;
   transition-timing-function: ease-in-out;
-  ${(props) =>
-    !props.imgPath &&
-    css`
-      background: lightgray;
-      border-radius: 20px;
-    `}
 
   ${FlipCardBackGeneral}, ${FlipCardFront} {
     -webkit-backface-visibility: hidden; /* Safari */

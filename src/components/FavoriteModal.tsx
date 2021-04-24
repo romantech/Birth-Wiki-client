@@ -110,7 +110,9 @@ const FavoriteModal = ({ showModal, setShowModal, ...props }: Props): JSX.Elemen
                       <MediaImageKorea korea={mediaImageKorea} world={mediaImageWorld} />
                       <h4 style={{ marginBottom: '-10px' }}>한국 1위 영화</h4>
                       <p style={{ textAlign: 'center' }}>
-                        {props.korea === undefined ? '정보가 없습니다 😢' : `<${props.korea?.title}>`}
+                        {props.korea === null || props.korea === undefined
+                          ? '정보가 없습니다 😢'
+                          : `<${props.korea?.title}>`}
                         <br />
                         {props.movieInfoKorean
                           ? getMovieRateStar(props.movieInfoKorean.vote_average).map((el, index) => {
@@ -126,7 +128,9 @@ const FavoriteModal = ({ showModal, setShowModal, ...props }: Props): JSX.Elemen
                       <MediaImageWorld korea={mediaImageKorea} world={mediaImageWorld} />
                       <h4 style={{ marginBottom: '-10px' }}>해외 1위 영화</h4>
                       <p style={{ textAlign: 'center' }}>
-                        {props.world === undefined ? '정보가 없습니다 😢' : `<${props.world?.title}>`}
+                        {props.world === null || props.world === undefined
+                          ? '정보가 없습니다 😢'
+                          : `<${props.world?.title}>`}
                         <br />
                         {props.movieInfoWorld
                           ? getMovieRateStar(props.movieInfoWorld.vote_average).map((el, index) => {
@@ -144,16 +148,20 @@ const FavoriteModal = ({ showModal, setShowModal, ...props }: Props): JSX.Elemen
                       <MediaImageKorea korea={mediaImageKorea} world={mediaImageWorld} />
                       <h4 style={{ marginBottom: '-10px' }}>한국 1위 음악</h4>
                       <p style={{ textAlign: 'center' }}>
-                        {props.korea === undefined ? '정보가 없습니다 😢' : `<${props.korea?.title}>`}
+                        {props.korea === null || props.korea === undefined
+                          ? '정보가 없습니다 😢'
+                          : `<${props.korea?.title}>`}
                         <br />
-                        {props.korea === undefined ? '' : `${props.korea?.singer}`}
+                        {props.korea === null || props.korea === undefined ? '' : `${props.korea?.singer}`}
                       </p>
                       <MediaImageWorld korea={mediaImageKorea} world={mediaImageWorld} />
                       <h4 style={{ marginBottom: '-10px' }}>해외 1위 음악</h4>
                       <p style={{ textAlign: 'center' }}>
-                        {props.world === undefined ? '정보가 없습니다 😢' : `<${props.world?.title}>`}
+                        {props.world === null || props.world === undefined
+                          ? '정보가 없습니다 😢'
+                          : `<${props.world?.title}>`}
                         <br />
-                        {props.world === undefined ? '' : `${props.world?.singer}`}
+                        {props.world === null || props.world === undefined ? '' : `${props.world?.singer}`}
                       </p>
                     </>
                   )}

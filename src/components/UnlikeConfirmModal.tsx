@@ -41,7 +41,7 @@ const UnlikeConfirmModal = ({ ...props }: UnlikeConfirmModal): JSX.Element => {
     });
     props.setFilteredArray(setLiked);
 
-    let newCards = userInfo.likeCards.filter((el: any) => {
+    let newCards = userInfo.likeCards.filter((el: { id: number; category: string }) => {
       if (el.id !== props.id || el.category !== props.category) {
         return el;
       }

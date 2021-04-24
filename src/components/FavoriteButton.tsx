@@ -35,7 +35,7 @@ function FavoriteButton(props: any) {
       setIsLikeAdd(!isLikeAdd);
     }
 
-    let newCards;
+    let newCards = Object.assign({}, props.cardData, { like: true });
     if (action === 'like') {
       newCards = userInfo.likeCards ? [...userInfo.likeCards, props.cardData] : [props.cardData];
     } else {
