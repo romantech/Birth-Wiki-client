@@ -115,6 +115,7 @@ const SidebarMystory = ({ ...props }: SetFilteredArray): JSX.Element => {
 const MyStory = styled.div`
   & .list {
     list-style: none;
+    display: grid;
   }
   & .category {
     margin: 0 10px;
@@ -126,8 +127,10 @@ const ModalView = styled.button`
   border-radius: 20px;
   cursor: pointer;
   outline: none;
-  margin-bottom: 10px;
+  margin: 10px;
   background: #ffffffe3;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
 
   &:hover {
     background: white;

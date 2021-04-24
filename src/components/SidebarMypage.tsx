@@ -273,8 +273,11 @@ function SidebarMypage() {
       </ProfileContainer>
       <MyStoryContainer>
         <RecordCardsList>
-          <p onClick={clickedStoryHandler}> 나만의 기록리스트 </p>
-          {recordCards !== null
+          <p onClick={clickedStoryHandler}>
+            나만의 기록리스트
+            {storyclicked ? <AiFillCaretUp /> : <AiFillCaretDown />}
+          </p>
+          {/* {recordCards !== null
             ? storyclicked
               ? recordCards.map((data: any) => (
                   <MyStory to='/' key={data.id}>
@@ -282,7 +285,7 @@ function SidebarMypage() {
                   </MyStory>
                 ))
               : ''
-            : ''}
+            : ''} */}
         </RecordCardsList>
         <LikeCardsList>
           <p onClick={clickMarkHandler}>
