@@ -85,7 +85,7 @@ function Nav() {
 
 export default Nav;
 
-const Navbar = styled.nav`
+const Navbar = styled.header`
   background: #060b26;
   height: 70px;
   display: flex;
@@ -98,7 +98,7 @@ const Navbar = styled.nav`
   @media screen and (max-width: 600px) {
     width: 100%;
   }
-  z-index: 1;
+  z-index: 5;
   width: 100%;
   position: fixed;
 `;

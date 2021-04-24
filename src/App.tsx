@@ -11,6 +11,7 @@ import SidebarSignUp from './components/SidebarSignUp';
 import SidebarEdit from './components/SidebarEdit';
 import GuestModal from './components/GuestModal';
 import GuestReject from './components/GuestReject';
+import Footer from './components/Footer';
 
 function App(): JSX.Element {
   const isSignup = useSelector((state: RootState) => state.signupReducer.isSignup);
@@ -32,6 +33,7 @@ function App(): JSX.Element {
       ) : null}
       {isGuestModal ? <GuestModal /> : null}
       {isReject ? <GuestReject /> : null}
+      <Footer />
     </Router>
   );
 }
