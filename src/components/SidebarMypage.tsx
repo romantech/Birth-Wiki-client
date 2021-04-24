@@ -8,6 +8,8 @@ import axios from 'axios';
 import initialState from '../reducers/initialState';
 import SidebarMystory from './SidebarMystory';
 import { LikeCardsGeneral } from '../types/index';
+import Pagination from './pagination';
+import { AiFillCaretUp, AiFillCaretDown } from 'react-icons/ai';
 
 const MypageContainer = styled.div`
   color: #fff;
@@ -120,7 +122,7 @@ const RecordCardsList = styled.div`
   padding: 10px;
   color: #fff;
 
-  background-color: #eee;
+  background-color: #fff;
   color: #444;
   cursor: pointer;
   padding: 18px;
@@ -153,7 +155,7 @@ const LikeCardsList = styled.div`
   padding: 10px;
   color: #fff;
 
-  background-color: #eee;
+  background-color: #fff;
   color: #444;
   cursor: pointer;
   padding: 18px;
@@ -162,12 +164,6 @@ const LikeCardsList = styled.div`
   text-align: left;
   outline: none;
   font-size: 15px;
-
-  .active,
-  &:hover {
-    background-color: #ccc;
-  }
-
   p {
     margin: 0;
   }
@@ -197,6 +193,10 @@ function SidebarMypage() {
   const [filteredArray, setFilteredArray] = useState<LikeCardsGeneral[]>(
     likeCards !== null ? likeCards.filter((el: { like: boolean }) => el.like === true) : [],
   );
+  const [loading, setLoding] = useState([false]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [cardsPerPage, setCardsPerPage] = useState(5);
+
   const logoutHandler = () => {
     if (isGuest) {
       dispatch(setGuest(false));
@@ -243,6 +243,13 @@ function SidebarMypage() {
     setMarkClicked(!markclicked);
   };
 
+  const indexOfLastCard = currentPage * cardsPerPage;
+  const indexOfFirstCard = indexOfLastCard - cardsPerPage;
+  const currentCards = likeCards ? likeCards.slice(indexOfFirstCard, indexOfLastCard) : [];
+
+  const paginate = (pageNumber: number) => {
+    setCurrentPage(pageNumber);
+  };
   return (
     <MypageContainer>
       Mypage
@@ -278,10 +285,15 @@ function SidebarMypage() {
             : ''}
         </RecordCardsList>
         <LikeCardsList>
-          <p onClick={clickMarkHandler}> 내가 찜한 카드 </p>
-          {likeCards !== null
-            ? markclicked
-              ? likeCards.map((card: any, index: any) => (
+          <p onClick={clickMarkHandler}>
+            내가 찜한 카드
+            {markclicked ? <AiFillCaretUp /> : <AiFillCaretDown />}
+          </p>
+          {likeCards !== null && currentCards !== null ? (
+            markclicked ? (
+              <div>
+                <Pagination cardsPerPage={cardsPerPage} totalCards={likeCards.length} paginate={paginate} />
+                {currentCards.map((card: any, index: any) => (
                   <SidebarMystory
                     id={card.id}
                     like={card.like}
@@ -295,9 +307,14 @@ function SidebarMypage() {
                     setFilteredArray={setFilteredArray}
                     filteredArray={filteredArray}
                   />
-                ))
-              : ''
-            : ''}
+                ))}
+              </div>
+            ) : (
+              ''
+            )
+          ) : (
+            ''
+          )}
         </LikeCardsList>
       </MyStoryContainer>
     </MypageContainer>

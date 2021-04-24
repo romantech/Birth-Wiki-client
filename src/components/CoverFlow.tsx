@@ -70,24 +70,6 @@ function CoverFlow(props: any) {
     }
   };
 
-  // let prevX: number[] = [];
-  // const dragHandler = (e: React.DragEvent<HTMLDivElement>) => {
-  //   prevX.push(e.clientX);
-  //   if (prevX[0] > 0) {
-  //     if (prevX[0] - e.clientX > 0) {
-  //       setTimeout(() => {
-  //         prevHandler();
-  //         prevX = [];
-  //       }, 100);
-  //     } else if (prevX[0] - e.clientX < 0) {
-  //       setTimeout(() => {
-  //         nextHandler();
-  //         prevX = [];
-  //       }, 100);
-  //     }
-  //   }
-  // };
-
   let prevArr: number[] = [];
   let nextArr: number[] = [];
   const wheelHandler = (e: React.WheelEvent<HTMLDivElement>) => {
@@ -110,12 +92,37 @@ function CoverFlow(props: any) {
     }
   };
 
+  let startP: any;
+  let endP: any;
+  function dragStart(e: any) {
+    e.preventDefault();
+    if (e.type === 'touchstart') {
+      startP = e.touches[0].clientX;
+    } else {
+      startP = e.clientX;
+    }
+  }
+
+  function dragAction(e: any) {
+    if (e.type === 'touchmove') {
+      endP = e.touches[0].clientX;
+    } else {
+      endP = e.clientX;
+    }
+  }
+
+  function dragEnd(e: any) {
+    if (startP - endP > 0) {
+      nextHandler();
+    } else if (startP - endP < 0) {
+      prevHandler();
+    }
+    startP = 0;
+    endP = 0;
+  }
+
   return (
-    <Container
-    // onDrag={(e) => {
-    //   dragHandler(e);
-    // }}
-    >
+    <Container>
       <button onClick={prevHandler} className='moveBtn'>
         테스형!
       </button>
@@ -135,51 +142,82 @@ function CoverFlow(props: any) {
             />
           );
         })}
-        <div className='testimonials'>
+        <div className='testimonials' draggable={false}>
           {cardData.map((el, idx) => {
             if (idx < 5) {
               return (
-                <label
-                  key={idx}
-                  className='item'
-                  htmlFor={`t-${idx + 1}`}
-                  style={{
-                    backgroundImage: `url(${el.image})`,
-                    backgroundSize: 'cover',
-                  }}
-                >
-                  <FavoriteButton cardData={el} />
-                  <h2 className='cardTitle'>{cardTitle[idx]}</h2>
-                  <ul className='card_content'>
-                    {el.contents ? (
-                      el.contents.map((list: any, i: any) => {
-                        return (
-                          <li key={i}>
-                            <span>{list[0]}</span> {list[1]}
-                          </li>
-                        );
-                      })
-                    ) : (
-                      <div className='culture'>
-                        <div>
-                          <h3>
-                            해외 : <span>{el.world.title}</span>
-                            <p>{el.world.singer}</p>
-                          </h3>
-
-                          <img src={`${el.world.poster}`} alt={el.world.title} />
-                        </div>
-                        {el.korea ? (
-                          <div>
-                            <h3>
-                              한국 : <span>{el.korea.title}</span>
-                            </h3>
-                            <img src={`${el.korea.poster}`} alt={el.korea.title} />
-                          </div>
-                        ) : null}
+                <label key={idx} className='item' htmlFor={`t-${idx + 1}`}>
+                  {/* 이슈 버스 데스 */}
+                  {el.contents ? (
+                    <div className='inner_item'>
+                      <div className='sideImg'>
+                        <img src={`${el.image}`} alt={`${el.category}`} draggable={false} />
                       </div>
-                    )}
-                  </ul>
+                      <div className='sideContent'>
+                        <div>
+                          <h1>날짜</h1>
+                          <h3 className='cardTitle'>{cardTitle[idx]}</h3>
+                        </div>
+                        <div className='issueList'>
+                          {el.contents.map((list: any, i: any) => {
+                            return (
+                              <p key={i}>
+                                <span>{list[0]}</span> <br /> {list[1]}
+                              </p>
+                            );
+                          })}
+                        </div>
+                        <div>
+                          <FavoriteButton cardData={el} />
+                        </div>
+                      </div>
+                    </div>
+                  ) : (
+                    <div className='inner_item'>
+                      <div className='sideImg'>
+                        <img src={`${el.world.poster}`} alt={`${el.world.title}`} />
+                      </div>
+                      <div className='sideContent'>
+                        <div>
+                          <h1>날짜</h1>
+                          <h3 className='cardTitle'>{cardTitle[idx]}</h3>
+                        </div>
+                        <div>
+                          {el.world ? (
+                            <>
+                              <img
+                                src={`${el.world.poster}`}
+                                alt={`${el.world.title}`}
+                                style={{ width: '100px', height: '100px' }}
+                              />
+                              <h4>{el.world.title}</h4>
+                            </>
+                          ) : (
+                            <div>자료없음</div>
+                          )}
+                          <p>해외</p>
+                          {el.korea ? (
+                            <>
+                              <img
+                                src={`${el.korea.poster}`}
+                                alt={`${el.korea.title}`}
+                                style={{ width: '100px', height: '100px' }}
+                              />
+                              <h4>{el.korea.title}</h4>
+                            </>
+                          ) : (
+                            <div>자료없음</div>
+                          )}
+                          <p>한국</p>
+                        </div>
+                        <div>
+                          <FavoriteButton cardData={el} />
+                        </div>
+                      </div>
+                    </div>
+                  )}
+
+                  {/* 영화 뮤직 */}
                 </label>
               );
             }
@@ -203,11 +241,15 @@ function CoverFlow(props: any) {
       </button>
       <div
         className='slideBG'
-        onClick={() => {
-          //props.setIsFlow(false);
-          //props.setIsHover(true);
-        }}
         onWheel={wheelHandler}
+        draggable={true}
+        onClick={() => {
+          props.setIsFlow(false);
+          props.setIsHover(true);
+        }}
+        onDragStart={dragStart}
+        onDragOver={dragAction}
+        onDragEnd={dragEnd}
       ></div>
     </Container>
   );
@@ -216,93 +258,59 @@ function CoverFlow(props: any) {
 const Container = styled.div`
   display: flex;
   align-items: center;
-  min-width: 100vw;
-  min-height: 79vh;
+  width: 100vw;
+  height: 100vh;
   z-index: 2;
+  user-select: none;
 
-  & .cardTitle {
-    background: rgba(0, 0, 0, 0.3);
-    color: #fff;
-    margin: 0;
-    padding: 10px;
-    border-radius: 10px 10px 0 0;
-  }
+  & .inner_item {
+    display: flex;
 
-  & .card_content {
-    height: 270px;
-    overflow-y: scroll;
-    margin: 0;
-    padding: 0;
-    background: rgba(0, 0, 0, 0.1);
-    position: relative;
+    & .sideImg {
+      width: 50%;
+      background: #fff;
+      color: #000;
+      box-shadow: 0 5px 16px rgb(0 0 0 / 20%);
+      border-radius: 15px;
+      z-index: 3;
+      position: relative;
+    }
 
-    &::-webkit-scrollbar {
+    & .sideImg img {
+      width: 100%;
+      min-height: 70vh;
+      object-fit: cover;
+    }
+
+    & .sideContent {
+      width: 50%;
+      height: 430px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      line-height: 1.8;
+      color: #141414;
+      padding: 35px;
+      overflow: auto;
+    }
+
+    & .sideContent p:after {
+      content: '';
+      display: block;
+      border-bottom: 1px solid rgba(155, 155, 155, 0.13);
+      margin-top: 10px;
+    }
+
+    & .sideContent::-webkit-scrollbar {
       width: 2px;
     }
 
-    &::hover li {
-      opacity: 0.2;
-    }
-
-    & li {
-      list-style: none;
-      padding: 10px;
-      width: 100%;
-      background: rgba(255, 255, 255, 0.1);
-      box-shadow: 0 5px 25px rgba(0, 0, 0, 0.1);
-      transition: transform 0.5s;
-      color: #fff;
+    & .issueList p {
       word-break: keep-all;
-    }
 
-    & li:hover {
-      transform: scale(1.05);
-      z-index: 100;
-      background: rgba(0, 0, 0, 0.4);
-      color: #fff;
-      font-weight: 700;
-    }
-
-    & li span {
-      width: 20%;
-      height: 22px;
-      text-align: center;
-      line-height: 22px;
-      background: rgba(0, 0, 0, 0.4);
-      color: #fff;
-      display: inline-block;
-      border-radius: 15px;
-      margin-right: 10px;
-      font-size: 15px;
-      font-weight: 700;
-      transform: translateY(-2px);
-    }
-
-    & li:hover span {
-      background: rgba(255, 255, 255, 0.8);
-      color: #f20;
-    }
-  }
-
-  & .culture {
-    display: flex;
-    flex-direction: column-reverse;
-
-    & h3 {
-      color: #fff;
-      margin-bottom: 4px;
-    }
-
-    & h3 span {
-      font-size: 1.5rem;
-    }
-
-    & img {
-      border-radius: 10px;
-      display: inline-block;
-      width: 50%;
-      height: 100%;
-      object-fit: contain;
+      & span {
+        color: #f20;
+      }
     }
   }
 

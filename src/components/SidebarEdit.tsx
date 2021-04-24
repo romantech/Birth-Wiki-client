@@ -21,6 +21,10 @@ function SidebarEdit() {
     password2: false,
     nickName: false,
   });
+  const [duple, setduple] = useState({
+    userEmail: false,
+    nickName: false,
+  });
 
   const changeInfo = () => {
     axios({
@@ -92,29 +96,17 @@ function SidebarEdit() {
           nickName: editUserInfo.nickName,
         },
       })
-        .then((res) => {
-          setEditUserInfo({
-            ...editUserInfo,
-            errorMsg: '',
-          });
+        .then(() => {
+          setduple({ ...duple, nickName: true });
         })
         .catch((err) => {
-          console.log(err);
-          return !err.response
-            ? setEditUserInfo({
-                ...editUserInfo,
-                errorMsg: '❗️ 서버 오류, 잠시 후 다시 시도해주세요',
-              })
-            : setEditUserInfo({
-                ...editUserInfo,
-                errorMsg: '❗️ 이미 사용중인 닉네임입니다',
-              });
+          setduple({ ...duple, nickName: false });
         });
     }
   };
 
   const closeEidt = () => {
-    dispatch(setIsSidbar(!isSidebar));
+    dispatch(setIsSidbar(true));
     dispatch(setIsEdit(false));
   };
   return (
@@ -130,7 +122,7 @@ function SidebarEdit() {
             changeInfo();
           }}
         ></iframe>
-        {errorMsg ? <div className='alert-box'>{errorMsg}</div> : ''}
+
         <EditContainer
           action='https://server.birthwiki.space/user/update'
           method='post'
@@ -156,15 +148,14 @@ function SidebarEdit() {
             }}
             onBlur={checkedNickName}
           />
-          {check.nickName ? (
-            <Valid to='#'>
-              <ColorIcon.FcApproval />
-            </Valid>
+          {!check.nickName ? (
+            <div className='default'> 닉네임을 수정해주세요.</div>
+          ) : !duple.nickName ? (
+            <div className='invalid'> 이미 사용 중인 닉네임입니다.</div>
           ) : (
-            <Invalid to='#'>
-              <ColorIcon.FcCancel />
-            </Invalid>
+            <div className='ok'>사용 가능한 닉네임입니다.</div>
           )}
+          {errorMsg ? <div className='alert-box'>{errorMsg}</div> : ''}
           <InputCatecory>password</InputCatecory>
           <EditInput
             type='password'
@@ -231,7 +222,7 @@ const EditWrapper = styled.div`
   background-color: #0e6973;
   border-radius: 20px;
   box-sizing: border-box;
-  height: 580px;
+  height: 600px;
   padding: 20px 25px;
   width: 400px;
   transition: all 0.2s ease-in-out;
@@ -242,7 +233,7 @@ const EditWrapper = styled.div`
     display: none;
   }
   & .alert-box {
-    color: #eee;
+    color: #fff;
   }
   & .access {
     display: none;
@@ -261,7 +252,7 @@ const EditClose = styled(AiOutlineClose)`
   color: #fff;
 `;
 const Title = styled.div`
-  color: #eee;
+  color: #fff;
   font-family: sans-serif;
   font-size: 36px;
   font-weight: 600;
@@ -269,7 +260,7 @@ const Title = styled.div`
 `;
 
 const SubTitle = styled.div`
-  color: #eee;
+  color: #fff;
   font-family: sans-serif;
   font-size: 20px;
   font-weight: bold;
@@ -279,6 +270,21 @@ const EditContainer = styled.form`
   height: 50px;
   position: relative;
   width: 100%;
+  & .invalid {
+    font-size: 12px;
+    color: yellow;
+    padding: 5px 0 0 10px;
+  }
+  & .ok {
+    font-size: 12px;
+    color: pink;
+    padding: 5px 0 0 10px;
+  }
+  & .default {
+    font-size: 12px;
+    color: #fff;
+    padding: 5px 0 0 10px;
+  }
 `;
 
 const InputCatecory = styled.div`
@@ -286,12 +292,12 @@ const InputCatecory = styled.div`
   height: 30px;
   padding: 0.5rem;
   margin: 5px;
-  color: #eee;
+  color: #fff;
 `;
 
 const EditInput = styled.input`
   box-sizing: border-box;
-  color: #eee;
+  color: #fff;
   font-size: 15px;
   height: 80%;
   outline: 0;
@@ -336,7 +342,7 @@ const SubmitDiv = styled.div`
   border-radius: 12px;
   border: 0;
   box-sizing: border-box;
-  color: #eee;
+  color: #fff;
   cursor: pointer;
   font-size: 18px;
   height: 50px;
