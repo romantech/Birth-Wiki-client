@@ -1,18 +1,32 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
+import { useHistory } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { RootState } from '../store/index';
+import { FaCheck } from 'react-icons/fa';
 
-function CardCreate() {
+function CardCreate(props: any) {
   const userInfo = useSelector((state: RootState) => state.userInfoReducer.userInfo);
-
+  const history = useHistory();
   const currentDate = new Date().toISOString().substring(0, 10);
+  const [descRecord, setDescRecord] = useState('');
+  const [imgRecord, setImgRecord] = useState(null);
+
+  const handleSubmit = () => {
+    history.push(`${props.selectedDate}`);
+  };
 
   return (
     <CreateCard>
       <div className='create'>
         <h2>나의 기록카드 만들기</h2>
-        <iframe name='frAttachFiles' className='invisable'></iframe>
+        <iframe
+          name='frAttachFiles'
+          className='invisable'
+          onLoad={() => {
+            handleSubmit();
+          }}
+        ></iframe>
         <form
           target='frAttachFiles'
           action='https://server.birthwiki.space/record/create'
@@ -29,12 +43,16 @@ function CardCreate() {
           />
           <input type='text' name='nickName' value={`${userInfo.nickName}`} style={{ display: 'none' }} />
           <input type='text' name='date' value={`${currentDate}`} style={{ display: 'none' }} />
-          <div className='crtCard'>
-            {/* <label className='input-file-button' htmlFor='input-file'>
-              이미지 업로드
-            </label> */}
+          {/* <div className='crtCard'>
             <input type='file' name='cardImage' id='input-file' />
+          </div> */}
+          <div className='custom-file'>
+            <input type='file' className='custom-file_input' id='field-upload' name='cardImage' required />
+            <label className='custom-file_label' htmlFor='field-upload'>
+              사진 업로드
+            </label>
           </div>
+
           <div className='crtCard'>
             <textarea className='card-desc' name='cardDesc' placeholder='내용을 입력하세요' />
           </div>
@@ -84,25 +102,71 @@ const CreateCard = styled.div`
   & .create .card-desc {
     width: 100%;
     height: 110px;
-    padding: 12px 20px;
+    padding: 10px 10px;
     box-sizing: border-box;
     border: 2px solid #ccc;
-    border-radius: 4px;
+    border: 0;
+    border-radius: 15px;
     background-color: #f8f8f8;
     resize: none;
   }
 
   & .createBtn {
     margin-top: 10px;
-    background: #fff;
+    background: #f2f2f2;
+    font-size: 1rem;
+    width: 40%;
     border: none;
-    padding: 5px 10px;
+    padding: 8px 20px;
     border-radius: 4px;
     font-weight: 700;
   }
 
   & .invisable {
     display: none;
+  }
+
+  & .custom-file_input {
+    position: absolute;
+    width: 0.1px;
+    height: 0.1px;
+    opacity: 0;
+    overflow: hidden;
+    z-index: -1;
+  }
+  & .custom-file_label {
+    position: relative;
+    display: block;
+    width: 50%;
+    min-width: 335px;
+    min-height: 45px;
+    margin: 10px 0;
+    padding: 0;
+    background: #ffffff;
+    border: 1px solid #dfdfdf;
+    color: #666666;
+    border-radius: 15px;
+    line-height: 45px;
+    text-align: center;
+    text-transform: none;
+    cursor: pointer;
+    transition: all 0.3s;
+  }
+  & .custom-file_input:valid ~ .custom-file_label {
+    border-color: #39b54a;
+    background: #39b54a;
+    color: #39b54a;
+  }
+  & .custom-file_input:valid ~ .custom-file_label:before {
+    content: '업로드 되었습니다';
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    margin: auto;
+    color: #ffffff;
+    line-height: 45px;
   }
 `;
 

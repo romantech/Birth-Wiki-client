@@ -97,7 +97,7 @@ function CoverFlow(props: any) {
             );
           })}
           <label htmlFor='t-6' className='item'>
-            <CreateCard />
+            <CreateCard selectedDate={props.selectedDate} />
           </label>
         </div>
         <div className='dots'>
