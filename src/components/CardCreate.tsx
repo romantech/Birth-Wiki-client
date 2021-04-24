@@ -62,9 +62,7 @@ function CardCreate({ setIsFlow, setIsHover }: any) {
           />
           <input type='text' name='nickName' value={`${userInfo.nickName}`} style={{ display: 'none' }} />
           <input type='text' name='date' value={`${currentDate}`} style={{ display: 'none' }} />
-          <div className='crtCard'>
-            <input type='file' name='cardImage' id='input-file' />
-          </div>
+
           <div className='custom-file'>
             <input
               type='file'
