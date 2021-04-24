@@ -76,6 +76,7 @@ const Main = () => {
     align-items: center;
     flex-direction: column;
     width: 100%;
+    height: 100vh;
     overflow: hidden;
     object-fit: contain;
     background: linear-gradient(
@@ -87,8 +88,8 @@ const Main = () => {
       url(${weather}) center center/cover no-repeat;
     transition: 0.5s ease;
 
-    @media (max-width: 1163px) {
-      height: auto;
+    @media (max-width: 1400px) {
+      height: 100%;
     }
   `;
 
@@ -96,25 +97,15 @@ const Main = () => {
     setShowCard((prev) => !prev);
   };
 
-  const cardRef: any = useRef<HTMLDivElement>(null);
-  const animation: any = useSpring({
-    //카드 클릭시 에니메이션 효과
-    config: {
-      duration: 200,
-    },
-    opacity: showCard ? 1 : 0,
-    transform: showCard ? `translateY(0%)` : `translateY(100%)`,
-  });
-
   return (
     <>
       {data ? (
         <Background>
-          <DateInput>
-            <BirthWikiSearch year={year} month={month} day={day} />
-          </DateInput>
           {isHover ? (
             <>
+              <DateInput>
+                <BirthWikiSearch year={year} month={month} day={day} />
+              </DateInput>
               <WeatherDetail>
                 <Weather data={data} selectedDate={selectedDate} />
               </WeatherDetail>
