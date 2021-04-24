@@ -16,7 +16,7 @@ export default function LaunchPage() {
 
   const pressHandler = (e: any, here: string, next: string) => {
     setWarning(false);
-    let numValue = Number(e.target.value);
+    let numValue = Number(e.target.value) === 0 ? '' : Number(e.target.value);
 
     if (here === 'year') {
       e.target.value = numValue > curYear ? String(curYear) : String(numValue);
@@ -101,71 +101,87 @@ export default function LaunchPage() {
   };
   return (
     <LaunchScreen>
-      <WordsContainner>
+      <div className='videoContiner'>
+        <video className='video' muted loop autoPlay={true}>
+          <source src='../background.mp4' type='video/mp4'></source>
+        </video>
+
+        {/* <WordsContainner>
         <Words>What happened</Words>
         <Words>on Your BirthDay!</Words>
-      </WordsContainner>
-      <InputContiner>
-        <InputSubmit>
-          <InputDate
-            type='number'
-            id='year'
-            min='1'
-            max={curYear}
-            placeholder='1990'
-            onKeyUp={(e) => {
-              pressHandler(e, 'year', 'month');
-            }}
-            onBlur={(e) => {
-              blurHandler(e, 'year', 'month');
-            }}
-            onKeyPress={(e) => {
-              enterHandler(e, 'year', 'month');
-            }}
-          ></InputDate>{' '}
-          <span>년</span>
-          <InputDate
-            type='number'
-            id='month'
-            max='12'
-            min='1'
-            placeholder='1'
-            onKeyUp={(e) => {
-              pressHandler(e, 'month', 'day');
-            }}
-            onBlur={(e) => {
-              blurHandler(e, 'month', 'day');
-            }}
-            onKeyPress={(e) => {
-              enterHandler(e, 'month', 'day');
-            }}
-          ></InputDate>{' '}
-          <span>월</span>
-          <InputDate
-            type='number'
-            id='day'
-            min='1'
-            max='31'
-            placeholder='1'
-            onKeyUp={(e) => {
-              pressHandler(e, 'day', '');
-            }}
-            onBlur={(e) => {
-              blurHandler(e, 'day', '');
-            }}
-            onKeyPress={(e) => {
-              enterHandler(e, 'day', '');
-            }}
-          ></InputDate>{' '}
-          <span>일</span>
-        </InputSubmit>
-        {warning ? (
-          <div className='warning'>날짜를 다시 입력해 주세요</div>
-        ) : (
-          <div className='warning'>&nbsp;</div>
-        )}
-        <BirthwikiBtn onClick={birthwikiHandler}>Birth Wiki!</BirthwikiBtn>
-      </InputContiner>
+      </WordsContainner> */}
+
+        <InputContiner>
+          <InputSubmit>
+            <InputDate
+              type='number'
+              id='year'
+              min='1'
+              max={curYear}
+              placeholder='1990'
+              onKeyUp={(e) => {
+                pressHandler(e, 'year', 'month');
+              }}
+              onBlur={(e) => {
+                blurHandler(e, 'year', 'month');
+              }}
+              onKeyPress={(e) => {
+                enterHandler(e, 'year', 'month');
+              }}
+              onFocus={(e) => {
+                e.target.value = '';
+              }}
+            ></InputDate>{' '}
+            <span>년</span>
+            <InputDate
+              type='number'
+              id='month'
+              max='12'
+              min='1'
+              placeholder='1'
+              onKeyUp={(e) => {
+                pressHandler(e, 'month', 'day');
+              }}
+              onBlur={(e) => {
+                blurHandler(e, 'month', 'day');
+              }}
+              onKeyPress={(e) => {
+                enterHandler(e, 'month', 'day');
+              }}
+              onFocus={(e) => {
+                e.target.value = '';
+              }}
+            ></InputDate>{' '}
+            <span>월</span>
+            <InputDate
+              type='number'
+              id='day'
+              min='1'
+              max='31'
+              placeholder='1'
+              onKeyUp={(e) => {
+                pressHandler(e, 'day', '');
+              }}
+              onBlur={(e) => {
+                blurHandler(e, 'day', '');
+              }}
+              onKeyPress={(e) => {
+                enterHandler(e, 'day', '');
+              }}
+              onFocus={(e) => {
+                e.target.value = '';
+              }}
+            ></InputDate>{' '}
+            <span>일</span>
+          </InputSubmit>
+          {warning ? (
+            <div className='warning'>날짜를 다시 입력해 주세요</div>
+          ) : (
+            <div className='warning'>&nbsp;</div>
+          )}
+          <BirthwikiBtn onClick={birthwikiHandler}>Birth Wiki!</BirthwikiBtn>
+        </InputContiner>
+      </div>
     </LaunchScreen>
   );
 }
@@ -208,22 +224,41 @@ const WordsContainner = styled.div`
 const LaunchScreen = styled.div`
   font-family: sans-serif;
   background: #fff;
-  padding: 0;
-  margin: 0;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   flex-wrap: wrap;
-  width: 100%;
   height: 100vh;
   background-repeat: repeat-x;
-  /* background-image: url('../movie.png'); */
-  background-position: x y;
   background-size: 100%;
 
   & .warning {
     margin: 10px;
+  }
+
+  & .videoContiner {
+    width: 100%;
+    height: 100%;
+    background: black;
+    & .video {
+      max-width: 100%;
+      display: block;
+      transform: translateX(0%) translateY(0%);
+    }
+  }
+  @media screen and (max-width: 600px) {
+    width: 100%;
+    & .videoContiner {
+      width: 100%;
+      height: 100%;
+      background: #fff;
+      & .video {
+        max-width: 100%;
+        display: block;
+        transform: translateX(0%) translateY(0%);
+      }
+    }
   }
 `;
 
@@ -232,6 +267,16 @@ const InputContiner = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  position: absolute;
+  margin: 20px;
+  padding: 10px;
+  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.5);
+  /* transform: translate(-50%, -50%); */
+  @media screen and (max-width: 600px) {
+    width: 100%;
+    position: fixed;
+  }
 `;
 
 const InputSubmit = styled.form`
