@@ -6,7 +6,6 @@ import { useSelector } from 'react-redux';
 import { RootState } from '../store';
 import { Link } from 'react-router-dom';
 import HoverCard from '../components/HoverCard';
-import CardLists from '../components/CardLists';
 import Weather from '../components/Weather';
 import CoverFlow from '../components/CoverFlow';
 import BirthWikiSearch from '../components/BirthWikiSearch';
@@ -77,7 +76,6 @@ const Main = () => {
     align-items: center;
     flex-direction: column;
     width: 100%;
-    height: 100vh;
     overflow: hidden;
     object-fit: contain;
     background: linear-gradient(

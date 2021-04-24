@@ -1,32 +1,49 @@
-import React, { useState } from 'react';
+import React from 'react';
 import styled from 'styled-components';
-import { useHistory } from 'react-router-dom';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../store/index';
-import { FaCheck } from 'react-icons/fa';
+import { setGuestModal, setGuestReject, setUserInfo } from '../actions';
+import axios from 'axios';
 
 function CardCreate(props: any) {
   const userInfo = useSelector((state: RootState) => state.userInfoReducer.userInfo);
-  const history = useHistory();
-  const currentDate = new Date().toISOString().substring(0, 10);
-  const [descRecord, setDescRecord] = useState('');
-  const [imgRecord, setImgRecord] = useState(null);
+  const isLogin = useSelector((state: RootState) => state.loginReducer.isLogin);
+  const isGuest = useSelector((state: RootState) => state.guestReducer.isGuest);
+  const dispatch = useDispatch();
 
-  const handleSubmit = () => {
-    history.push(`${props.selectedDate}`);
+  const currentDate = new Date().toISOString().substring(0, 10);
+
+  const guestCreate = () => {
+    if (isGuest) {
+      dispatch(setGuestReject(true));
+    } else {
+      dispatch(setGuestModal(true));
+    }
+  };
+
+  const changeInfo = () => {
+    axios({
+      url: 'https://server.birthwiki.space/record/look',
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      data: {
+        nickName: userInfo.nickName,
+        accessToken: `Bearer ${userInfo.accessToken}`,
+      },
+    }).then((res) => {
+      let newCards = userInfo.recordCards
+        ? [...userInfo.recordCards, res.data.data.recordCards]
+        : [res.data.data.recordCards][res.data.data.recordCards];
+      let newInfo = Object.assign({}, userInfo, { recordCards: newCards });
+      dispatch(setUserInfo(newInfo));
+    });
   };
 
   return (
     <CreateCard>
       <div className='create'>
         <h2>나의 기록카드 만들기</h2>
-        <iframe
-          name='frAttachFiles'
-          className='invisable'
-          onLoad={() => {
-            handleSubmit();
-          }}
-        ></iframe>
+        <iframe name='frAttachFiles' className='invisable' onLoad={changeInfo}></iframe>
         <form
           target='frAttachFiles'
           action='https://server.birthwiki.space/record/create'
@@ -43,9 +60,9 @@ function CardCreate(props: any) {
           />
           <input type='text' name='nickName' value={`${userInfo.nickName}`} style={{ display: 'none' }} />
           <input type='text' name='date' value={`${currentDate}`} style={{ display: 'none' }} />
-          {/* <div className='crtCard'>
+          <div className='crtCard'>
             <input type='file' name='cardImage' id='input-file' />
-          </div> */}
+          </div>
           <div className='custom-file'>
             <input type='file' className='custom-file_input' id='field-upload' name='cardImage' required />
             <label className='custom-file_label' htmlFor='field-upload'>
@@ -57,7 +74,13 @@ function CardCreate(props: any) {
             <textarea className='card-desc' name='cardDesc' placeholder='내용을 입력하세요' />
           </div>
           <div>
-            <input type='submit' value='카드 생성' className='createBtn' />
+            {isLogin ? (
+              <input type='submit' value='카드 생성' className='createBtn' />
+            ) : (
+              <button className='createBtn' onClick={guestCreate}>
+                카드 생성
+              </button>
+            )}
           </div>
         </form>
       </div>

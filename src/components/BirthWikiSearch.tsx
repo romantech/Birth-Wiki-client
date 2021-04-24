@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
+import 'dotenv/config';
 
 export default function BirthWikiSearch({ year, month, day }: any) {
   const [date, setDate] = useState({ year: year, month: month, day: day });
@@ -13,7 +14,7 @@ export default function BirthWikiSearch({ year, month, day }: any) {
 
   const pressHandler = (e: any, here: string, next: string) => {
     setWarning(false);
-    let numValue = Number(e.target.value);
+    let numValue = Number(e.target.value) === 0 ? '' : Number(e.target.value);
 
     if (here === 'year') {
       e.target.value = numValue > curYear ? String(curYear) : String(numValue);
@@ -91,7 +92,7 @@ export default function BirthWikiSearch({ year, month, day }: any) {
   const birthwikiHandler = () => {
     let selectDate = date.year + '-' + date.month + '-' + date.day;
     if (date.year !== '0' && date.month !== '0' && date.day !== '0') {
-      window.location.href = `https://localhost:3000/main/${selectDate}`;
+      window.location.href = `${process.env.REACT_APP_CLIENT_URL}/main/${selectDate}`;
     } else {
       setWarning(true);
     }
@@ -115,6 +116,9 @@ export default function BirthWikiSearch({ year, month, day }: any) {
           onKeyPress={(e) => {
             enterHandler(e, 'year', 'month');
           }}
+          onFocus={(e) => {
+            e.target.value = '';
+          }}
         ></InputDate>{' '}
         <span>년</span>
         <InputDate
@@ -132,6 +136,9 @@ export default function BirthWikiSearch({ year, month, day }: any) {
           onKeyPress={(e) => {
             enterHandler(e, 'month', 'day');
           }}
+          onFocus={(e) => {
+            e.target.value = '';
+          }}
         ></InputDate>{' '}
         <span>월</span>
         <InputDate
@@ -148,6 +155,9 @@ export default function BirthWikiSearch({ year, month, day }: any) {
           }}
           onKeyPress={(e) => {
             enterHandler(e, 'day', '');
+          }}
+          onFocus={(e) => {
+            e.target.value = '';
           }}
         ></InputDate>{' '}
         <span>일</span>

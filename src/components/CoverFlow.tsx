@@ -7,6 +7,7 @@ import CreateCard from './CardCreate';
 
 import movieCover from '../img/subData/movieCover.jpg';
 import musicCover from '../img/subData/musicCover.jpg';
+import recordCover from '../img/subData/recordCover.jpeg';
 import { check } from 'prettier';
 
 function CoverFlow(props: any) {
@@ -26,26 +27,31 @@ function CoverFlow(props: any) {
     '그때, 가장 핫한 음악',
   ];
 
+  const [checked, setChecked] = useState([false, false, false, false, false, false]);
+
+  useEffect(() => {
+    let changeArr = checked.slice();
+    changeArr[props.selected] = true;
+    setChecked(changeArr);
+  }, []);
+
   return (
     <Container>
       <div className='slider'>
-        {cardData.map((el, idx) => {
-          if (props.selected === idx) {
-            return (
-              <input
-                key={idx}
-                type='radio'
-                className='slideInput'
-                name='testimonial'
-                id={`t-${idx + 1}`}
-                checked
-              />
-            );
-          } else {
-            return (
-              <input key={idx} type='radio' className='slideInput' name='testimonial' id={`t-${idx + 1}`} />
-            );
-          }
+        {cardData.map((el, idx: any) => {
+          return (
+            <input
+              key={idx}
+              type='radio'
+              className='slideInput'
+              name='testimonial'
+              id={`t-${idx + 1}`}
+              checked={true}
+              onClick={(e) => {
+                console.log(e);
+              }}
+            />
+          );
         })}
         <input type='radio' className='slideInput' name='testimonial' id='t-6' />
 
@@ -123,6 +129,7 @@ const Container = styled.div`
   align-items: center;
   min-width: 100vw;
   min-height: 100vh;
+  z-index: 2;
 
   & .cardTitle {
     background: rgba(0, 0, 0, 0.3);

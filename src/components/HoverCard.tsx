@@ -18,6 +18,52 @@ const HoverCard = (props: any) => {
   const cardData = [issue, birth, death, movie, music, { image: recordCover }];
   const cardTitle = ['ISSUE', 'BIRTH', 'DEATH', 'MOVIE', 'MUSIC', 'RECORD'];
 
+  const CardLists = styled.div`
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    padding: 4% 2% 0;
+    box-sizing: border-box;
+  `;
+
+  const CardContents = styled.div`
+    flex: 1;
+    overflow: hidden;
+    transition: 0.4s;
+    margin: 0 1%;
+    box-shadow: 0 20px 30px rgba(0, 0, 0, 0.4);
+    border-radius: 15px;
+    background-size: cover;
+    position: relative;
+    height: 30vh;
+    top: 40px;
+    color: #fff;
+    cursor: pointer;
+
+    & h2 {
+      opacity: 1;
+      position: relative;
+      font-size: 3.2vh;
+      display: block;
+      text-align: center;
+      height: 6vh;
+      line-height: 1;
+      color: white;
+      text-transform: uppercase;
+      transition: 0.2s;
+    }
+    &:hover {
+      flex: 0 0 25%;
+      top: 0px;
+      & h2 {
+      }
+    }
+    & img:hover {
+      width: 100%;
+      height: 100%;
+    }
+  `;
+
   const openCard = () => {
     setShowCard((prev) => !prev);
   };
