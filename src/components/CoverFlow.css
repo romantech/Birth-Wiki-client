@@ -16,6 +16,42 @@
   overflow: hidden;
 }
 
+@media (max-width: 899px) {
+  .testimonials {
+    max-width: 600px;
+    width: 100%;
+    margin: 0 auto;
+  }
+}
+
+@media (max-width: 699px) {
+  .testimonials {
+    max-width: 450px;
+    width: 100%;
+    margin: 0 auto;
+  }
+
+  .testimonials .item {
+    max-width: 450px;
+  }
+
+  .inner_item {
+    width: 450px;
+    flex-direction: column;
+  }
+
+  .inner_item .sideImg {
+    width: 100%;
+    height: 25vh;
+    overflow: hidden;
+    border-radius: 15px 0 0;
+  }
+
+  .inner_item .sideContent {
+    width: 100%;
+  }
+}
+
 .testimonials .item {
   top: 0;
   position: absolute;
@@ -34,9 +70,6 @@
 }
 
 @media only screen and (max-width: 768px) {
-  .testimonials .item {
-    width: 90%;
-  }
 }
 
 .dots {

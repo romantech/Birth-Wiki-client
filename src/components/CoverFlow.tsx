@@ -4,6 +4,8 @@ import styled from 'styled-components';
 import './CoverFlow.css';
 import FavoriteButton from './FavoriteButton';
 import CreateCard from './CardCreate';
+import { FaRegArrowAltCircleLeft } from 'react-icons/fa';
+import { FaRegArrowAltCircleRight } from 'react-icons/fa';
 
 import movieCover from '../img/subData/movieCover.jpg';
 import musicCover from '../img/subData/musicCover.jpg';
@@ -117,7 +119,7 @@ function CoverFlow(props: any) {
     // }}
     >
       <button onClick={prevHandler} className='moveBtn'>
-        테스형!
+        <FaRegArrowAltCircleLeft />
       </button>
       <div className='slider' tabIndex={0} onKeyUp={pressHandler}>
         {cardData.map((el, idx: any) => {
@@ -148,14 +150,13 @@ function CoverFlow(props: any) {
                       </div>
                       <div className='sideContent'>
                         <div>
-                          <h1>날짜</h1>
-                          <h3 className='cardTitle'>{cardTitle[idx]}</h3>
+                          <h2 className='cardTitle'>{cardTitle[idx]}</h2>
                         </div>
                         <div className='issueList'>
                           {el.contents.map((list: any, i: any) => {
                             return (
                               <p key={i}>
-                                <span>{list[0]}</span> <br /> {list[1]}
+                                <span>{list[0]}</span> {list[1]}
                               </p>
                             );
                           })}
@@ -168,12 +169,16 @@ function CoverFlow(props: any) {
                   ) : (
                     <div className='inner_item'>
                       <div className='sideImg'>
-                        <img src={`${el.world.poster}`} alt={`${el.world.title}`} />
+                        {el.movie ? <img src={`${el.world.poster}`} alt={`${el.category}`} /> : null}
+                        {el.world.poster ? (
+                          <img src={`${el.world.poster}`} alt={`${el.category}`} />
+                        ) : (
+                          <img src={`${el.world.poster}`} alt={`${el.category}`} />
+                        )}
                       </div>
                       <div className='sideContent'>
                         <div>
-                          <h1>날짜</h1>
-                          <h3 className='cardTitle'>{cardTitle[idx]}</h3>
+                          <h2 className='cardTitle'>{cardTitle[idx]}</h2>
                         </div>
                         <div>
                           {el.world ? (
@@ -183,7 +188,7 @@ function CoverFlow(props: any) {
                                 alt={`${el.world.title}`}
                                 style={{ width: '100px', height: '100px' }}
                               />
-                              <h4>{el.world.title}</h4>
+                              <h3>{el.world.title}</h3>
                             </>
                           ) : (
                             <div>자료없음</div>
@@ -219,7 +224,13 @@ function CoverFlow(props: any) {
             {checked[5] ? (
               <CreateCard setIsFlow={props.setIsFlow} setIsHover={props.setIsHover} />
             ) : (
-              <div>꺄라라라</div>
+              <div>
+                <img
+                  src={`${recordCover}`}
+                  alt={`${recordCover}`}
+                  style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                />
+              </div>
             )}
           </label>
         </div>
@@ -230,7 +241,7 @@ function CoverFlow(props: any) {
         </div>
       </div>
       <button onClick={nextHandler} className='moveBtn'>
-        테스형!
+        <FaRegArrowAltCircleRight />
       </button>
       <div
         className='slideBG'
@@ -247,7 +258,7 @@ function CoverFlow(props: any) {
 const Container = styled.div`
   display: flex;
   align-items: center;
-  min-width: 100vw;
+  min-width: 85vw;
   min-height: 100vh;
   z-index: 2;
 
@@ -255,13 +266,17 @@ const Container = styled.div`
     display: flex;
 
     & .sideImg {
-      width: 50%;
+      width: 100%;
       background: #fff;
       color: #000;
       box-shadow: 0 5px 16px rgb(0 0 0 / 20%);
       border-radius: 15px;
       z-index: 3;
       position: relative;
+
+      @media (max-width: 699px) {
+        width: 100%;
+      }
     }
 
     & .sideImg img {
@@ -271,7 +286,7 @@ const Container = styled.div`
     }
 
     & .sideContent {
-      width: 50%;
+      width: 100%;
       height: 430px;
       display: flex;
       flex-direction: column;
@@ -280,6 +295,17 @@ const Container = styled.div`
       color: #141414;
       padding: 35px;
       overflow: auto;
+
+      & img {
+        width: 150px;
+        height: 150px;
+        border-radius: 50%;
+        border: 6px solid #eee;
+      }
+
+      @media (max-width: 699px) {
+        width: 100%;
+      }
     }
 
     & .sideContent p:after {
@@ -295,9 +321,14 @@ const Container = styled.div`
 
     & .issueList p {
       word-break: keep-all;
+      font-size: 1.1rem;
+      font-weight: 600;
 
       & span {
-        color: #f20;
+        color: #333;
+        padding: 5px 10px;
+        border-radius: 15px;
+        background: #eee;
       }
     }
   }
@@ -318,6 +349,18 @@ const Container = styled.div`
   & .moveBtn {
     position: relative;
     z-index: 2;
+    font-size: 3rem;
+    background: none;
+    line-height: 90px;
+    width: 100px;
+    height: 80px;
+    cursor: pointer;
+    border-radius: 50%;
+    border: none;
+  }
+
+  & .moveBtn:active {
+    color: #fff;
   }
 `;
 
