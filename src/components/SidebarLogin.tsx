@@ -134,8 +134,8 @@ function SidebarLogin() {
           <HomeLogin type='submit' onClick={homeLoginHandler}>
             Login
           </HomeLogin>
-          <GuestLogin onClick={guestHandler}>Guest</GuestLogin>
           <HomeSignUp onClick={signupHandler}>Sign up</HomeSignUp>
+          <GuestLogin onClick={guestHandler}>Guest Login</GuestLogin>
           {errorMsg ? <ErrorMsg>{errorMsg}</ErrorMsg> : ''}
         </div>
         <SocialLoginContainer>
@@ -234,6 +234,7 @@ const HomeLogin = styled.button`
   cursor: pointer;
   transition: all 0.2s ease-in-out;
   text-decoration: none;
+  font-weight: normal;
   &:hover {
     transition: all 0.2s ease-in-out;
     background: rgba(255, 255, 255, 0.8);
@@ -245,9 +246,9 @@ const GuestLogin = styled.button`
   border-radius: 12px;
   background: rgba(6, 11, 38, 0.8);
   white-space: nowrap;
-  width: 100px;
+  width: 220px;
   padding: 10px 25px;
-  margin: 10px;
+  margin: 5px 10px;
   color: #fff;
   font-size: 16px;
   outline: none;

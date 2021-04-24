@@ -92,6 +92,9 @@ const Navbar = styled.nav`
   justify-content: start;
   align-items: center;
   justify-content: space-between;
+  z-index: 1;
+  width: 100%;
+  position: fixed;
   @media screen and (max-width: 600px) {
     width: 100%;
   }
@@ -174,7 +177,7 @@ const Favorite = styled.button`
   height: 40px;
   font-size: 30px;
   background: none;
-  color: #eee;
+  color: #fff;
   text-decoration: none;
   border: none;
   outline: none;

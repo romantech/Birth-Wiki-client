@@ -28,7 +28,6 @@ const SidebarMystory = ({ ...props }: SetFilteredArray): JSX.Element => {
   });
   const [movieInfoKorean, setMovieInfoKorean] = useState<MovieInfo>();
   const [movieInfoWorld, setMovieInfoWorld] = useState<MovieInfo>();
-  const [loading, setLoading] = useState(false);
 
   const getMovieRate = (movieTitle: string, region: string) => {
     TMDB_API.get('/movie', {
@@ -72,11 +71,13 @@ const SidebarMystory = ({ ...props }: SetFilteredArray): JSX.Element => {
   }
 
   return (
-    <>
-      <ModalView onClick={openModal}>
-        {props.category}
-        {props.date}
-      </ModalView>
+    <MyStory>
+      <li className='list'>
+        <ModalView onClick={openModal}>
+          <span className='category'>{props.category}</span>
+          <span className='date'>{props.date}</span>
+        </ModalView>
+      </li>
       <FavoriteShareModalMini
         shareModalMini={shareModalMini}
         setShareModalMini={setShareModalMini}
@@ -107,19 +108,27 @@ const SidebarMystory = ({ ...props }: SetFilteredArray): JSX.Element => {
         setUnlikeModal={setUnlikeModal}
       />
       <FavoriteShareModalMain shareModalMain={shareModalMain} setShareModalMain={setShareModalMain} />
-    </>
+    </MyStory>
   );
 };
 
+const MyStory = styled.div`
+  & .list {
+    list-style: none;
+  }
+  & .category {
+    margin: 0 10px;
+  }
+`;
+
 const ModalView = styled.button`
-  min-width: 100px;
-  min-height: 25px;
   border: none;
   border-radius: 20px;
   cursor: pointer;
   outline: none;
   margin-bottom: 10px;
   background: #ffffffe3;
+
   &:hover {
     background: white;
   }
