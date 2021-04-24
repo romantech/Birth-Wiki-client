@@ -86,6 +86,10 @@ const Main = () => {
       ),
       url(${weather}) center center/cover no-repeat;
     transition: 0.5s ease;
+
+    @media (max-width: 1163px) {
+      height: auto;
+    }
   `;
 
   const openCard = () => {
@@ -130,7 +134,13 @@ const Main = () => {
             </>
           ) : null}
           {isFlow ? (
-            <CoverFlow data={data} selected={selected} setIsFlow={setIsFlow} setIsHover={setIsHover} />
+            <CoverFlow
+              data={data}
+              selectedDate={selectedDate}
+              selected={selected}
+              setIsFlow={setIsFlow}
+              setIsHover={setIsHover}
+            />
           ) : null}
           {/* isHoriz?<HorizFlow data={data} /> : null */}
         </Background>
@@ -177,11 +187,11 @@ const WeatherDetail = styled.div`
   padding: 20px;
 
   @media (max-width: 920px) {
-    width: 45vw;
+    width: 55vw;
   }
 
   @media (max-width: 600px) {
-    width: 90%;
+    width: 70%;
   }
 `;
 

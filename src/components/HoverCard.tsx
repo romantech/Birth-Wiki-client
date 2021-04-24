@@ -106,4 +106,56 @@ const HoverCard = (props: any) => {
   );
 };
 
+const CardLists = styled.div`
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  padding: 4% 2% 0;
+  box-sizing: border-box;
+
+  @media (max-width: 800px) {
+    flex-direction: column;
+  }
+`;
+
+const CardContents = styled.div`
+  flex: 1;
+  overflow: hidden;
+  transition: 0.4s;
+  margin: 0 1%;
+  box-shadow: 0 20px 30px rgba(0, 0, 0, 0.4);
+  border-radius: 15px;
+  background-size: cover;
+  position: relative;
+  height: 150px;
+  top: 40px;
+  color: #fff;
+  cursor: pointer;
+
+  @media (max-width: 800px) {
+    top: 0px;
+    width: 70%;
+    margin: 0 auto 10px;
+  }
+
+  & h2 {
+    font-size: 3.2vh;
+    display: block;
+    text-align: center;
+    height: 6vh;
+    line-height: 1.6;
+    color: #fff;
+    text-shadow: 2px 2px 14px rgba(0, 0, 0, 1);
+    text-transform: uppercase;
+  }
+  &:hover {
+    flex: 0 0 25%;
+    top: 0px;
+  }
+  & img:hover {
+    width: 100%;
+    height: 100%;
+  }
+`;
+
 export default HoverCard;
