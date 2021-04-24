@@ -33,7 +33,7 @@ function CardCreate({ setIsFlow, setIsHover }: any) {
     }).then((res) => {
       let newCards = userInfo.recordCards
         ? [...userInfo.recordCards, res.data.data.recordCards]
-        : [res.data.data.recordCards][res.data.data.recordCards];
+        : [res.data.data.recordCards];
       let newInfo = Object.assign({}, userInfo, { recordCards: newCards });
       dispatch(setUserInfo(newInfo));
       setIsHover(true);

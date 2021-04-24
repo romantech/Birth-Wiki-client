@@ -35,12 +35,13 @@ function FavoriteButton(props: any) {
       setIsLikeAdd(!isLikeAdd);
     }
 
+    let newCard = Object.assign({}, props.cardData, { like: true });
     let newCards;
     if (action === 'like') {
-      newCards = userInfo.likeCards ? [...userInfo.likeCards, props.cardData] : [props.cardData];
+      newCards = userInfo.likeCards ? [...userInfo.likeCards, newCard] : [newCard];
     } else {
       newCards = userInfo.likeCards.filter((el: any) => {
-        if (el.id !== props.cardData.id || el.category !== props.cardData.category) {
+        if (el.id !== newCard.id || el.category !== newCard.category) {
           return el;
         }
       });

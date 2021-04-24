@@ -86,6 +86,9 @@ function Nav() {
 export default Nav;
 
 const Navbar = styled.nav`
+  z-index: 1;
+  width: 100%;
+  position: fixed;
   background: #060b26;
   height: 70px;
   display: flex;

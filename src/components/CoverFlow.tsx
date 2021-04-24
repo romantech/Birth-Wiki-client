@@ -217,7 +217,7 @@ const Container = styled.div`
   display: flex;
   align-items: center;
   min-width: 100vw;
-  min-height: 50vh;
+  min-height: 79vh;
   z-index: 2;
 
   & .cardTitle {
