@@ -60,18 +60,17 @@ function Nav() {
         <img className='logo' src='../logo.png' alt='logo' />
       </Home>
       <SidebarsOpen onClick={showSidebar} />
-
-      <Favorite onClick={modalHandler}>
-        <div>
-          {isGuest || isLogin ? (
-            userInfo.profileImage ? (
+      {isGuest || isLogin ? (
+        <Favorite onClick={modalHandler}>
+          <div>
+            {userInfo.profileImage ? (
               <UserPoto src={`${userInfo.profileImage}`} />
             ) : (
               <UserPoto src={`${process.env.PUBLIC_URL}/img/profile.png`} />
-            )
-          ) : null}
-        </div>
-      </Favorite>
+            )}
+          </div>
+        </Favorite>
+      ) : null}
       {isSidebar ? (
         <NavSidebar>
           <SidebarsClose onClick={showSidebar} />
