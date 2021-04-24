@@ -32,6 +32,8 @@ const UnlikeConfirmModal = ({ ...props }: UnlikeConfirmModal): JSX.Element => {
   });
 
   const setUnlike = () => {
+    props.setUnlikeModal((prev) => !prev);
+
     const setLiked = props.filteredArray.map((el) => {
       if (el.id === props.id) {
         el.like = false;

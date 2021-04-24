@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import styled, { css } from 'styled-components';
 import { FiHeart, FiShare, FiZoomIn } from 'react-icons/fi';
 import FavoriteModal from '../components/FavoriteModal';
@@ -38,12 +38,17 @@ const FavoriteCardList = ({ ...props }: SetFilteredArray): JSX.Element => {
   const fetchImage = (url: string) => {
     axios.get(url).then((res) => {
       if (res.status === 200) {
-        setFetchStatus(true);
+        setTimeout(() => {
+          setFetchStatus(true);
+        }, 500);
       }
     });
   };
 
   fetchImage(props.image);
+  useEffect(() => {
+    return () => setFetchStatus(false);
+  }, []);
 
   const getMovieRate = (movieTitle: string, region: string) => {
     TMDB_API.get('/movie', {
@@ -75,18 +80,18 @@ const FavoriteCardList = ({ ...props }: SetFilteredArray): JSX.Element => {
     setShowModal((prev) => !prev);
   };
 
-  const openShareModal = (e: { pageX: number; pageY: number }) => {
-    // const clientRect = e.target.getBoundingClientRect();
-    // const relativeTop = clientRect.top;
-    // const scrolledTopLength = window.pageYOffset;
-    // const absoluteTop = scrolledTopLength + relativeTop;
+  // const openShareModal = (e: { pageX: number; pageY: number }) => {
+  //   // const clientRect = e.target.getBoundingClientRect();
+  //   // const relativeTop = clientRect.top;
+  //   // const scrolledTopLength = window.pageYOffset;
+  //   // const absoluteTop = scrolledTopLength + relativeTop;
 
-    setShareModalMini((prev) => !prev);
-    setXYPosition({
-      pageX: e.pageX,
-      pageY: e.pageY,
-    });
-  };
+  //   setShareModalMini((prev) => !prev);
+  //   setXYPosition({
+  //     pageX: e.pageX,
+  //     pageY: e.pageY,
+  //   });
+  // };
 
   if (props.category === 'movie') {
     props.image = props.world?.poster ? props.world?.poster : props.image;
@@ -106,8 +111,10 @@ const FavoriteCardList = ({ ...props }: SetFilteredArray): JSX.Element => {
           <FlipCardFront>
             <CategoryName category={category}>{category}</CategoryName>
             <CardYear category={category}>{props.date}</CardYear>
-            {!fetchStatus ? (
-              <LoadingBackground category={category} />
+            {fetchStatus === false ? (
+              <LoadingBackground category={category}>
+                <Wave />
+              </LoadingBackground>
             ) : (
               <img loading='lazy' src={props.image} alt={category} />
             )}
@@ -146,7 +153,7 @@ const FavoriteCardList = ({ ...props }: SetFilteredArray): JSX.Element => {
                 </p>
                 {movieInfoKorean ? (
                   <p style={{ marginTop: '-10px' }}>
-                    {movieInfoKorean.vote_average
+                    {movieInfoKorean.vote_average !== undefined
                       ? getMovieRateStar(movieInfoKorean.vote_average).map((el, index) => {
                           if (el[0] === 'black') {
                             return <MovieRateStarBlack style={{ color: 'white' }} key={index} />;
@@ -167,7 +174,7 @@ const FavoriteCardList = ({ ...props }: SetFilteredArray): JSX.Element => {
                 </p>
                 {movieInfoWorld ? (
                   <p style={{ marginTop: '-15px' }}>
-                    {movieInfoWorld.vote_average
+                    {movieInfoWorld.vote_average !== undefined
                       ? getMovieRateStar(movieInfoWorld.vote_average).map((el, index) => {
                           if (el[0] === 'black') {
                             return <MovieRateStarBlack style={{ color: 'white' }} key={index} />;
@@ -239,8 +246,43 @@ const FavoriteCardList = ({ ...props }: SetFilteredArray): JSX.Element => {
   );
 };
 
-const LoadingBackground = styled.button<{ category: string }>`
-  background: lightgray;
+const Wave = styled.div`
+  height: 100%;
+  width: 100%;
+  color: #fff;
+  position: relative;
+  top: 120%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  overflow: hidden;
+  transition: all 1s;
+
+  &:before {
+    content: '';
+    position: absolute;
+    width: 350px;
+    height: 350px;
+    border-radius: 100px;
+    background-color: lightgray;
+    top: 50px;
+    left: 50%;
+    transform: translate(-50%);
+    animation: wave 5s infinite linear;
+    transition: all 2s;
+  }
+
+  @keyframes wave {
+    0% {
+      transform: translate(-50%) rotate(-180deg);
+    }
+    100% {
+      transform: translate(-50%) rotate(360deg);
+    }
+  }
+`;
+
+const LoadingBackground = styled.div<{ category: string }>`
+  background: #e2e2e2;
   border-radius: 20px;
   border: none;
   height: ${(props) => {
@@ -250,6 +292,7 @@ const LoadingBackground = styled.button<{ category: string }>`
     return '350px';
   }};
   width: 100%;
+  overflow: hidden;
 `;
 
 const ModalView = styled.button`
