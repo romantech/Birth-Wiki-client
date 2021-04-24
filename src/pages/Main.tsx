@@ -106,13 +106,6 @@ const Main = () => {
     transform: showCard ? `translateY(0%)` : `translateY(100%)`,
   });
 
-  const closeCard = (e: React.SyntheticEvent) => {
-    //배경 클릭시 카드 off
-    if (cardRef.current === (e.target as typeof e.target)) {
-      setShowCard(false);
-    }
-  };
-
   return (
     <>
       {data ? (

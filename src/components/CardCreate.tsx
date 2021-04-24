@@ -5,7 +5,7 @@ import { RootState } from '../store/index';
 import { setGuestModal, setGuestReject, setUserInfo } from '../actions';
 import axios from 'axios';
 
-function CardCreate(props: any) {
+function CardCreate({ setIsFlow, setIsHover }: any) {
   const userInfo = useSelector((state: RootState) => state.userInfoReducer.userInfo);
   const isLogin = useSelector((state: RootState) => state.loginReducer.isLogin);
   const isGuest = useSelector((state: RootState) => state.guestReducer.isGuest);
@@ -36,6 +36,8 @@ function CardCreate(props: any) {
         : [res.data.data.recordCards][res.data.data.recordCards];
       let newInfo = Object.assign({}, userInfo, { recordCards: newCards });
       dispatch(setUserInfo(newInfo));
+      setIsHover(true);
+      setIsFlow(false);
     });
   };
 
@@ -64,7 +66,14 @@ function CardCreate(props: any) {
             <input type='file' name='cardImage' id='input-file' />
           </div>
           <div className='custom-file'>
-            <input type='file' className='custom-file_input' id='field-upload' name='cardImage' required />
+            <input
+              type='file'
+              className='custom-file_input'
+              id='field-upload'
+              name='cardImage'
+              style={{ display: 'none' }}
+              required
+            />
             <label className='custom-file_label' htmlFor='field-upload'>
               사진 업로드
             </label>
@@ -150,6 +159,7 @@ const CreateCard = styled.div`
   }
 
   & .custom-file_input {
+    display: none;
     position: absolute;
     width: 0.1px;
     height: 0.1px;
