@@ -73,6 +73,8 @@ const Wrapper = styled.div`
 const Category = styled.button<{ imagePath: string }>`
   cursor: pointer;
   font-size: 1.5rem;
+  text-shadow: 11px 4px 15px rgba(186, 186, 186, 1);
+  font-weight: 700;
   height: 100%;
   width: 100%;
   outline: none;

@@ -130,8 +130,8 @@ const CreateCard = styled.div`
   }
 
   & .create .card-desc {
-    width: 100%;
-    height: 110px;
+    width: 420px;
+    height: 170px;
     padding: 10px 10px;
     box-sizing: border-box;
     border: 2px solid #ccc;
@@ -168,7 +168,7 @@ const CreateCard = styled.div`
   & .custom-file_label {
     position: relative;
     display: block;
-    width: 50%;
+    width: 100%;
     min-width: 335px;
     min-height: 45px;
     margin: 10px 0;
