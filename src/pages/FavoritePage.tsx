@@ -13,6 +13,7 @@ import { RootState } from '../store';
 import { LikeCardsGeneral } from '../types/index';
 import { ArrowLeft, ArrowRight } from '../components/ArrowIcon';
 import { FaArrowCircleUp } from 'react-icons/fa';
+import addLikeProperty from '../utils/addLikeProperty';
 
 let sliceStart = 0;
 let sliceEnd = 11;
@@ -20,20 +21,13 @@ const FavoritePage = (): JSX.Element => {
   const { userInfo } = useSelector((state: RootState) => state.userInfoReducer);
   let { likeCards } = useSelector((state: RootState) => state.userInfoReducer.userInfo);
 
-  likeCards = likeCards.map((el: { like: boolean }) => {
-    if (el.like === undefined) {
-      el['like'] = true;
-      return el;
-    }
-    return el;
-  });
-
+  likeCards = addLikeProperty(likeCards);
   const [renderArray, setRenderArray] = useState<LikeCardsGeneral[]>([]);
   const [filteredArray, setFilteredArray] = useState<LikeCardsGeneral[]>(likeCards !== null ? likeCards : []);
 
   const getLikeCards = (start: number, end: number) => {
     const sliced = filteredArray.slice(start, end);
-    if (sliced.length) {
+    if (sliced.length !== 0) {
       setRenderArray(renderArray.concat(sliced));
       sliceStart = sliceEnd;
       sliceEnd = sliceEnd + 11;
@@ -59,7 +53,7 @@ const FavoritePage = (): JSX.Element => {
 
   return (
     <Container>
-      <h1 className='Favorite-H1'>CATEGORY</h1>
+      <h1 className='Favorite-H1 h1-top'>CATEGORY</h1>
       <Categories>
         <ScrollMenu
           data={categories.map((category) => (
@@ -80,7 +74,7 @@ const FavoritePage = (): JSX.Element => {
       <h1 className='Favorite-H1'>YOUR CARDS</h1>
       <InfiniteScroll
         dataLength={renderArray.length}
-        next={() => setTimeout(() => getLikeCards(sliceStart, sliceEnd), 1200)}
+        next={() => setTimeout(() => getLikeCards(sliceStart, sliceEnd), 500)}
         hasMore={renderArray.length < filteredArray.length}
         loader={<Loader />}
         endMessage={
@@ -128,12 +122,15 @@ const FavoritePage = (): JSX.Element => {
 const Container = styled.div`
   padding: 1.8rem 5rem 5rem 4rem;
   /* background: #d4dbdd; */
+  .Favorite-H1.h1-top {
+    margin-top: 80px;
+  }
 
-  // 1200px 이하인 경우
   @media (max-width: 1500px) {
     padding: 1.8rem 4rem 4rem 3rem;
   }
 
+  // 1200px 이하인 경우
   @media (max-width: 1200px) {
     padding: 1.6rem 2rem 2rem 1rem;
     .Favorite-H1 {
@@ -154,6 +151,9 @@ const Container = styled.div`
     .Favorite-H1 {
       font-size: 1.7em;
       text-align: center;
+    }
+    .Favorite-H1.h1-top {
+      margin-top: 100px;
     }
   }
 

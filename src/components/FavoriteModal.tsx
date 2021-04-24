@@ -114,7 +114,7 @@ const FavoriteModal = ({ showModal, setShowModal, ...props }: Props): JSX.Elemen
                           ? '정보가 없습니다 😢'
                           : `<${props.korea?.title}>`}
                         <br />
-                        {props.movieInfoKorean
+                        {props.movieInfoKorean !== undefined
                           ? getMovieRateStar(props.movieInfoKorean.vote_average).map((el, index) => {
                               if (el[0] === 'black') {
                                 return <MovieRateStarBlack key={index} />;
@@ -132,7 +132,7 @@ const FavoriteModal = ({ showModal, setShowModal, ...props }: Props): JSX.Elemen
                           ? '정보가 없습니다 😢'
                           : `<${props.world?.title}>`}
                         <br />
-                        {props.movieInfoWorld
+                        {props.movieInfoWorld !== undefined
                           ? getMovieRateStar(props.movieInfoWorld.vote_average).map((el, index) => {
                               if (el[0] === 'black') {
                                 return <MovieRateStarBlack key={index} />;
