@@ -5,7 +5,7 @@ import { RootState } from '../store/index';
 import { setGuestModal, setGuestReject, setUserInfo } from '../actions';
 import axios from 'axios';
 
-function CardCreate() {
+function CardCreate({ setIsFlow, setIsHover }: any) {
   const userInfo = useSelector((state: RootState) => state.userInfoReducer.userInfo);
   const isLogin = useSelector((state: RootState) => state.loginReducer.isLogin);
   const isGuest = useSelector((state: RootState) => state.guestReducer.isGuest);
@@ -36,6 +36,8 @@ function CardCreate() {
         : [res.data.data.recordCards][res.data.data.recordCards];
       let newInfo = Object.assign({}, userInfo, { recordCards: newCards });
       dispatch(setUserInfo(newInfo));
+      setIsHover(true);
+      setIsFlow(false);
     });
   };
 
