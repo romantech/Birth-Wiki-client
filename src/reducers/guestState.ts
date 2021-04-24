@@ -4,7 +4,7 @@ export default {
   profileImage: `${process.env.PUBLIC_URL}/guest.png`,
   source: null,
   accessToken: null,
-  likeCards: null,
-  recordCards: null,
+  likeCards: [],
+  recordCards: [],
   isReject: false,
 };
