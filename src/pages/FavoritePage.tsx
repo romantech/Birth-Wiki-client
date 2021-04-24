@@ -17,18 +17,24 @@ import { FaArrowCircleUp } from 'react-icons/fa';
 let sliceStart = 0;
 let sliceEnd = 11;
 const FavoritePage = (): JSX.Element => {
-  const userInfo = useSelector((state: RootState) => state.userInfoReducer.userInfo);
-  const { likeCards } = userInfo;
+  const { userInfo } = useSelector((state: RootState) => state.userInfoReducer);
+  let { likeCards } = useSelector((state: RootState) => state.userInfoReducer.userInfo);
+
+  likeCards = likeCards.map((el: { like: boolean }) => {
+    if (el.like === undefined) {
+      el['like'] = true;
+      return el;
+    }
+    return el;
+  });
 
   const [renderArray, setRenderArray] = useState<LikeCardsGeneral[]>([]);
-  const [filteredArray, setFilteredArray] = useState<LikeCardsGeneral[]>(
-    likeCards !== null ? likeCards.filter((el: { like: boolean }) => el.like === true) : [],
-  );
+  const [filteredArray, setFilteredArray] = useState<LikeCardsGeneral[]>(likeCards !== null ? likeCards : []);
 
   const getLikeCards = (start: number, end: number) => {
     const sliced = filteredArray.slice(start, end);
     if (sliced.length) {
-      setRenderArray(renderArray.concat(...sliced));
+      setRenderArray(renderArray.concat(sliced));
       sliceStart = sliceEnd;
       sliceEnd = sliceEnd + 11;
     }
@@ -40,7 +46,7 @@ const FavoritePage = (): JSX.Element => {
       sliceEnd = 11;
       getLikeCards(sliceStart, sliceEnd);
     }
-  }, [renderArray, filteredArray, userInfo]);
+  }, [filteredArray]);
 
   const breakPoints = {
     default: 6,

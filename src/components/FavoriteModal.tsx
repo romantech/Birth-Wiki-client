@@ -1,9 +1,12 @@
-import React, { useRef, useEffect, useCallback } from 'react';
+import React, { useRef, useEffect, useState, useCallback } from 'react';
+import TMDB_API from '../utils/TMDB_API';
 import { useSpring, animated } from 'react-spring';
 import styled, { css } from 'styled-components';
 import { MdClose } from 'react-icons/md';
 import { LikeCardsGeneral, MovieInfo } from '../types/index';
 import { IconCircle, ShareIcon, HeartIcon } from './FavoriteCardList';
+import { FaStar } from 'react-icons/fa';
+import getMovieRateStar from '../utils/getMovieRateStar';
 
 interface Props extends LikeCardsGeneral {
   showModal: boolean;
@@ -16,6 +19,7 @@ interface Props extends LikeCardsGeneral {
 }
 
 const FavoriteModal = ({ showModal, setShowModal, ...props }: Props): JSX.Element => {
+  const [worldSingerImgPath, setWorldSingerImgPath] = useState('');
   const modalRef = useRef<HTMLDivElement>(null);
   const animation = useSpring({
     config: {
@@ -25,13 +29,40 @@ const FavoriteModal = ({ showModal, setShowModal, ...props }: Props): JSX.Elemen
     transform: showModal ? `translateY(0%)` : `translateY(100%)`,
   });
 
-  const category = props.category;
+  const getWorldSingerImg = (name: string) => {
+    if (name) {
+      TMDB_API.get('/person', {
+        params: {
+          query: name,
+        },
+      }).then((res) => {
+        if (res.data.total_results !== 0 && res.data.results[0].profile_path) {
+          const path = 'https://image.tmdb.org/t/p/w500' + res.data.results[0].profile_path;
+          setWorldSingerImgPath(path);
+        } else {
+          return '';
+        }
+      });
+    }
+  };
+
+  if (!worldSingerImgPath && props.world?.singer) {
+    getWorldSingerImg(props.world.singer);
+  }
+
+  const { category } = props;
   const mediaImageKorea = props.korea?.poster
     ? props.korea?.poster
     : `${process.env.PUBLIC_URL}/img/question.png`;
-  const mediaImageWorld = props.world?.poster
-    ? props.world?.poster
-    : `${process.env.PUBLIC_URL}/img/question.png`;
+
+  let mediaImageWorld = '';
+  if (props.category === 'music') {
+    mediaImageWorld = worldSingerImgPath ? worldSingerImgPath : `${process.env.PUBLIC_URL}/img/question.png`;
+  } else {
+    mediaImageWorld = props.world?.poster
+      ? props.world?.poster
+      : `${process.env.PUBLIC_URL}/img/question.png`;
+  }
 
   const closeModal = (e: React.MouseEvent<HTMLElement>) => {
     if (modalRef.current === e.target) {
@@ -79,20 +110,36 @@ const FavoriteModal = ({ showModal, setShowModal, ...props }: Props): JSX.Elemen
                       <MediaImageKorea korea={mediaImageKorea} world={mediaImageWorld} />
                       <h4 style={{ marginBottom: '-10px' }}>한국 1위 영화</h4>
                       <p style={{ textAlign: 'center' }}>
-                        {props.korea === undefined ? '정보가 없습니다 😢' : `<${props.korea?.title}>`}
+                        {props.korea === null || props.korea === undefined
+                          ? '정보가 없습니다 😢'
+                          : `<${props.korea?.title}>`}
                         <br />
                         {props.movieInfoKorean
-                          ? `${props.movieInfoKorean.vote_average}점 (${props.movieInfoKorean.vote_count}명 투표)`
+                          ? getMovieRateStar(props.movieInfoKorean.vote_average).map((el, index) => {
+                              if (el[0] === 'black') {
+                                return <MovieRateStarBlack key={index} />;
+                              } else {
+                                return <MovieRateStarGray key={index} />;
+                              }
+                            })
                           : ''}
                       </p>
 
                       <MediaImageWorld korea={mediaImageKorea} world={mediaImageWorld} />
                       <h4 style={{ marginBottom: '-10px' }}>해외 1위 영화</h4>
                       <p style={{ textAlign: 'center' }}>
-                        {props.world === undefined ? '정보가 없습니다 😢' : `<${props.world?.title}>`}
+                        {props.world === null || props.world === undefined
+                          ? '정보가 없습니다 😢'
+                          : `<${props.world?.title}>`}
                         <br />
                         {props.movieInfoWorld
-                          ? `${props.movieInfoWorld.vote_average}점 (${props.movieInfoWorld.vote_count}명 투표)`
+                          ? getMovieRateStar(props.movieInfoWorld.vote_average).map((el, index) => {
+                              if (el[0] === 'black') {
+                                return <MovieRateStarBlack key={index} />;
+                              } else {
+                                return <MovieRateStarGray key={index} />;
+                              }
+                            })
                           : ''}
                       </p>
                     </>
@@ -101,16 +148,20 @@ const FavoriteModal = ({ showModal, setShowModal, ...props }: Props): JSX.Elemen
                       <MediaImageKorea korea={mediaImageKorea} world={mediaImageWorld} />
                       <h4 style={{ marginBottom: '-10px' }}>한국 1위 음악</h4>
                       <p style={{ textAlign: 'center' }}>
-                        {props.korea === undefined ? '정보가 없습니다 😢' : `<${props.korea?.title}>`}
+                        {props.korea === null || props.korea === undefined
+                          ? '정보가 없습니다 😢'
+                          : `<${props.korea?.title}>`}
                         <br />
-                        {props.korea === undefined ? '' : `${props.korea?.singer}`}
+                        {props.korea === null || props.korea === undefined ? '' : `${props.korea?.singer}`}
                       </p>
                       <MediaImageWorld korea={mediaImageKorea} world={mediaImageWorld} />
                       <h4 style={{ marginBottom: '-10px' }}>해외 1위 음악</h4>
                       <p style={{ textAlign: 'center' }}>
-                        {props.world === undefined ? '정보가 없습니다 😢' : `<${props.world?.title}>`}
+                        {props.world === null || props.world === undefined
+                          ? '정보가 없습니다 😢'
+                          : `<${props.world?.title}>`}
                         <br />
-                        {props.world === undefined ? '' : `${props.world?.singer}`}
+                        {props.world === null || props.world === undefined ? '' : `${props.world?.singer}`}
                       </p>
                     </>
                   )}
@@ -146,6 +197,14 @@ const FavoriteModal = ({ showModal, setShowModal, ...props }: Props): JSX.Elemen
     </>
   );
 };
+
+export const MovieRateStarBlack = styled(FaStar)`
+  color: black;
+`;
+
+export const MovieRateStarGray = styled(FaStar)`
+  color: #b9b9b9;
+`;
 
 const Background = styled.div`
   width: 100%;
