@@ -72,24 +72,6 @@ function CoverFlow(props: any) {
     }
   };
 
-  // let prevX: number[] = [];
-  // const dragHandler = (e: React.DragEvent<HTMLDivElement>) => {
-  //   prevX.push(e.clientX);
-  //   if (prevX[0] > 0) {
-  //     if (prevX[0] - e.clientX > 0) {
-  //       setTimeout(() => {
-  //         prevHandler();
-  //         prevX = [];
-  //       }, 100);
-  //     } else if (prevX[0] - e.clientX < 0) {
-  //       setTimeout(() => {
-  //         nextHandler();
-  //         prevX = [];
-  //       }, 100);
-  //     }
-  //   }
-  // };
-
   let prevArr: number[] = [];
   let nextArr: number[] = [];
   const wheelHandler = (e: React.WheelEvent<HTMLDivElement>) => {
@@ -112,12 +94,37 @@ function CoverFlow(props: any) {
     }
   };
 
+  let startP: any;
+  let endP: any;
+  function dragStart(e: any) {
+    e.preventDefault();
+    if (e.type === 'touchstart') {
+      startP = e.touches[0].clientX;
+    } else {
+      startP = e.clientX;
+    }
+  }
+
+  function dragAction(e: any) {
+    if (e.type === 'touchmove') {
+      endP = e.touches[0].clientX;
+    } else {
+      endP = e.clientX;
+    }
+  }
+
+  function dragEnd(e: any) {
+    if (startP - endP > 0) {
+      nextHandler();
+    } else if (startP - endP < 0) {
+      prevHandler();
+    }
+    startP = 0;
+    endP = 0;
+  }
+
   return (
-    <Container
-    // onDrag={(e) => {
-    //   dragHandler(e);
-    // }}
-    >
+    <Container>
       <button onClick={prevHandler} className='moveBtn'>
         <FaRegArrowAltCircleLeft />
       </button>
@@ -137,7 +144,7 @@ function CoverFlow(props: any) {
             />
           );
         })}
-        <div className='testimonials'>
+        <div className='testimonials' draggable={false}>
           {cardData.map((el, idx) => {
             if (idx < 5) {
               return (
@@ -146,7 +153,7 @@ function CoverFlow(props: any) {
                   {el.contents ? (
                     <div className='inner_item'>
                       <div className='sideImg'>
-                        <img src={`${el.image}`} alt={`${el.category}`} />
+                        <img src={`${el.image}`} alt={`${el.category}`} draggable={false} />
                       </div>
                       <div className='sideContent'>
                         <div>
@@ -245,11 +252,15 @@ function CoverFlow(props: any) {
       </button>
       <div
         className='slideBG'
+        onWheel={wheelHandler}
+        draggable={true}
         onClick={() => {
           props.setIsFlow(false);
           props.setIsHover(true);
         }}
-        onWheel={wheelHandler}
+        onDragStart={dragStart}
+        onDragOver={dragAction}
+        onDragEnd={dragEnd}
       ></div>
     </Container>
   );
@@ -261,6 +272,7 @@ const Container = styled.div`
   min-width: 85vw;
   min-height: 100vh;
   z-index: 2;
+  user-select: none;
 
   & .inner_item {
     display: flex;
