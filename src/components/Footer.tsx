@@ -63,7 +63,7 @@ const Footer = () => {
             <div className='contect'>
               <a
                 className='repo'
-                href='hhttps://github.com/Ma-SangHee'
+                href='https://github.com/Ma-SangHee'
                 target='_blank'
                 rel='noopener noreferrer'
               >
