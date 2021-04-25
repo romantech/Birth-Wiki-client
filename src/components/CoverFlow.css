@@ -36,7 +36,6 @@
   }
 
   .inner_item {
-    width: 450px;
     flex-direction: column;
   }
 

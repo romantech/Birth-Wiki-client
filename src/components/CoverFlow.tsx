@@ -177,11 +177,7 @@ function CoverFlow(props: any) {
                     <div className='inner_item'>
                       <div className='sideImg'>
                         {el.movie ? <img src={`${el.world.poster}`} alt={`${el.category}`} /> : null}
-                        {el.world.poster ? (
-                          <img src={`${el.world.poster}`} alt={`${el.category}`} />
-                        ) : (
-                          <img src={`${el.world.poster}`} alt={`${el.category}`} />
-                        )}
+                        {el.world.poster ? <img src={`${el.world.poster}`} alt={`${el.category}`} /> : null}
                       </div>
                       <div className='sideContent'>
                         <div>
@@ -317,6 +313,7 @@ const Container = styled.div`
 
       @media (max-width: 699px) {
         width: 100%;
+        padding: 0;
       }
     }
 
@@ -341,6 +338,10 @@ const Container = styled.div`
         padding: 5px 10px;
         border-radius: 15px;
         background: #eee;
+      }
+
+      @media (max-width: 699px) {
+        font-size: 0.8rem;
       }
     }
   }
