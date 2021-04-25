@@ -215,7 +215,6 @@ function SidebarMypage() {
           dispatch(setUserInfo(initialState.userInfo));
         })
         .then(() => {
-          console.log(userInfo);
           window.location.href = 'https://localhost:3000/';
         })
         .catch((error) => console.log('err', error.message));

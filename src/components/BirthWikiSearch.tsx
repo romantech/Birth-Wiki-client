@@ -85,7 +85,6 @@ export default function BirthWikiSearch({ year, month, day }: any) {
       } else {
         birthwikiHandler();
       }
-      console.log(date.year + '-' + date.month + '-' + date.day);
     }
   };
 

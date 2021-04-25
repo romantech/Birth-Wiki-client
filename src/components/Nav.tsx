@@ -16,7 +16,6 @@ function Nav() {
   const userInfo = useSelector((state: RootState) => state.userInfoReducer.userInfo);
   const isLogin = useSelector((state: RootState) => state.loginReducer.isLogin);
   const isGuest = useSelector((state: RootState) => state.guestReducer.isGuest);
-  console.log(userInfo);
   const dispatch = useDispatch();
   useEffect(() => {
     const url = new URL(window.location.href);
