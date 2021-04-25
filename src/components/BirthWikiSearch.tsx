@@ -193,6 +193,7 @@ const BirthwikiSearch = styled.div`
 const InputContiner = styled.form`
   display: flex;
   justify-content: space-between;
+  align-items: center;
 `;
 
 const InputDate = styled.input`
