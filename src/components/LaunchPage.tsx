@@ -99,6 +99,7 @@ export default function LaunchPage() {
       setWarning(true);
     }
   };
+
   return (
     <>
       <LaunchScreen>
