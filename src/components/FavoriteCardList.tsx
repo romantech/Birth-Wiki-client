@@ -110,7 +110,9 @@ const FavoriteCardList = ({ ...props }: SetFilteredArray): JSX.Element => {
         <FlipCardInner fetchStatus={fetchStatus} imgPath={props.image} category={category}>
           <FlipCardFront>
             <CategoryName category={category}>{category}</CategoryName>
-            <CardYear category={category}>{props.date}</CardYear>
+            <CardYear category={category}>
+              {category !== 'music' && category !== 'movie' ? props.date : `${props.date}w`}
+            </CardYear>
             {fetchStatus === false ? (
               <LoadingBackground category={category}>
                 <Wave />
@@ -249,7 +251,6 @@ const FavoriteCardList = ({ ...props }: SetFilteredArray): JSX.Element => {
 const Wave = styled.div`
   height: 100%;
   width: 100%;
-  color: #fff;
   position: relative;
   top: 120%;
   left: 50%;
@@ -373,7 +374,7 @@ const CardYear = styled.p<{ category: string }>`
   text-align: center;
   font-weight: 900;
   left: ${(props) => (props.category !== 'music' && props.category !== 'movie' ? '21%' : '25%')};
-  width: ${(props) => (props.category !== 'music' && props.category !== 'movie' ? '30%' : '38%')};
+  width: ${(props) => (props.category !== 'music' && props.category !== 'movie' ? '30%' : '40%')};
   top: auto;
   bottom: -2.5%;
   transform: translate(-50%, -50%);
@@ -460,6 +461,11 @@ const FlipCardInner = styled.div<{ imgPath: string; category: string; fetchStatu
       letter-spacing: 1.5px;
       font-weight: 900;
       font-size: 1.4rem;
+
+      @media (max-width: 576px) {
+        top: 15px;
+        font-size: 1rem;
+      }
     }
 
     li {

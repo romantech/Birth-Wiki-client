@@ -234,8 +234,4 @@ const Loader = styled.img.attrs({
   width: 100px;
 `;
 
-const Modal = styled.div`
-  background-color: rgba(6, 11, 38, 0.8);
-`;
-
 export default FavoritePage;

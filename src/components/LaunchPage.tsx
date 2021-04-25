@@ -253,7 +253,7 @@ const WordsContainner = styled.div`
 
 const LaunchScreen = styled.div`
   font-family: sans-serif;
-  background: #fff;
+  background: #060b26;
   display: flex;
   flex-direction: column;
   justify-content: center;

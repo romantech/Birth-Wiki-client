@@ -1,7 +1,7 @@
 import { LikeCardsGeneral } from '../types/index';
 
 const addLikeProperty = (likeCards: LikeCardsGeneral[]) => {
-  if (likeCards.length !== 0) {
+  if (likeCards !== null) {
     return likeCards.map((card) => {
       if (card.like === undefined) {
         card['like'] = true;
@@ -10,6 +10,7 @@ const addLikeProperty = (likeCards: LikeCardsGeneral[]) => {
       return card;
     });
   }
+  return likeCards;
 };
 
 export default addLikeProperty;
