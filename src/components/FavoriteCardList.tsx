@@ -456,11 +456,11 @@ const FlipCardInner = styled.div<{ imgPath: string; category: string; fetchStatu
 
     h2 {
       position: absolute;
-      top: 5px;
+      top: 10px;
       text-transform: uppercase;
       letter-spacing: 1.5px;
       font-weight: 900;
-      font-size: 1.4rem;
+      font-size: 1.2rem;
 
       @media (max-width: 576px) {
         top: 15px;
