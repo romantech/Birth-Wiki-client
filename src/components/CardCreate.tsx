@@ -5,7 +5,7 @@ import { RootState } from '../store/index';
 import { setGuestModal, setGuestReject, setUserInfo, setSaveModal } from '../actions';
 import axios from 'axios';
 
-function CardCreate({ onwheel }: any) {
+function CardCreate({ setChecked }: any) {
   const userInfo = useSelector((state: RootState) => state.userInfoReducer.userInfo);
   const isLogin = useSelector((state: RootState) => state.loginReducer.isLogin);
   const isGuest = useSelector((state: RootState) => state.guestReducer.isGuest);
@@ -36,6 +36,7 @@ function CardCreate({ onwheel }: any) {
       let newInfo = Object.assign({}, userInfo, { recordCards: res.data.data.recordCards });
       dispatch(setUserInfo(newInfo));
       dispatch(setSaveModal(true));
+      setChecked([false, false, false, false, false, true]);
     });
   };
 

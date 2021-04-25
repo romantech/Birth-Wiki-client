@@ -50,6 +50,7 @@ function CoverFlow(props: any) {
     const changeCheck = Array(6).fill(false);
     changeCheck[curCheck - 1] = true;
     setChecked(changeCheck);
+    props.setSelected(curCheck - 1);
   };
 
   const nextHandler = () => {
@@ -255,7 +256,7 @@ function CoverFlow(props: any) {
                   />
                 </div>
                 <div className='sideContent'>
-                  <CreateCard />
+                  <CreateCard setChecked={setChecked} />
                 </div>
               </div>
             ) : (

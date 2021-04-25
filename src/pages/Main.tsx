@@ -132,6 +132,7 @@ const Main = () => {
               data={data}
               selectedDate={selectedDate}
               selected={selected}
+              setSelected={setSelected}
               setIsFlow={setIsFlow}
               setIsHover={setIsHover}
             />
