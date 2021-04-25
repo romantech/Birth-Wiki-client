@@ -192,7 +192,7 @@ const Categories = styled.div`
 `;
 
 const ScrollIcon = styled(FaArrowCircleUp)`
-  color: gray;
+  color: #a7a7a7;
   opacity: 0.4;
   font-size: 2.5rem;
   cursor: pointer;
@@ -202,7 +202,7 @@ const ScrollIcon = styled(FaArrowCircleUp)`
   transition: all 0.3s ease-in-out;
 
   &:hover {
-    color: black;
+    color: #6b6b6b;
     transition: all 0.3s ease-in-out;
     bottom: 30px;
     opacity: 0.7;
