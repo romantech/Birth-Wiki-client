@@ -293,25 +293,25 @@ function SidebarMypage() {
             markclicked ? (
               <div>
                 <Pagination cardsPerPage={cardsPerPage} totalCards={likeCards.length} paginate={paginate} />
-                {currentlikeCards.map((card: any, index: any) =>
-                  card.like === true ? (
-                    <SidebarMystory
-                      id={card.id}
-                      like={card.like}
-                      date={card.date}
-                      category={card.category}
-                      contents={card.contents}
-                      image={card.image}
-                      korea={card.korea}
-                      world={card.world}
-                      key={index}
-                      setFilteredArray={setFilteredArray}
-                      filteredArray={filteredArray}
-                    />
-                  ) : (
-                    ''
-                  ),
-                )}
+                {currentlikeCards.map((card: LikeCardsGeneral, index: React.Key | null | undefined) => {
+                  if (card.like === true) {
+                    return (
+                      <SidebarMystory
+                        id={card.id}
+                        like={card.like}
+                        date={card.date}
+                        category={card.category}
+                        contents={card.contents}
+                        image={card.image}
+                        korea={card.korea}
+                        world={card.world}
+                        key={index}
+                        setFilteredArray={setFilteredArray}
+                        filteredArray={filteredArray}
+                      />
+                    );
+                  }
+                })}
               </div>
             ) : (
               ''

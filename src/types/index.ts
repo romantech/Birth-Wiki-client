@@ -26,6 +26,15 @@ export interface MovieInfo {
   vote_count: number;
 }
 
+export interface RecordCard {
+  id: number;
+  date: string;
+  cardImage: string;
+  writer: string;
+  cardDesc: string;
+  privacy: boolean;
+}
+
 export interface LikeCardsGeneral {
   id: number;
   like: boolean;
