@@ -186,14 +186,10 @@ function SidebarMypage() {
   const dispatch = useDispatch();
   const [storyclicked, setStoryClicked] = useState(false);
   const [markclicked, setMarkClicked] = useState(false);
-  const [showModal, setShowModal] = useState(false);
   const isGuest = useSelector((state: RootState) => state.guestReducer.isGuest);
-  const [shareModalMain, setShareModalMain] = useState(false);
-  const [unLikeModal, setUnlikeModal] = useState(false);
   const [filteredArray, setFilteredArray] = useState<LikeCardsGeneral[]>(
     likeCards !== null ? likeCards.filter((el: { like: boolean }) => el.like === true) : [],
   );
-  const [loading, setLoding] = useState([false]);
   const [currentPage, setCurrentPage] = useState(1);
   const [cardsPerPage, setCardsPerPage] = useState(5);
 
@@ -245,7 +241,8 @@ function SidebarMypage() {
 
   const indexOfLastCard = currentPage * cardsPerPage;
   const indexOfFirstCard = indexOfLastCard - cardsPerPage;
-  const currentCards = likeCards ? likeCards.slice(indexOfFirstCard, indexOfLastCard) : [];
+  const currentlikeCards = likeCards ? likeCards.slice(indexOfFirstCard, indexOfLastCard) : [];
+  const currentrecodeCards = recordCards ? recordCards.slice(indexOfFirstCard, indexOfLastCard) : [];
 
   const paginate = (pageNumber: number) => {
     setCurrentPage(pageNumber);
@@ -277,9 +274,9 @@ function SidebarMypage() {
             나만의 기록리스트
             {storyclicked ? <AiFillCaretUp /> : <AiFillCaretDown />}
           </p>
-          {/* {recordCards !== null
+          {/* {recordCards !== null && currentrecodeCards !== null
             ? storyclicked
-              ? recordCards.map((data: any) => (
+              ? currentrecodeCards.map((data: any, index: any) => (
                   <MyStory to='/' key={data.id}>
                     {data}
                   </MyStory>
@@ -292,25 +289,29 @@ function SidebarMypage() {
             내가 찜한 카드
             {markclicked ? <AiFillCaretUp /> : <AiFillCaretDown />}
           </p>
-          {likeCards !== null && currentCards !== null ? (
+          {likeCards !== null && currentlikeCards !== null ? (
             markclicked ? (
               <div>
                 <Pagination cardsPerPage={cardsPerPage} totalCards={likeCards.length} paginate={paginate} />
-                {currentCards.map((card: any, index: any) => (
-                  <SidebarMystory
-                    id={card.id}
-                    like={card.like}
-                    date={card.date}
-                    category={card.category}
-                    contents={card.contents}
-                    image={card.image}
-                    korea={card.korea}
-                    world={card.world}
-                    key={index}
-                    setFilteredArray={setFilteredArray}
-                    filteredArray={filteredArray}
-                  />
-                ))}
+                {currentlikeCards.map((card: any, index: any) =>
+                  card.like === true ? (
+                    <SidebarMystory
+                      id={card.id}
+                      like={card.like}
+                      date={card.date}
+                      category={card.category}
+                      contents={card.contents}
+                      image={card.image}
+                      korea={card.korea}
+                      world={card.world}
+                      key={index}
+                      setFilteredArray={setFilteredArray}
+                      filteredArray={filteredArray}
+                    />
+                  ) : (
+                    ''
+                  ),
+                )}
               </div>
             ) : (
               ''
