@@ -24,7 +24,7 @@ const Main = () => {
   const [weather, setWeather] = useState(clear);
   const [isHover, setIsHover] = useState(true);
   const [isFlow, setIsFlow] = useState(false);
-  const [isHoriz, setisHoriz] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const [selected, setSelected] = useState(0);
   const date = selectedDate.split('/')[2];
   const year = date.split('-')[0];
@@ -32,6 +32,10 @@ const Main = () => {
   const day = date.split('-')[2];
 
   useEffect(() => {
+    setTimeout(() => {
+      setIsLoading(false);
+    }, 2200);
+
     Axios({
       url: 'https://server.birthwiki.space/data/date',
       method: 'POST',
@@ -72,7 +76,7 @@ const Main = () => {
 
   const Background = styled.div`
     display: flex;
-    justify-content: space-around;
+    justify-content: space-between;
     align-items: center;
     flex-direction: column;
     width: 100%;
@@ -99,7 +103,13 @@ const Main = () => {
 
   return (
     <>
-      {data ? (
+      {isLoading ? (
+        <LoadingImg>
+          <div>
+            <img src={`${process.env.PUBLIC_URL}/mainLoading2.gif`}></img>
+          </div>
+        </LoadingImg>
+      ) : data ? (
         <Background>
           {isHover ? (
             <>
@@ -126,12 +136,27 @@ const Main = () => {
               setIsHover={setIsHover}
             />
           ) : null}
-          {/* isHoriz?<HorizFlow data={data} /> : null */}
         </Background>
       ) : null}
     </>
   );
 };
+
+const LoadingImg = styled.div`
+  width: 100vw;
+  height: 100vh;
+  & div {
+    top: 25%;
+    left: 25%;
+    position: relative;
+    height: 50%;
+    width: 50%;
+    & img {
+      height: 100%;
+      width: 100%;
+    }
+  }
+`;
 
 const DateInput = styled.div`
   padding: 10px 10px 10px 10;

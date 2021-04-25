@@ -43,6 +43,7 @@ function CoverFlow(props: any) {
   const initCheck = Array(6).fill(false);
   initCheck[props.selected] = true;
   const [checked, setChecked] = useState(initCheck);
+  const [isMove, setIsMove] = useState(false);
 
   const prevHandler = () => {
     const curCheck = checked.indexOf(true) === 0 ? 6 : checked.indexOf(true);
@@ -59,9 +60,12 @@ function CoverFlow(props: any) {
   };
 
   const clickHandler = (idx: number) => {
-    const changeCheck = Array(6).fill(false);
-    changeCheck[idx] = true;
-    setChecked(changeCheck);
+    if (!isMove) {
+      const changeCheck = Array(6).fill(false);
+      changeCheck[idx] = true;
+      setChecked(changeCheck);
+    }
+    setIsMove(false);
   };
 
   const pressHandler = (e: React.KeyboardEvent<HTMLDivElement>) => {
@@ -75,15 +79,17 @@ function CoverFlow(props: any) {
   let prevArr: number[] = [];
   let nextArr: number[] = [];
   const wheelHandler = (e: React.WheelEvent<HTMLDivElement>) => {
-    if (e.deltaY > 0) {
-      prevArr.push(1);
-      setTimeout(() => {
-        if (prevArr[0]) {
-          prevHandler();
-          prevArr = [];
-        }
-      }, 100);
-    } else if (e.deltaY < 0) {
+    e.preventDefault();
+    // if (e.deltaY > 0) {
+    //   prevArr.push(1);
+    //   setTimeout(() => {
+    //     if (prevArr[0]) {
+    //       prevHandler();
+    //       prevArr = [];
+    //     }
+    //   }, 100);
+    // } else
+    if (e.deltaY < 0) {
       nextArr.push(1);
       setTimeout(() => {
         if (nextArr[0]) {
@@ -94,15 +100,18 @@ function CoverFlow(props: any) {
     }
   };
 
-  let startP: any;
-  let endP: any;
+  let startP: number;
+  let endP: number;
   function dragStart(e: any) {
+    setIsMove(true);
     e.preventDefault();
     if (e.type === 'touchstart') {
       startP = e.touches[0].clientX;
     } else {
       startP = e.clientX;
     }
+    document.onmousemove = dragAction;
+    document.onmouseup = dragEnd;
   }
 
   function dragAction(e: any) {
@@ -113,14 +122,15 @@ function CoverFlow(props: any) {
     }
   }
 
-  function dragEnd(e: any) {
+  async function dragEnd(e: any) {
     if (startP - endP > 0) {
-      nextHandler();
+      await nextHandler();
     } else if (startP - endP < 0) {
-      prevHandler();
+      await prevHandler();
     }
-    startP = 0;
-    endP = 0;
+
+    document.onmousemove = null;
+    document.onmouseup = null;
   }
 
   return (
@@ -128,7 +138,7 @@ function CoverFlow(props: any) {
       <button onClick={prevHandler} className='moveBtn'>
         <FaRegArrowAltCircleLeft />
       </button>
-      <div className='slider' tabIndex={0} onKeyUp={pressHandler}>
+      <div className='slider' tabIndex={0} onKeyUp={pressHandler} draggable='true' onDragStart={dragStart}>
         {cardData.map((el, idx: any) => {
           return (
             <input
@@ -144,16 +154,20 @@ function CoverFlow(props: any) {
             />
           );
         })}
-        <div className='testimonials' draggable={false}>
+        <div className='testimonials'>
           {cardData.map((el, idx) => {
             if (idx < 5) {
               return (
                 <label key={idx} className='item' htmlFor={`t-${idx + 1}`}>
-                  {/* 이슈 버스 데스 */}
                   {el.contents ? (
                     <div className='inner_item'>
                       <div className='sideImg'>
-                        <img src={`${el.image}`} alt={`${el.category}`} draggable={false} />
+                        <img
+                          src={`${el.image}`}
+                          alt={`${el.category}`}
+                          draggable='false'
+                          onWheel={wheelHandler}
+                        />
                       </div>
                       <div className='sideContent'>
                         <div>
@@ -176,8 +190,12 @@ function CoverFlow(props: any) {
                   ) : (
                     <div className='inner_item'>
                       <div className='sideImg'>
-                        {el.movie ? <img src={`${el.world.poster}`} alt={`${el.category}`} /> : null}
-                        {el.world.poster ? <img src={`${el.world.poster}`} alt={`${el.category}`} /> : null}
+                        <img
+                          src={`${el.image}`}
+                          alt={`${el.category}`}
+                          draggable='false'
+                          onWheel={wheelHandler}
+                        />
                       </div>
                       <div className='sideContent'>
                         <div>
@@ -190,12 +208,14 @@ function CoverFlow(props: any) {
                                 src={`${el.world.poster}`}
                                 alt={`${el.world.title}`}
                                 style={{ width: '100px', height: '100px' }}
+                                draggable='false'
                               />
                               <h3>{el.world.title}</h3>
                             </>
                           ) : (
                             <div>자료없음</div>
                           )}
+                          {el.world.singer ? <h4>{el.world.singer.replace('&amp;', '&')}</h4> : null}
                           <p>해외</p>
                           {el.korea ? (
                             <>
@@ -203,12 +223,14 @@ function CoverFlow(props: any) {
                                 src={`${el.korea.poster}`}
                                 alt={`${el.korea.title}`}
                                 style={{ width: '100px', height: '100px' }}
+                                draggable='false'
                               />
                               <h4>{el.korea.title}</h4>
                             </>
                           ) : (
                             <div>자료없음</div>
                           )}
+                          {el.korea.singer ? <h4>{el.korea.singer.replace('&amp;', '&')}</h4> : null}
                           <p>한국</p>
                         </div>
                         <div>
@@ -217,15 +239,25 @@ function CoverFlow(props: any) {
                       </div>
                     </div>
                   )}
-
-                  {/* 영화 뮤직 */}
                 </label>
               );
             }
           })}
           <label htmlFor='t-6' className='item'>
             {checked[5] ? (
-              <CreateCard setIsFlow={props.setIsFlow} setIsHover={props.setIsHover} />
+              <div className='inner_item'>
+                <div className='sideImg'>
+                  <img
+                    src={`${recordCover}`}
+                    alt={`${recordCover}`}
+                    draggable='false'
+                    onWheel={wheelHandler}
+                  />
+                </div>
+                <div className='sideContent'>
+                  <CreateCard />
+                </div>
+              </div>
             ) : (
               <div>
                 <img
@@ -248,15 +280,11 @@ function CoverFlow(props: any) {
       </button>
       <div
         className='slideBG'
-        onWheel={wheelHandler}
         draggable={true}
         onClick={() => {
           props.setIsFlow(false);
           props.setIsHover(true);
         }}
-        onDragStart={dragStart}
-        onDragOver={dragAction}
-        onDragEnd={dragEnd}
       ></div>
     </Container>
   );
@@ -289,7 +317,7 @@ const Container = styled.div`
 
     & .sideImg img {
       width: 100%;
-      min-height: 70vh;
+      height: 100%;
       object-fit: cover;
     }
 
@@ -301,7 +329,7 @@ const Container = styled.div`
       align-items: center;
       line-height: 1.8;
       color: #141414;
-      padding: 35px;
+      padding: 10px;
       overflow: auto;
 
       & img {
