@@ -1,17 +1,19 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../store/index';
-import { setGuestModal, setGuestReject, setUserInfo } from '../actions';
+import { setGuestModal, setGuestReject, setUserInfo, setSaveModal } from '../actions';
 import axios from 'axios';
 
-function CardCreate({ setIsFlow, setIsHover }: any) {
+function CardCreate({ onwheel }: any) {
   const userInfo = useSelector((state: RootState) => state.userInfoReducer.userInfo);
   const isLogin = useSelector((state: RootState) => state.loginReducer.isLogin);
   const isGuest = useSelector((state: RootState) => state.guestReducer.isGuest);
   const dispatch = useDispatch();
+  const selectedDate = new URL(window.location.href).pathname.split('/')[2];
+  const isSave = useSelector((state: RootState) => state.saveReducer.isSave);
 
-  const currentDate = new Date().toISOString().substring(0, 10);
+  useEffect(() => {}, [isSave]);
 
   const guestCreate = () => {
     if (isGuest) {
@@ -31,20 +33,16 @@ function CardCreate({ setIsFlow, setIsHover }: any) {
         accessToken: `Bearer ${userInfo.accessToken}`,
       },
     }).then((res) => {
-      let newCards = userInfo.recordCards
-        ? [...userInfo.recordCards, res.data.data.recordCards]
-        : [res.data.data.recordCards];
-      let newInfo = Object.assign({}, userInfo, { recordCards: newCards });
+      let newInfo = Object.assign({}, userInfo, { recordCards: res.data.data.recordCards });
       dispatch(setUserInfo(newInfo));
-      setIsHover(true);
-      setIsFlow(false);
+      dispatch(setSaveModal(true));
     });
   };
 
   return (
     <CreateCard>
       <div className='create'>
-        <h2>나의 기록카드 만들기</h2>
+        <h2>나만의 기록</h2>
         <iframe name='frAttachFiles' className='invisable' onLoad={changeInfo}></iframe>
         <form
           target='frAttachFiles'
@@ -52,6 +50,8 @@ function CardCreate({ setIsFlow, setIsHover }: any) {
           name='record-form'
           method='POST'
           encType='multipart/form-data'
+          id='formData'
+          noValidate={true}
         >
           <input
             className='access'
@@ -61,7 +61,7 @@ function CardCreate({ setIsFlow, setIsHover }: any) {
             style={{ display: 'none' }}
           />
           <input type='text' name='nickName' value={`${userInfo.nickName}`} style={{ display: 'none' }} />
-          <input type='text' name='date' value={`${currentDate}`} style={{ display: 'none' }} />
+          <input type='text' name='date' value={`${selectedDate}`} style={{ display: 'none' }} />
 
           <div className='custom-file'>
             <input
@@ -85,7 +85,7 @@ function CardCreate({ setIsFlow, setIsHover }: any) {
               <input type='submit' value='카드 생성' className='createBtn' />
             ) : (
               <button className='createBtn' onClick={guestCreate}>
-                카드 생성
+                기록하기
               </button>
             )}
           </div>
@@ -99,10 +99,12 @@ const CreateCard = styled.div`
   border-radius: 10px;
   width: 100%;
   height: 100%;
-  background: linear-gradient(90deg, rgba(0, 0, 0, 0.2) 0%, rgba(0, 0, 0, 0.2) 100%),
-    url('https://images.unsplash.com/photo-1527345931282-806d3b11967f?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=967&q=80');
   background-size: cover;
   background-repeat: no-repeat;
+
+  & h2 {
+    color: black;
+  }
 
   & .create {
     color: #fff;
@@ -130,7 +132,7 @@ const CreateCard = styled.div`
   }
 
   & .create .card-desc {
-    width: 420px;
+    width: 270px;
     height: 170px;
     padding: 10px 10px;
     box-sizing: border-box;

@@ -33,7 +33,6 @@ export default Footer;
 const FooterContainer = styled.div`
   background: #060b26;
   color: #fff;
-  margin-bottom: 10px;
   & .copy-right {
     text-align: center;
     font-size: 8px;

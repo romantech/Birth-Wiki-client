@@ -11,6 +11,7 @@ import SidebarSignUp from './components/SidebarSignUp';
 import SidebarEdit from './components/SidebarEdit';
 import GuestModal from './components/GuestModal';
 import GuestReject from './components/GuestReject';
+import SaveModal from './components/saveModal';
 import Footer from './components/Footer';
 
 function App(): JSX.Element {
@@ -18,6 +19,7 @@ function App(): JSX.Element {
   const isEdit = useSelector((state: RootState) => state.signupReducer.isEdit);
   const isGuestModal = useSelector((state: RootState) => state.guestReducer.isGuestModal);
   const isReject = useSelector((state: RootState) => state.guestReducer.isReject);
+  const isSave = useSelector((state: RootState) => state.saveReducer.isSave);
 
   return (
     <Router>
@@ -33,6 +35,7 @@ function App(): JSX.Element {
       ) : null}
       {isGuestModal ? <GuestModal /> : null}
       {isReject ? <GuestReject /> : null}
+      {isSave ? <SaveModal /> : null}
       <Footer />
     </Router>
   );
