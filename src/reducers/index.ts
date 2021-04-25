@@ -6,6 +6,7 @@ import userInfoReducer from './userInfoReducer';
 import sidebarReducer from './sidebarReducer';
 import signupReducer from './signupReducer';
 import guestReducer from './guestReducer';
+import saveReducer from './saveReducer';
 
 const persistConfig = {
   key: 'root',
@@ -18,6 +19,7 @@ const rootReducer = combineReducers({
   sidebarReducer,
   signupReducer,
   guestReducer,
+  saveReducer,
 });
 
 export default persistReducer(persistConfig, rootReducer);

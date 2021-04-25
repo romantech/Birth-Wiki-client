@@ -74,8 +74,9 @@ const CardContents = styled.div`
   border-radius: 15px;
   background-size: cover;
   position: relative;
-  height: 200px;
+  height: 25vh;
   top: 40px;
+  bottom: 0px;
   color: #fff;
   cursor: pointer;
 

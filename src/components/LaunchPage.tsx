@@ -99,6 +99,7 @@ export default function LaunchPage() {
       setWarning(true);
     }
   };
+
   return (
     <>
       <LaunchScreen>
@@ -278,14 +279,13 @@ const InputContiner = styled.div`
   padding: 10px;
   border-radius: 20px;
   z-index: 2;
-  top: 60%;
+  bottom: 20%;
   background: rgb(255, 255, 255, 0.3);
   width: 500px;
   height: 200px;
   /* transform: translate(-50%, -50%); */
-  @media screen and (max-width: 600px) {
+  @media screen and (max-width: 425px) {
     width: 100%;
-    position: fixed;
   }
 `;
 
