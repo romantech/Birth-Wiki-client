@@ -341,6 +341,7 @@ const Container = styled.div`
 
       @media (max-width: 699px) {
         width: 100%;
+        padding: 0;
       }
     }
 
@@ -365,6 +366,10 @@ const Container = styled.div`
         padding: 5px 10px;
         border-radius: 15px;
         background: #eee;
+      }
+
+      @media (max-width: 699px) {
+        font-size: 0.8rem;
       }
     }
   }
