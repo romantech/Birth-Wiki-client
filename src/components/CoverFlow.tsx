@@ -15,13 +15,13 @@ import { check } from 'prettier';
 function CoverFlow(props: any) {
   const subMovie = {
     image: movieCover,
-    korea: { title: '정보 없음', poster: '정보 없음' },
-    world: { title: '정보 없음', poster: '정보 없음' },
+    korea: { title: '영화정보가 없습니다', poster: movieCover },
+    world: { title: '영화정보가 없습니다', poster: movieCover },
   };
   const subMusic = {
     image: musicCover,
-    korea: { title: '정보 없음', poster: '정보 없음', singer: '정보 없음' },
-    world: { title: '정보 없음', poster: '정보 없음', singer: '정보 없음' },
+    korea: { title: '음악정보가 없습니다', poster: musicCover, singer: '가수정보가 없습니다' },
+    world: { title: '음악정보가 없습니다', poster: musicCover, singer: '가수정보가 없습니다' },
   };
 
   const data = props.data;
@@ -228,7 +228,7 @@ function CoverFlow(props: any) {
                                 style={{ width: '100px', height: '100px' }}
                                 draggable='false'
                               />
-                              <h4>{el.korea.title}</h4>
+                              <h3>{el.korea.title}</h3>
                             </>
                           ) : (
                             <div>자료없음</div>
@@ -317,6 +317,9 @@ const Container = styled.div`
 
       @media (max-width: 699px) {
         width: 100%;
+        height: 18vh;
+        box-shadow: none;
+        border-radius: 0;
       }
     }
 
@@ -346,6 +349,7 @@ const Container = styled.div`
 
       @media (max-width: 699px) {
         width: 100%;
+        height: 250px;
         padding: 0;
       }
     }
