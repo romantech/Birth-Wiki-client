@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import styled from 'styled-components';
 import { useDispatch } from 'react-redux';
 import { setIsLogin, setUserInfo, setIsSidbar, setIsSignup } from '../actions/index';
@@ -10,7 +10,7 @@ import axios from 'axios';
 
 function SidebarSignUp() {
   const dispatch = useDispatch();
-
+  const modalRef = useRef<HTMLDivElement>(null);
   const [signUpInfo, setSignUpInfo] = useState({
     userEmail: '',
     password: '',
@@ -251,8 +251,9 @@ const SignUpWrapper = styled.div`
   width: 400px;
   transition: all 0.2s ease-in-out;
   text-decoration: none;
-  z-index: 10;
+  z-index: 1;
   position: relative;
+  margin-top: 70px;
   & .invisable {
     display: none;
   }

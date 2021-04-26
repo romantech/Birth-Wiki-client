@@ -111,9 +111,9 @@ export default function LaunchPage() {
           </div>
         </BGVideoContiner>
         {/* <WordsContainner>
-        <Words>What happened</Words>
-        <Words>on Your BirthDay!</Words>
-      </WordsContainner> */}
+          <Words>What happened</Words>
+          <Words>on Your BirthDay!</Words>
+        </WordsContainner> */}
 
         <InputContiner>
           <InputSubmit>
@@ -190,7 +190,7 @@ export default function LaunchPage() {
   );
 }
 const BGVideoContiner = styled.div`
-  background: #0c0c0c;
+  background: #060b26;
   display: flex;
   justify-content: center;
   padding: 0;
