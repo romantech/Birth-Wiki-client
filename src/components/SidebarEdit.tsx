@@ -13,6 +13,7 @@ function SidebarEdit() {
   const isSidebar = useSelector((state: RootState) => state.sidebarReducer.isSidebar);
   const userInfo = useSelector((state: RootState) => state.userInfoReducer.userInfo);
   const dispatch = useDispatch();
+  const modalRef = useRef<HTMLDivElement>(null);
   const [editUserInfo, setEditUserInfo] = useState(userInfo);
   const { password, password2, errorMsg } = editUserInfo;
 
@@ -227,8 +228,9 @@ const EditWrapper = styled.div`
   width: 400px;
   transition: all 0.2s ease-in-out;
   text-decoration: none;
-  z-index: 10;
+  z-index: 1;
   position: relative;
+  margin-top: 70px;
   & .invisable {
     display: none;
   }

@@ -63,7 +63,7 @@ const Footer = () => {
             <div className='contect'>
               <a
                 className='repo'
-                href='hhttps://github.com/Ma-SangHee'
+                href='https://github.com/Ma-SangHee'
                 target='_blank'
                 rel='noopener noreferrer'
               >
@@ -95,7 +95,6 @@ const FooterContainer = styled.div`
   }
 
   @media (max-width: 899px) {
-    font-size: 10px;
     padding-left: 10px;
   }
 `;
@@ -130,7 +129,7 @@ const ContactUs = styled.div`
 
   & .team {
     display: flex;
-    @media (max-width: 576px) {
+    @media (max-width: 750px) {
       flex-direction: column;
     }
     & .position {
