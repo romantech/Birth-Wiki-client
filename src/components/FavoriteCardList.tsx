@@ -44,8 +44,8 @@ const FavoriteCardList = ({ ...props }: SetFilteredArray): JSX.Element => {
       }
     });
   };
-
   fetchImage(props.image);
+
   useEffect(() => {
     return () => setFetchStatus(false);
   }, []);
@@ -109,7 +109,7 @@ const FavoriteCardList = ({ ...props }: SetFilteredArray): JSX.Element => {
       <FlipCard>
         <FlipCardInner fetchStatus={fetchStatus} imgPath={props.image} category={category}>
           <FlipCardFront>
-            <CategoryName category={category}>{category}</CategoryName>
+            <CategoryName>{category}</CategoryName>
             <CardYear category={category}>
               {category !== 'music' && category !== 'movie' ? props.date : `${props.date}w`}
             </CardYear>
@@ -294,6 +294,15 @@ const LoadingBackground = styled.div<{ category: string }>`
   }};
   width: 100%;
   overflow: hidden;
+
+  @media (max-width: 576px) {
+    height: ${(props) => {
+      if (props.category === 'music') {
+        return '160px';
+      }
+      return '240px';
+    }};
+  }
 `;
 
 const ModalView = styled.button`
@@ -370,25 +379,36 @@ export const HeartIcon = styled(FiHeart)`
 const CardYear = styled.p<{ category: string }>`
   position: absolute;
   color: #ffffffb3;
-  font-size: 80%;
+  font-size: 75%;
   text-align: center;
   font-weight: 900;
-  left: ${(props) => (props.category !== 'music' && props.category !== 'movie' ? '21%' : '25%')};
-  width: ${(props) => (props.category !== 'music' && props.category !== 'movie' ? '30%' : '40%')};
-  top: auto;
-  bottom: -2.5%;
   transform: translate(-50%, -50%);
   z-index: 1;
   background: #00000029;
   border-radius: 18px;
   padding: 5px;
+
+  left: ${(props) => (props.category !== 'music' && props.category !== 'movie' ? '3rem' : '4rem')};
+  width: ${(props) => (props.category !== 'music' && props.category !== 'movie' ? '4rem' : '6rem')};
+  top: auto;
+  bottom: -0.5rem;
 `;
 
-const CategoryName = styled(CardYear)`
-  left: 79%;
-  width: 30%;
-  top: 4%;
-  bottom: auto;
+const CategoryName = styled.p`
+  position: absolute;
+  color: #ffffffb3;
+  font-size: 75%;
+  text-align: center;
+  font-weight: 900;
+  transform: translate(-50%, -50%);
+  z-index: 1;
+  background: #00000029;
+  border-radius: 18px;
+  padding: 5px;
+
+  right: -1rem;
+  width: 4rem;
+  top: 1rem;
 `;
 
 const FlipCardFront = styled.div`
@@ -461,10 +481,12 @@ const FlipCardInner = styled.div<{ imgPath: string; category: string; fetchStatu
       letter-spacing: 1.5px;
       font-weight: 900;
       font-size: 1.2rem;
+    }
 
-      @media (max-width: 576px) {
-        top: 15px;
-        font-size: 1rem;
+    @media (max-width: 375px) {
+      h2,
+      h4 {
+        display: none;
       }
     }
 
@@ -476,7 +498,17 @@ const FlipCardInner = styled.div<{ imgPath: string; category: string; fetchStatu
         (props.category === 'music' || props.category === 'movie') &&
         css`
           margin: 40px 0 19px 0;
-        `}
+        `};
+
+      @media (max-width: 375px) {
+        margin: ${(props) => {
+          if (props.category === 'music' || props.category === 'movie') {
+            return '0px 0 19px 0;';
+          } else {
+            return '16px 0 19px 0;';
+          }
+        }};
+      }
     }
 
     p {

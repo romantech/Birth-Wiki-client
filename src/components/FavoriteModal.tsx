@@ -39,8 +39,6 @@ const FavoriteModal = ({ showModal, setShowModal, ...props }: Props): JSX.Elemen
         if (res.data.total_results !== 0 && res.data.results[0].profile_path) {
           const path = 'https://image.tmdb.org/t/p/w500' + res.data.results[0].profile_path;
           setWorldSingerImgPath(path);
-        } else {
-          return '';
         }
       });
     }
@@ -104,7 +102,7 @@ const FavoriteModal = ({ showModal, setShowModal, ...props }: Props): JSX.Elemen
                 </div>
                 <div>
                   {category !== 'music' && category !== 'movie' ? (
-                    props.contents?.map((issue, index) => <p key={index}>{`${issue[0]} - ${issue[1]}`}</p>)
+                    props.contents?.map((issue, index) => <p key={index}>{`${issue[0]} — ${issue[1]}`}</p>)
                   ) : category === 'movie' ? (
                     <>
                       <MediaImageKorea korea={mediaImageKorea} world={mediaImageWorld} />
@@ -245,9 +243,26 @@ const ModalWrapper = styled.div`
 
   // 900px 이하일 때
   @media (max-width: 899px) {
+    margin-bottom: -4rem;
     width: 80vw;
+    max-width: 500px;
+    height: 80vh;
+    display: grid;
+    grid-template-rows: 1fr 2fr;
+
+    .icon-circle {
+      background: white;
+      border: none;
+      &:hover {
+        background: #dddddd;
+      }
+    }
+  }
+
+  @media (max-width: 375px) {
+    width: 85vw;
     max-width: 600px;
-    height: 85vh;
+    height: 70vh;
     display: grid;
     grid-template-rows: 1fr 2fr;
 

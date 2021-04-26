@@ -141,6 +141,10 @@ const CreateCard = styled.div`
     border-radius: 15px;
     background-color: #f8f8f8;
     resize: none;
+
+    @media (max-width: 699px) {
+      width: 370px;
+    }
   }
 
   & .createBtn {
