@@ -215,8 +215,7 @@ function SidebarMypage() {
           dispatch(setUserInfo(initialState.userInfo));
         })
         .then(() => {
-          console.log(userInfo);
-          window.location.href = 'https://localhost:3000/';
+          window.location.href = `${process.env.REACT_APP_CLIENT_URL}`;
         })
         .catch((error) => console.log('err', error.message));
     }

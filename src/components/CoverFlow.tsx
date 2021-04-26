@@ -50,6 +50,7 @@ function CoverFlow(props: any) {
     const changeCheck = Array(6).fill(false);
     changeCheck[curCheck - 1] = true;
     setChecked(changeCheck);
+    props.setSelected(curCheck - 1);
   };
 
   const nextHandler = () => {
@@ -215,7 +216,9 @@ function CoverFlow(props: any) {
                           ) : (
                             <div>자료없음</div>
                           )}
-                          {el.world.singer ? <h4>{el.world.singer.replace('&amp;', '&')}</h4> : null}
+                          {el.world && el.world.singer ? (
+                            <h4>{el.world.singer.replace('&amp;', '&')}</h4>
+                          ) : null}
                           <p>해외</p>
                           {el.korea ? (
                             <>
@@ -230,7 +233,9 @@ function CoverFlow(props: any) {
                           ) : (
                             <div>자료없음</div>
                           )}
-                          {el.korea.singer ? <h4>{el.korea.singer.replace('&amp;', '&')}</h4> : null}
+                          {el.korea && el.korea.singer ? (
+                            <h4>{el.korea.singer.replace('&amp;', '&')}</h4>
+                          ) : null}
                           <p>한국</p>
                         </div>
                         <div>
@@ -255,7 +260,7 @@ function CoverFlow(props: any) {
                   />
                 </div>
                 <div className='sideContent'>
-                  <CreateCard />
+                  <CreateCard setChecked={setChecked} />
                 </div>
               </div>
             ) : (

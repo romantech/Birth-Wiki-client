@@ -9,20 +9,14 @@ function GuestModal() {
   const dispatch = useDispatch();
 
   const accept = () => {
-    console.log('수락');
     dispatch(setGuest(true));
     dispatch(setUserInfo(guestState));
     dispatch(setGuestModal(false));
   };
 
   const reject = () => {
-    console.log('거절');
     dispatch(setGuestModal(false));
   };
-
-  useEffect(() => {
-    console.log('모달오픈');
-  }, []);
 
   return (
     <Background ref={modalRef} onClick={reject}>

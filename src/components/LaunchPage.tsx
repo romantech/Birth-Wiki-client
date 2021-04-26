@@ -87,7 +87,6 @@ export default function LaunchPage() {
       } else {
         birthwikiHandler();
       }
-      console.log(date.year + '-' + date.month + '-' + date.day);
     }
   };
 
