@@ -16,6 +16,7 @@ import snow from '../img/snow.jpg';
 import cloud from '../img/cloud.jpg';
 import solar from '../img/solar.jpg';
 import lightning from '../img/lightning.jpg';
+import iridescence from '../img/iridescence.jpg';
 
 const Main = () => {
   const selectedDate = new URL(window.location.href).pathname;
@@ -67,6 +68,9 @@ const Main = () => {
         break;
       case '뇌전':
         setWeather(lightning);
+        break;
+      case '채운':
+        setWeather(iridescence);
         break;
       case '우박':
         setWeather(snow);
