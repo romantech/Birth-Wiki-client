@@ -18,9 +18,6 @@ function GuestModal() {
     dispatch(setGuestModal(false));
   };
 
-  useEffect(() => {
-  }, []);
-
   return (
     <Background ref={modalRef} onClick={reject}>
       <ModalWrapper>

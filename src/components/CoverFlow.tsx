@@ -216,7 +216,9 @@ function CoverFlow(props: any) {
                           ) : (
                             <div>자료없음</div>
                           )}
-                          {el.world.singer ? <h4>{el.world.singer.replace('&amp;', '&')}</h4> : null}
+                          {el.world && el.world.singer ? (
+                            <h4>{el.world.singer.replace('&amp;', '&')}</h4>
+                          ) : null}
                           <p>해외</p>
                           {el.korea ? (
                             <>
@@ -231,7 +233,9 @@ function CoverFlow(props: any) {
                           ) : (
                             <div>자료없음</div>
                           )}
-                          {el.korea.singer ? <h4>{el.korea.singer.replace('&amp;', '&')}</h4> : null}
+                          {el.korea && el.korea.singer ? (
+                            <h4>{el.korea.singer.replace('&amp;', '&')}</h4>
+                          ) : null}
                           <p>한국</p>
                         </div>
                         <div>
