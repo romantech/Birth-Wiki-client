@@ -64,7 +64,7 @@ const Title = styled.div`
 
   @media (max-width: 970px) {
     flex-direction: column;
-    line-height: 2rem;
+    line-height: 3rem;
   }
 `;
 
@@ -92,6 +92,7 @@ const TextContainer = styled.div`
     flex-direction: row;
     flex-wrap: wrap;
     justify-content: center;
+    line-height: 2rem;
   }
 
   & .text {
@@ -110,25 +111,15 @@ const VideoContainer = styled.div`
   flex-direction: column;
   justify-content: center;
   padding: 0;
-  /* height: 500px; */
   width: 700px;
   position: relative;
   z-index: 1;
-
-  & .videoContainer {
-    position: absolute;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: 0;
+  @media (max-width: 970px) {
     width: 100%;
-    height: 100%;
-    overflow: hidden;
   }
+
   & .video {
     width: 100%;
     height: 100%;
-    /* -o-object-fit: cover;
-    object-fit: cover; */
   }
 `;

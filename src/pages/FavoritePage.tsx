@@ -20,9 +20,10 @@ let sliceEnd = 11;
 const FavoritePage = (): JSX.Element => {
   const { userInfo } = useSelector((state: RootState) => state.userInfoReducer);
   let { likeCards } = useSelector((state: RootState) => state.userInfoReducer.userInfo);
+  let { recordCards } = useSelector((state: RootState) => state.userInfoReducer.userInfo);
 
   likeCards = addLikeProperty(likeCards);
-  const [renderArray, setRenderArray] = useState<LikeCardsGeneral[]>([]);
+  const [renderArray, setRenderArray] = useState<any[]>([]);
   const [filteredArray, setFilteredArray] = useState<LikeCardsGeneral[]>(likeCards !== null ? likeCards : []);
 
   const getLikeCards = (start: number, end: number) => {
@@ -62,6 +63,7 @@ const FavoritePage = (): JSX.Element => {
               key={category.categoryName}
               setFilteredArray={setFilteredArray}
               likeCards={likeCards}
+              recordCards={recordCards}
               setRenderArray={setRenderArray}
             />
           ))}
@@ -105,6 +107,9 @@ const FavoritePage = (): JSX.Element => {
                     korea={card.korea}
                     world={card.world}
                     key={index}
+                    recordImage={card.cardImage}
+                    recordDesc={card.cardDesc}
+                    recordWriter={card.writer}
                     setFilteredArray={setFilteredArray}
                     filteredArray={filteredArray}
                   />
