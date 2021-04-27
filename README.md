@@ -1,6 +1,6 @@
 # About
 
-<img width="429" alt="logo" src="https://user-images.githubusercontent.com/8604840/115818693-448ac100-a438-11eb-9fa2-79430e64144f.png">
+<img width="429" alt="logo" src="https://user-images.githubusercontent.com/70802487/116229201-2c48d800-a791-11eb-86d8-df4cc15e31d3.png">
 
 내 생일에 어떤 일이 있었는지 궁금하지 않으신가요?  
 [Birth Wiki](https://birthwiki.space)에서 확인할 수 있습니다. 
