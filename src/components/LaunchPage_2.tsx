@@ -64,7 +64,7 @@ const Title = styled.div`
 
   @media (max-width: 970px) {
     flex-direction: column;
-    line-height: 3rem;
+    line-height: 2rem;
   }
 `;
 
@@ -92,7 +92,6 @@ const TextContainer = styled.div`
     flex-direction: row;
     flex-wrap: wrap;
     justify-content: center;
-    line-height: 2rem;
   }
 
   & .text {
@@ -115,9 +114,6 @@ const VideoContainer = styled.div`
   width: 700px;
   position: relative;
   z-index: 1;
-  @media (max-width: 970px) {
-    width: 100%;
-  }
 
   & .videoContainer {
     position: absolute;
