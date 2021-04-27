@@ -6,7 +6,7 @@ import Nav from './components/Nav';
 import Main from './pages/Main';
 import { RootState } from './store/index';
 import FavoritePage from './pages/FavoritePage';
-import LaunchPage from './components/LaunchPage';
+import LaunchPage from './pages/LaunchPage';
 import SidebarSignUp from './components/SidebarSignUp';
 import SidebarEdit from './components/SidebarEdit';
 import GuestModal from './components/GuestModal';

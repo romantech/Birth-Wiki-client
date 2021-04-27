@@ -197,7 +197,7 @@ function SidebarEdit() {
           <SubTitle>선택사항</SubTitle>
           <InputCatecory>프로필 이미지 등록</InputCatecory>
           <EditInput type='file' name='profileImage' accept='image/*' />
-          {(check.password && check.password2) || check.nickName ? (
+          {(check.password && check.password2) || duple.nickName ? (
             <EditSubmit type='submit' value='회원 정보 수정'></EditSubmit>
           ) : (
             <SubmitDiv>회원 정보 수정</SubmitDiv>
