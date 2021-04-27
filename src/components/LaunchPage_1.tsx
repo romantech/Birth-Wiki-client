@@ -5,7 +5,7 @@ import Footer from './Footer';
 
 import 'dotenv/config';
 
-export default function LaunchPage_1() {
+export default function LaunchPage_1({ setIsLoading }: any) {
   const [date, setDate] = useState({ year: '0', month: '0', day: '0' });
   const [warning, setWarning] = useState(false);
 
@@ -93,7 +93,9 @@ export default function LaunchPage_1() {
   const birthwikiHandler = () => {
     let selectDate = date.year + '-' + date.month + '-' + date.day;
     if (date.year !== '0' && date.month !== '0' && date.day !== '0') {
-      window.location.href = `${process.env.REACT_APP_CLIENT_URL}/main/${selectDate}`;
+      setIsLoading(true);
+      //setTimeout(() => {}, 1000);
+      window.location.replace(`${process.env.REACT_APP_CLIENT_URL}/main/${selectDate}`);
     } else {
       setWarning(true);
     }
@@ -190,15 +192,22 @@ export default function LaunchPage_1() {
   );
 }
 const BGVideoContiner = styled.div`
-  background: #060b26;
   display: flex;
-  justify-content: center;
   padding: 0;
-  height: 800px;
+  height: 80%;
+  width: 100%;
   position: relative;
   z-index: 1;
 
-  & .videoContainer {
+  & img {
+    position: relative;
+    width: 100%;
+    top: 10%;
+    -o-object-fit: cover;
+    object-fit: cover;
+  }
+
+  & .videoContiner {
     position: absolute;
     top: 0;
     right: 0;
@@ -208,6 +217,7 @@ const BGVideoContiner = styled.div`
     height: 100%;
     overflow: hidden;
   }
+
   & .video {
     width: 100%;
     height: 100%;
@@ -318,7 +328,7 @@ const InputContiner = styled.div`
 `;
 
 const InputSubmit = styled.form`
-  display: block;
+  display: inline-block;
   justify-content: space-between;
   padding: 5px;
 `;
@@ -343,7 +353,7 @@ const InputDate = styled.input`
 `;
 
 const BirthwikiBtn = styled.button`
-  background: #060b26;
+  background: black;
   border-radius: 50px;
   padding: 16px 20px;
   color: #fff;

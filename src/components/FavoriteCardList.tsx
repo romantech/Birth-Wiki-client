@@ -15,6 +15,9 @@ import axios from 'axios';
 interface SetFilteredArray extends LikeCardsGeneral {
   setFilteredArray: React.Dispatch<React.SetStateAction<LikeCardsGeneral[]>>;
   filteredArray: LikeCardsGeneral[];
+  recordImage: any;
+  recordDesc: any;
+  recordWriter: any;
 }
 
 const FavoriteCardList = ({ ...props }: SetFilteredArray): JSX.Element => {
@@ -36,13 +39,19 @@ const FavoriteCardList = ({ ...props }: SetFilteredArray): JSX.Element => {
   const [fetchStatus, setFetchStatus] = useState(false);
 
   const fetchImage = (url: string) => {
-    axios.get(url).then((res) => {
-      if (res.status === 200) {
-        setTimeout(() => {
-          setFetchStatus(true);
-        }, 500);
-      }
-    });
+    if (props.category) {
+      axios.get(url).then((res) => {
+        if (res.status === 200) {
+          setTimeout(() => {
+            setFetchStatus(true);
+          }, 500);
+        }
+      });
+    } else {
+      setTimeout(() => {
+        setFetchStatus(true);
+      }, 500);
+    }
   };
   fetchImage(props.image);
 
@@ -103,6 +112,11 @@ const FavoriteCardList = ({ ...props }: SetFilteredArray): JSX.Element => {
     const contentsLength = props.contents.length;
     props.image = getVerticalImg(props.image, props.category, contentsLength);
   }
+  if (!props.category) {
+    props.image = props.recordImage
+      ? `https://server.birthwiki.space/${props.recordImage}`
+      : 'https://images.unsplash.com/photo-1619354923603-1f4cdbe81414?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1900&q=80';
+  }
 
   return (
     <>
@@ -133,7 +147,11 @@ const FavoriteCardList = ({ ...props }: SetFilteredArray): JSX.Element => {
                 <ZoomInIcon />
               </IconCircle>
             </IconWrapper>
-            {category !== 'music' && category !== 'movie' ? (
+            {category === undefined ? (
+              <h2>{`${props.date.split('-')[0]}년${props.date.split('-')[1]}월${
+                props.date.split('-')[2]
+              }일`}</h2>
+            ) : category !== 'music' && category !== 'movie' ? (
               <h2>{`${props.date.split('-')[0]}월${props.date.split('-')[1]}일`}</h2>
             ) : (
               <>
@@ -143,7 +161,9 @@ const FavoriteCardList = ({ ...props }: SetFilteredArray): JSX.Element => {
               </>
             )}
             <li />
-            {category !== 'music' && category !== 'movie' ? (
+            {category === undefined ? (
+              <div>{`${props.recordDesc}`}</div>
+            ) : category !== 'music' && category !== 'movie' ? (
               props.contents?.map((issue, index) => <p key={index}>{`${issue[0]} - ${issue[1]}`}</p>)
             ) : category === 'movie' ? (
               <>
