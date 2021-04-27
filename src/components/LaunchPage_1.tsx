@@ -191,10 +191,11 @@ export default function LaunchPage_1({ setIsLoading }: any) {
     </>
   );
 }
+
 const BGVideoContiner = styled.div`
   display: flex;
   padding: 0;
-  height: 80%;
+  height: 100%;
   width: 100%;
   position: relative;
   z-index: 1;
@@ -252,6 +253,11 @@ const Words = styled.span`
       margin-bottom: -15px;
     }
   }
+  @media (max-width: 425px) {
+    font-size: 30px;
+    letter-spacing: 1px;
+    margin-bottom: 20px;
+  } ;
 `;
 const Words1 = styled.span`
   color: #eee;
@@ -279,6 +285,11 @@ const Words1 = styled.span`
       margin-bottom: -15px;
     }
   }
+  @media (max-width: 425px) {
+    font-size: 20px;
+    letter-spacing: 1px;
+    margin-bottom: 20px;
+  } ;
 `;
 const WordsContainner = styled.div`
   text-align: center;
@@ -349,6 +360,10 @@ const InputDate = styled.input`
   ::-webkit-inner-spin-button {
     -webkit-appearance: none;
     margin: 0;
+  }
+  @media screen and (max-width: 425px) {
+    font-size: 1.5rem;
+    height: 25px;
   }
 `;
 
