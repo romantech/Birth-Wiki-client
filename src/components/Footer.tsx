@@ -30,6 +30,10 @@ const Footer = () => {
         <ContactUs>
           <h2>Contact Us</h2>
           <div className='team'>
+            <span className='position'>문의 메일</span>
+            <div className='contect'>birthwiki@gmail.com</div>
+          </div>
+          <div className='team'>
             <span className='position'>Back-end</span>
             <div className='contect'>
               <a className='repo' href='https://github.com/G-Ryu' target='_blank' rel='noopener noreferrer'>
