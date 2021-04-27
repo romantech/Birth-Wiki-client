@@ -13,7 +13,7 @@ function LoadingModal() {
     <Background>
       <LoadingImg>
         <div>
-          <img src={`${process.env.PUBLIC_URL}/clock1.gif`}></img>
+          <img src={`${process.env.PUBLIC_URL}/mainLoading2.gif`}></img>
         </div>
       </LoadingImg>
     </Background>
@@ -23,14 +23,12 @@ function LoadingModal() {
 export default LoadingModal;
 
 const LoadingImg = styled.div`
-  width: 100vw;
-  height: 100vh;
+  width: 100%;
+  height: 100%;
   & div {
-    top: 25%;
-    left: 25%;
     position: relative;
-    height: 50%;
-    width: 50%;
+    height: 100%;
+    width: 100%;
     & img {
       height: 100%;
       width: 100%;

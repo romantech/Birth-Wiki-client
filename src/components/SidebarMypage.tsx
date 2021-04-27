@@ -10,6 +10,7 @@ import SidebarMystory from './SidebarMystory';
 import { LikeCardsGeneral } from '../types/index';
 import Pagination from './pagination';
 import { AiFillCaretUp, AiFillCaretDown } from 'react-icons/ai';
+import guestState from '../reducers/guestState';
 
 const MypageContainer = styled.div`
   color: #fff;
@@ -197,7 +198,7 @@ function SidebarMypage() {
     if (isGuest) {
       dispatch(setGuest(false));
       dispatch(setIsSidbar(false));
-      dispatch(setUserInfo(initialState.userInfo));
+      dispatch(setUserInfo(guestState));
     } else {
       axios({
         url: 'https://server.birthwiki.space/user/logout',

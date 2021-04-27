@@ -175,7 +175,6 @@ const BirthwikiSearch = styled.div`
   padding: 0;
   margin: 0;
   display: flex;
-  flex-direction: column;
   justify-content: center;
   align-items: center;
   flex-wrap: wrap;
@@ -183,6 +182,7 @@ const BirthwikiSearch = styled.div`
   /* background-image: url('../movie.png'); */
   background-position: x y;
   background-size: 100%;
+  width: 600px;
 
   & .warning {
     margin: 10px;
@@ -219,7 +219,8 @@ const BirthwikiBtn = styled.button`
   background: #060b26;
   border-radius: 50px;
   white-space: nowrap;
-  padding: 16px 64px;
+  padding: 8px 25px;
+  margin-left: 20px;
   color: #fff;
   font-size: 16px;
   outline: none;
