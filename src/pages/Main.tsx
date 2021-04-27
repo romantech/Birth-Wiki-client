@@ -18,25 +18,21 @@ import solar from '../img/solar.jpg';
 import lightning from '../img/lightning.jpg';
 import iridescence from '../img/iridescence.jpg';
 
-const Main = () => {
+const Main = ({ setIsLoading }: any) => {
   const selectedDate = new URL(window.location.href).pathname;
   const [showCard, setShowCard] = useState(false);
   const [data, setData] = useState(null);
   const [weather, setWeather] = useState(clear);
   const [isHover, setIsHover] = useState(true);
   const [isFlow, setIsFlow] = useState(false);
-  const [isLoading, setIsLoading] = useState(true);
   const [selected, setSelected] = useState(0);
   const date = selectedDate.split('/')[2];
   const year = date.split('-')[0];
   const month = date.split('-')[1];
   const day = date.split('-')[2];
 
+  setIsLoading(true);
   useEffect(() => {
-    setTimeout(() => {
-      setIsLoading(false);
-    }, 2200);
-
     Axios({
       url: 'https://server.birthwiki.space/data/date',
       method: 'POST',
@@ -101,19 +97,31 @@ const Main = () => {
     }
   `;
 
+  const Loadingground = styled.div`
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-direction: column;
+    width: 100%;
+    height: 10000px;
+    overflow: hidden;
+    object-fit: contain;
+    background: linear-gradient(
+        90deg,
+        rgba(255, 255, 255, 0.3) 0%,
+        rgba(255, 255, 255, 0.3) 50%,
+        rgba(255, 255, 255, 0.3) 100%
+      ),
+      url(${weather}) center center/cover no-repeat;
+  `;
+
   const openCard = () => {
     setShowCard((prev) => !prev);
   };
 
   return (
     <>
-      {isLoading ? (
-        <LoadingImg>
-          <div>
-            <img src={`${process.env.PUBLIC_URL}/mainLoading2.gif`}></img>
-          </div>
-        </LoadingImg>
-      ) : data ? (
+      {data ? (
         <Background>
           {isHover ? (
             <>
@@ -142,26 +150,12 @@ const Main = () => {
             />
           ) : null}
         </Background>
-      ) : null}
+      ) : (
+        <Loadingground />
+      )}
     </>
   );
 };
-
-const LoadingImg = styled.div`
-  width: 100vw;
-  height: 100vh;
-  & div {
-    top: 25%;
-    left: 25%;
-    position: relative;
-    height: 50%;
-    width: 50%;
-    & img {
-      height: 100%;
-      width: 100%;
-    }
-  }
-`;
 
 const DateInput = styled.div`
   padding: 10px 10px 10px 10;
