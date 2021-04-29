@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import Footer from './Footer';
+import { CgMouse } from 'react-icons/cg';
 
 import 'dotenv/config';
 
@@ -104,18 +105,24 @@ export default function LaunchPage_1({ setIsLoading }: any) {
   return (
     <>
       <LaunchScreen>
-        <BGVideoContiner>
-          <div className='videoContiner'>
-            <video className='video' muted loop autoPlay={true}>
-              <source src='../background1.mp4' type='video/mp4'></source>
-            </video>
-          </div>
-        </BGVideoContiner>
+        {/* <BGVideoContiner>
+          <video className='video' muted loop autoPlay={true}>
+            <source src='../background1.mp4' type='video/mp4'></source>
+          </video>
+        </BGVideoContiner> */}
         <WordsContainner>
           <Words>What happened</Words>
           <Words>on Your BirthDay!</Words>
           <Words1>생일을 입력해보세요</Words1>
         </WordsContainner>
+        <MainDescContainer>
+          <Title>
+            내 생일에 어떤 일이 있었는지 궁금하지 않으신가요?
+            <br />
+            자신의 생일에 대한 흥미롭고 재미있는 사실을 발견하세요.
+            <br />
+          </Title>
+        </MainDescContainer>
 
         <InputContiner>
           <InputSubmit>
@@ -187,6 +194,7 @@ export default function LaunchPage_1({ setIsLoading }: any) {
           )}
           <BirthwikiBtn onClick={birthwikiHandler}>Birth Wiki!</BirthwikiBtn>
         </InputContiner>
+        <Nextbtn></Nextbtn>
       </LaunchScreen>
     </>
   );
@@ -303,7 +311,7 @@ const WordsContainner = styled.div`
 
 const LaunchScreen = styled.section`
   font-family: sans-serif;
-  background: #f4f9f9;
+  background: rgba(0, 0, 0, 0.5);
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -318,6 +326,22 @@ const LaunchScreen = styled.section`
   }
 `;
 
+const MainDescContainer = styled.div`
+  display: flex;
+`;
+
+const Title = styled.div`
+  font-size: 2rem;
+  font-weight: 800;
+  letter-spacing: 0.1rem;
+  line-height: 3.5rem;
+  color: #2b2e4a;
+
+  @media (max-width: 970px) {
+    flex-direction: column;
+    line-height: 3rem;
+  }
+`;
 const InputContiner = styled.div`
   display: flex;
   flex-direction: column;
@@ -364,6 +388,7 @@ const InputDate = styled.input`
   @media screen and (max-width: 425px) {
     font-size: 1.5rem;
     height: 25px;
+    padding: 0;
   }
 `;
 
@@ -383,5 +408,25 @@ const BirthwikiBtn = styled.button`
     transition: all 0.2s ease-in-out;
     background: #fff;
     color: #010606;
+  }
+`;
+
+const Nextbtn = styled(CgMouse)`
+  position: absolute;
+  width: 3vw;
+  height: 3vh;
+  left: 48.5vw;
+  animation: down_ani 1.5s ease-in-out infinite;
+
+  @keyframes down_ani {
+    0% {
+      top: 81vh;
+    }
+    50% {
+      top: 79vh;
+    }
+    100% {
+      top: 81vh;
+    }
   }
 `;

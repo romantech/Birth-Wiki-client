@@ -1,21 +1,21 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import styled from 'styled-components';
 
-export default function LaunchPage_2() {
+export default function LaunchPage_4() {
   return (
     <LaunchPageContainer>
+      {' '}
       <MainDescContainer>
-        <Title>생일 검색해 보세요</Title>
+        <Title>
+          나만의 카드
+          <br />
+        </Title>
       </MainDescContainer>
-
       <DescContainer>
         <TextContainer>
-          <div className='text'>내 생일의 날씨정보</div>
-          <div className='text'>내 생일에 발생했던 이슈</div>
-          <div className='text'>나와 생일 같은 유명인</div>
-          <div className='text'>내 생일이 기일인 유명인</div>
-          <div className='text'>내 생일의 1위 영화 </div>
-          <div className='text'>내 생일의 1위 음악</div>
+          <div className='text'>
+            나만의 <span className='color'>기록카드</span>를 만들어보세요
+          </div>
         </TextContainer>
         <VideoContainer>
           <video className='video' muted loop autoPlay={true}>
@@ -26,10 +26,9 @@ export default function LaunchPage_2() {
     </LaunchPageContainer>
   );
 }
-
 const LaunchPageContainer = styled.section`
   font-family: sans-serif;
-  background: #f1f0f6;
+  background: #fff5fb;
   height: 100vh;
   background-size: 100%;
   flex-wrap: wrap;
@@ -40,7 +39,6 @@ const LaunchPageContainer = styled.section`
   flex-direction: column;
   text-align: center;
 `;
-
 const MainDescContainer = styled.div`
   display: flex;
 `;
