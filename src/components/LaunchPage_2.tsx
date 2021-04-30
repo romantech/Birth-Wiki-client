@@ -5,7 +5,10 @@ export default function LaunchPage_2() {
   return (
     <LaunchPageContainer>
       <MainDescContainer>
-        <Title>생일 검색해 보세요</Title>
+        <Title>
+          자신의 생일에 대한 <br />
+          흥미롭고 재미있는 사실을 발견하세요.
+        </Title>
       </MainDescContainer>
 
       <DescContainer>
@@ -19,7 +22,7 @@ export default function LaunchPage_2() {
         </TextContainer>
         <VideoContainer>
           <video className='video' muted loop autoPlay={true}>
-            <source src='../background.mp4' type='video/mp4'></source>
+            <source src='../section_2.mp4' type='video/mp4'></source>
           </video>
         </VideoContainer>
       </DescContainer>
@@ -29,7 +32,7 @@ export default function LaunchPage_2() {
 
 const LaunchPageContainer = styled.section`
   font-family: sans-serif;
-  background: #f1f0f6;
+  background: rgb(207, 164, 150);
   height: 100vh;
   background-size: 100%;
   flex-wrap: wrap;
@@ -42,18 +45,23 @@ const LaunchPageContainer = styled.section`
 `;
 
 const MainDescContainer = styled.div`
-  display: flex;
+  left: 30px;
 `;
 
 const Title = styled.div`
-  font-size: 2rem;
+  font-size: 3em;
   font-weight: 800;
   letter-spacing: 0.1rem;
-  line-height: 3.5rem;
+  line-height: 4.5rem;
   color: #2b2e4a;
+  margin-bottom: 20px;
 
-  @media (max-width: 970px) {
+  @media (max-width: 699px) {
     flex-direction: column;
+    line-height: 4rem;
+  }
+  @media (max-width: 499px) {
+    font-size: 2rem;
     line-height: 3rem;
   }
 `;

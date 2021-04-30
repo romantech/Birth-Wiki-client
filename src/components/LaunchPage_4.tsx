@@ -19,7 +19,7 @@ export default function LaunchPage_4() {
         </TextContainer>
         <VideoContainer>
           <video className='video' muted loop autoPlay={true}>
-            <source src='../background.mp4' type='video/mp4'></source>
+            <source src='../section_4.mp4' type='video/mp4'></source>
           </video>
         </VideoContainer>
       </DescContainer>
@@ -28,7 +28,7 @@ export default function LaunchPage_4() {
 }
 const LaunchPageContainer = styled.section`
   font-family: sans-serif;
-  background: #fff5fb;
+  background: rgb(203, 220, 192);
   height: 100vh;
   background-size: 100%;
   flex-wrap: wrap;

@@ -110,20 +110,20 @@ export default function LaunchPage_1({ setIsLoading }: any) {
             <source src='../background1.mp4' type='video/mp4'></source>
           </video>
         </BGVideoContiner> */}
-        <WordsContainner>
+        {/* <WordsContainner>
           <Words>What happened</Words>
           <Words>on Your BirthDay!</Words>
           <Words1>생일을 입력해보세요</Words1>
-        </WordsContainner>
+        </WordsContainner> */}
+        <img className='img' src={`${process.env.PUBLIC_URL}/section1.png`} />
         <MainDescContainer>
+          <h1>Welcome!</h1>
           <Title>
-            내 생일에 어떤 일이 있었는지 궁금하지 않으신가요?
-            <br />
-            자신의 생일에 대한 흥미롭고 재미있는 사실을 발견하세요.
-            <br />
+            내 생일에 어떤 일이 있었는지 <br />
+            궁금하지 않으신가요?
           </Title>
+          <SubTitle>생일을 입력해보세요</SubTitle>
         </MainDescContainer>
-
         <InputContiner>
           <InputSubmit>
             <InputDate
@@ -188,9 +188,9 @@ export default function LaunchPage_1({ setIsLoading }: any) {
             <span>일</span>
           </InputSubmit>
           {warning ? (
-            <div className='warning'>날짜를 다시 입력해 주세요</div>
+            <WarningMsg className='warning'>날짜를 다시 입력해 주세요</WarningMsg>
           ) : (
-            <div className='warning'>&nbsp;</div>
+            <WarningMsg className='warning'>&nbsp;</WarningMsg>
           )}
           <BirthwikiBtn onClick={birthwikiHandler}>Birth Wiki!</BirthwikiBtn>
         </InputContiner>
@@ -200,118 +200,118 @@ export default function LaunchPage_1({ setIsLoading }: any) {
   );
 }
 
-const BGVideoContiner = styled.div`
-  display: flex;
-  padding: 0;
-  height: 100%;
-  width: 100%;
-  position: relative;
-  z-index: 1;
+// const BGVideoContiner = styled.div`
+//   display: flex;
+//   padding: 0;
+//   height: 100%;
+//   width: 100%;
+//   position: relative;
+//   z-index: 1;
 
-  & img {
-    position: relative;
-    width: 100%;
-    top: 10%;
-    -o-object-fit: cover;
-    object-fit: cover;
-  }
+//   & img {
+//     position: relative;
+//     width: 100%;
+//     top: 10%;
+//     -o-object-fit: cover;
+//     object-fit: cover;
+//   }
 
-  & .videoContiner {
-    position: absolute;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    overflow: hidden;
-  }
+//   & .videoContiner {
+//     position: absolute;
+//     top: 0;
+//     right: 0;
+//     bottom: 0;
+//     left: 0;
+//     width: 100%;
+//     height: 100%;
+//     overflow: hidden;
+//   }
 
-  & .video {
-    width: 100%;
-    height: 100%;
-    -o-object-fit: cover;
-    object-fit: cover;
-  }
-`;
+//   & .video {
+//     width: 100%;
+//     height: 100%;
+//     -o-object-fit: cover;
+//     object-fit: cover;
+//   }
+// `;
 
-const Words = styled.span`
-  color: #eee;
-  opacity: 0.5;
-  text-transform: uppercase;
-  display: block;
-  font-size: 40px;
-  font-weight: 700;
-  letter-spacing: 3px;
-  margin-bottom: 30px;
-  position: relative;
-  animation: text 3s 1;
+// const Words = styled.span`
+//   color: #eee;
+//   opacity: 0.5;
+//   text-transform: uppercase;
+//   display: block;
+//   font-size: 40px;
+//   font-weight: 700;
+//   letter-spacing: 3px;
+//   margin-bottom: 30px;
+//   position: relative;
+//   animation: text 3s 1;
 
-  @keyframes text {
-    0% {
-      color: black;
-      margin-bottom: -10px;
-    }
-    30% {
-      letter-spacing: 25px;
-      margin-bottom: -10px;
-    }
-    85% {
-      letter-spacing: 8px;
-      margin-bottom: -15px;
-    }
-  }
-  @media (max-width: 425px) {
-    font-size: 30px;
-    letter-spacing: 1px;
-    margin-bottom: 20px;
-  } ;
-`;
-const Words1 = styled.span`
-  color: #eee;
-  opacity: 0.5;
-  text-transform: uppercase;
-  display: block;
-  font-size: 20px;
-  font-weight: 700;
-  letter-spacing: 3px;
-  margin-bottom: 30px;
-  position: relative;
-  animation: text 3s 1;
+//   @keyframes text {
+//     0% {
+//       color: black;
+//       margin-bottom: -10px;
+//     }
+//     30% {
+//       letter-spacing: 25px;
+//       margin-bottom: -10px;
+//     }
+//     85% {
+//       letter-spacing: 8px;
+//       margin-bottom: -15px;
+//     }
+//   }
+//   @media (max-width: 425px) {
+//     font-size: 30px;
+//     letter-spacing: 1px;
+//     margin-bottom: 20px;
+//   } ;
+// `;
+// const Words1 = styled.span`
+//   color: #eee;
+//   opacity: 0.5;
+//   text-transform: uppercase;
+//   display: block;
+//   font-size: 20px;
+//   font-weight: 700;
+//   letter-spacing: 3px;
+//   margin-bottom: 30px;
+//   position: relative;
+//   animation: text 3s 1;
 
-  @keyframes text {
-    0% {
-      color: black;
-      margin-bottom: -10px;
-    }
-    30% {
-      letter-spacing: 25px;
-      margin-bottom: -10px;
-    }
-    85% {
-      letter-spacing: 8px;
-      margin-bottom: -15px;
-    }
-  }
-  @media (max-width: 425px) {
-    font-size: 20px;
-    letter-spacing: 1px;
-    margin-bottom: 20px;
-  } ;
-`;
-const WordsContainner = styled.div`
-  text-align: center;
-  position: absolute;
-  top: 40%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 100%;
-  z-index: 2;
-`;
+//   @keyframes text {
+//     0% {
+//       color: black;
+//       margin-bottom: -10px;
+//     }
+//     30% {
+//       letter-spacing: 25px;
+//       margin-bottom: -10px;
+//     }
+//     85% {
+//       letter-spacing: 8px;
+//       margin-bottom: -15px;
+//     }
+//   }
+//   @media (max-width: 425px) {
+//     font-size: 20px;
+//     letter-spacing: 1px;
+//     margin-bottom: 20px;
+//   } ;
+// `;
+// const WordsContainner = styled.div`
+//   text-align: center;
+//   position: absolute;
+//   top: 40%;
+//   left: 50%;
+//   transform: translate(-50%, -50%);
+//   width: 100%;
+//   z-index: 2;
+// `;
 
 const LaunchScreen = styled.section`
   font-family: sans-serif;
-  background: rgba(0, 0, 0, 0.5);
+  background: rgba(246, 246, 240, 0);
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -324,26 +324,61 @@ const LaunchScreen = styled.section`
   & .warning {
     margin: 10px;
   }
+  & .img {
+    height: 100vh;
+    width: 100vw;
+    object-fit: cover;
+  }
 `;
 
 const MainDescContainer = styled.div`
-  display: flex;
+  position: absolute;
+  top: 20%;
+  left: 30px;
 `;
 
 const Title = styled.div`
-  font-size: 2rem;
+  font-size: 3em;
   font-weight: 800;
   letter-spacing: 0.1rem;
-  line-height: 3.5rem;
+  line-height: 4.5rem;
   color: #2b2e4a;
+  margin-bottom: 20px;
 
-  @media (max-width: 970px) {
+  @media (max-width: 699px) {
     flex-direction: column;
+    line-height: 4rem;
+  }
+  @media (max-width: 499px) {
+    font-size: 2rem;
     line-height: 3rem;
   }
 `;
+
+const SubTitle = styled.div`
+  font-size: 2rem;
+  font-weight: 600;
+  letter-spacing: 0.1rem;
+  line-height: 3rem;
+  color: #2b2e4a;
+
+  @media (max-width: 699px) {
+    flex-direction: column;
+    line-height: 3rem;
+  }
+  @media (max-width: 499px) {
+    font-size: 1.5rem;
+    line-height: 2rem;
+  }
+`;
+
 const InputContiner = styled.div`
+  position: absolute;
+  left: 30px;
+  top: 65%;
+
   display: flex;
+  /* 
   flex-direction: column;
   justify-content: center;
   align-items: center;
@@ -354,11 +389,15 @@ const InputContiner = styled.div`
   z-index: 2;
   bottom: 20%;
   background: rgb(255, 255, 255, 0.3);
-  width: 500px;
-  height: 200px;
+
+  height: 200px; */
   /* transform: translate(-50%, -50%); */
-  @media screen and (max-width: 425px) {
-    width: 100%;
+  @media screen and (max-width: 699px) {
+    top: 70%;
+  }
+  @media screen and (max-width: 499px) {
+    flex-direction: column;
+    align-items: center;
   }
 `;
 
@@ -366,6 +405,9 @@ const InputSubmit = styled.form`
   display: inline-block;
   justify-content: space-between;
   padding: 5px;
+  @media screen and (max-width: 499px) {
+    flex-direction: column;
+  }
 `;
 
 const InputDate = styled.input`
@@ -385,7 +427,7 @@ const InputDate = styled.input`
     -webkit-appearance: none;
     margin: 0;
   }
-  @media screen and (max-width: 425px) {
+  @media screen and (max-width: 499px) {
     font-size: 1.5rem;
     height: 25px;
     padding: 0;
@@ -395,19 +437,24 @@ const InputDate = styled.input`
 const BirthwikiBtn = styled.button`
   background: black;
   border-radius: 50px;
-  padding: 16px 20px;
+  padding: 10px 20px;
   color: #fff;
   font-size: 16px;
   outline: none;
   border: none;
   cursor: pointer;
   width: 120px;
+  margin-left: 10px;
   transition: all 0.2s ease-in-out;
   text-decoration: none;
   &:hover {
     transition: all 0.2s ease-in-out;
-    background: #fff;
+    background: rgb(246, 246, 240);
+    box-shadow: 0 4px 15px 0 rgb(0 0 0 / 30%);
     color: #010606;
+  }
+  @media screen and (max-width: 499px) {
+    margin: 10px;
   }
 `;
 
@@ -420,13 +467,25 @@ const Nextbtn = styled(CgMouse)`
 
   @keyframes down_ani {
     0% {
-      top: 81vh;
+      top: 93vh;
     }
     50% {
-      top: 79vh;
+      top: 90vh;
     }
     100% {
-      top: 81vh;
+      top: 93vh;
     }
+  }
+`;
+
+const WarningMsg = styled.div`
+  position: absolute;
+  left: 20px;
+  top: 82%;
+  font-size: 1rem;
+  font-weight: 500;
+
+  @media (max-width: 499px) {
+    top: 100%;
   }
 `;

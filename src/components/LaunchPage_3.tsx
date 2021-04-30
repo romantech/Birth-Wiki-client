@@ -13,7 +13,7 @@ export default function LaunchPage_3() {
       <DescContainer>
         <VideoContainer>
           <video className='video' muted loop autoPlay={true}>
-            <source src='../background.mp4' type='video/mp4'></source>
+            <source src='../section_3.mp4' type='video/mp4'></source>
           </video>
         </VideoContainer>
         <TextContainer>
@@ -28,7 +28,7 @@ export default function LaunchPage_3() {
 
 const LaunchPageContainer = styled.section`
   font-family: sans-serif;
-  background: #f4f9f9;
+  background: rgb(232, 228, 217);
   height: 100vh;
   background-size: 100%;
   flex-wrap: wrap;
