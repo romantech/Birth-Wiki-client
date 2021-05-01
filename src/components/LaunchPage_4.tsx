@@ -6,30 +6,30 @@ export default function LaunchPage_4() {
     <LaunchPageContainer>
       {' '}
       <MainDescContainer>
-        <Title>
-          나만의 카드
+        <Title data-aos='fade-up' data-aos-duration='1000'>
+          나만의 카드를 만들어 보세요
           <br />
         </Title>
-      </MainDescContainer>
-      <DescContainer>
-        <TextContainer>
+        <TextContainer data-aos='fade-up' data-aos-duration='1000'>
           <div className='text'>
-            나만의 <span className='color'>기록카드</span>를 만들어보세요
+            나만의 <span className='color'>이야기를</span> 기록해보세요.
           </div>
         </TextContainer>
         <VideoContainer>
-          <video className='video' muted loop autoPlay={true}>
+          {/* <video className='video' muted loop autoPlay={true}>
             <source src='../section_4.mp4' type='video/mp4'></source>
-          </video>
+          </video> */}
+          <img className='img' src={`${process.env.PUBLIC_URL}/section_4.gif`} />
         </VideoContainer>
-      </DescContainer>
+      </MainDescContainer>
     </LaunchPageContainer>
   );
 }
 const LaunchPageContainer = styled.section`
   font-family: sans-serif;
-  background: rgb(203, 220, 192);
+  background: #f8f7de;
   height: 100vh;
+  width: 100vw;
   background-size: 100%;
   flex-wrap: wrap;
   display: flex;
@@ -41,45 +41,44 @@ const LaunchPageContainer = styled.section`
 `;
 const MainDescContainer = styled.div`
   display: flex;
+  flex-direction: column;
+  align-items: center;
 `;
 
 const Title = styled.div`
-  font-size: 2rem;
+  font-size: 3em;
   font-weight: 800;
   letter-spacing: 0.1rem;
-  line-height: 3.5rem;
-  color: #2b2e4a;
+  line-height: 4.5rem;
+  color: #000;
+  text-align: start;
+  margin: 0 30px;
+  transform: translateY(0);
+  opacity: 1;
+  transition: all 1s 0.2s;
 
-  @media (max-width: 970px) {
+  @media (max-width: 699px) {
     flex-direction: column;
-    line-height: 3rem;
+    line-height: 4rem;
   }
-`;
-
-const DescContainer = styled.div`
-  display: flex;
-  align-items: center;
-
-  @media (max-width: 970px) {
-    flex-direction: column;
+  @media (max-width: 499px) {
+    font-size: 2rem;
+    line-height: 3rem;
   }
 `;
 
 const TextContainer = styled.div`
   display: flex;
-  flex-direction: column;
-  align-items: flex-start;
+  flex-wrap: wrap;
+  justify-content: center;
   font-size: 1.3rem;
   line-height: 3rem;
   padding: 5px;
   font-weight: 400;
-  color: #09015f;
-  margin-right: 20px;
+  color: #2b2e4a;
+  margin: 0 30px 20px;
 
   @media (max-width: 970px) {
-    flex-direction: row;
-    flex-wrap: wrap;
-    justify-content: center;
     line-height: 2rem;
   }
 
@@ -94,19 +93,11 @@ const TextContainer = styled.div`
 `;
 
 const VideoContainer = styled.div`
-  background: #060b26;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  padding: 0;
-  width: 700px;
+  width: 60%;
   position: relative;
   z-index: 1;
-  @media (max-width: 970px) {
-    width: 100%;
-  }
 
-  & .video {
+  & .img {
     width: 100%;
     height: 100%;
   }

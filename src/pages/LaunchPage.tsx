@@ -6,7 +6,6 @@ import LaunchPage_1 from '../components/LaunchPage_1';
 import LaunchPage_2 from '../components/LaunchPage_2';
 import LaunchPage_3 from '../components/LaunchPage_3';
 import LaunchPage_4 from '../components/LaunchPage_4';
-import LaunchPage_5 from '../components/LaunchPage_5';
 
 export default function LaunchPage({ setIsLoading }: any) {
   return (
@@ -16,7 +15,6 @@ export default function LaunchPage({ setIsLoading }: any) {
       <LaunchPage_2 />
       <LaunchPage_3 />
       <LaunchPage_4 />
-      <LaunchPage_5 />
       <BacktoTop>
         <TopButton
           onClick={() => {
