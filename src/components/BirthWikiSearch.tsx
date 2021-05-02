@@ -179,7 +179,6 @@ const BirthwikiSearch = styled.div`
   align-items: center;
   flex-wrap: wrap;
   background-repeat: repeat-x;
-  /* background-image: url('../movie.png'); */
   background-position: x y;
   background-size: 100%;
   width: 600px;
