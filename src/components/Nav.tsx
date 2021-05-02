@@ -7,7 +7,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import SidebarLogin from './SidebarLogin';
 import SidebarMypage from './SidebarMypage';
 import { RootState } from '../store/index';
-import { setIsSidbar, setIsLogin, setIsSignup, setUserInfo } from '../actions';
+import { setIsSidbar, setIsLogin, setIsSignup, setUserInfo, setGuestModal } from '../actions';
 import axios from 'axios';
 import GuestModal from './GuestModal';
 
@@ -16,10 +16,7 @@ function Nav() {
   const userInfo = useSelector((state: RootState) => state.userInfoReducer.userInfo);
   const isLogin = useSelector((state: RootState) => state.loginReducer.isLogin);
   const isGuest = useSelector((state: RootState) => state.guestReducer.isGuest);
-  const isGuestModal = useSelector((state: RootState) => state.guestReducer.isGuestModal);
   const dispatch = useDispatch();
-  const [modalOpen, setModalOpen] = useState(false);
-
   useEffect(() => {
     const url = new URL(window.location.href);
     const AuthorizationCode = url.searchParams.get('code');
@@ -47,12 +44,13 @@ function Nav() {
   const clickHandler = () => {
     window.location.replace('/');
   };
+
   const modalHandler = () => {
-    if (!isLogin && !isGuestModal) {
-      setModalOpen(true);
+    if (!isLogin && !isGuest) {
+      dispatch(setGuestModal(true));
     }
     if (isGuest || isLogin) {
-      window.location.href = 'https://localhost:3000/myFavorite';
+      window.location.href = `${process.env.REACT_APP_CLIENT_URL}/myFavorite`;
     }
   };
 
@@ -62,9 +60,8 @@ function Nav() {
         <img className='logo' src='../logo.png' alt='logo' />
       </Home>
       <SidebarsOpen onClick={showSidebar} />
-
-      <Favorite onClick={modalHandler}>
-        {isLogin ? (
+      {isGuest || isLogin ? (
+        <Favorite onClick={modalHandler}>
           <div>
             {userInfo.profileImage ? (
               <UserPoto src={`${userInfo.profileImage}`} />
@@ -72,12 +69,8 @@ function Nav() {
               <UserPoto src={`${process.env.PUBLIC_URL}/img/profile.png`} />
             )}
           </div>
-        ) : (
-          <span>Guest</span>
-        )}
-      </Favorite>
-      {modalOpen ? <GuestModal /> : null}
-
+        </Favorite>
+      ) : null}
       {isSidebar ? (
         <NavSidebar>
           <SidebarsClose onClick={showSidebar} />
@@ -92,16 +85,22 @@ function Nav() {
 
 export default Nav;
 
-const Navbar = styled.nav`
+const Navbar = styled.header`
   background: #060b26;
   height: 70px;
   display: flex;
   justify-content: start;
   align-items: center;
   justify-content: space-between;
+  z-index: 1;
+  width: 100%;
+  position: fixed;
   @media screen and (max-width: 600px) {
     width: 100%;
   }
+  z-index: 5;
+  width: 100%;
+  position: fixed;
 `;
 
 const Home = styled.button`
@@ -109,7 +108,7 @@ const Home = styled.button`
   display: flex;
   align-items: center;
   font-size: 30px;
-  margin: 10px 30px;
+  margin: 10px 20px;
   outline: none;
   border: none;
   cursor: pointer;
@@ -118,6 +117,7 @@ const Home = styled.button`
   font-weight: bold;
   @media screen and (max-width: 600px) {
     flex-direction: column;
+    margin: 10px 20px;
   }
   & .logo {
     width: 10rem;
@@ -129,20 +129,20 @@ const SidebarsOpen = styled(FaBars)`
   display: flex;
   align-items: center;
   position: absolute;
-  right: 32px;
+  right: 30px;
   height: 40px;
   font-size: 2rem;
   background: none;
   color: #fff;
   cursor: pointer;
   @media screen and (max-width: 600px) {
-    right: 10px;
+    right: 20px;
   }
 `;
 
 const NavSidebar = styled.div`
   background-color: rgba(6, 11, 38, 0.8);
-
+  position: relative;
   display: none;
   width: 350px;
   right: 0;
@@ -152,7 +152,7 @@ const NavSidebar = styled.div`
   justify-content: flex-start;
   position: fixed;
   top: 0;
-  z-index: 100;
+  z-index: 3;
   @media screen and (max-width: 600px) {
     width: 100%;
   }
@@ -175,21 +175,19 @@ const SidebarsClose = styled(AiOutlineClose)`
 const Favorite = styled.button`
   display: flex;
   align-items: center;
-  margin: 10px;
   position: absolute;
-  right: 80px;
+  right: 70px;
   height: 40px;
   font-size: 30px;
   background: none;
-  color: #eee;
+  color: #fff;
   text-decoration: none;
   border: none;
   outline: none;
   cursor: pointer;
 
   @media screen and (max-width: 600px) {
-    margin: 10px 5px;
-    right: 50px;
+    right: 60px;
     & .mypage {
       display: none;
     }
@@ -201,8 +199,8 @@ const Favorite = styled.button`
 
 const UserPoto = styled.img`
   font-size: 60px;
-  height: 50px;
-  width: 50px;
+  height: 40px;
+  width: 40px;
   color: #fff;
   border-radius: 25px;
   display: flex;

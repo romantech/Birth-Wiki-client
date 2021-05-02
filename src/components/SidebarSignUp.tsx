@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import styled from 'styled-components';
 import { useDispatch } from 'react-redux';
 import { setIsLogin, setUserInfo, setIsSidbar, setIsSignup } from '../actions/index';
@@ -10,7 +10,7 @@ import axios from 'axios';
 
 function SidebarSignUp() {
   const dispatch = useDispatch();
-
+  const modalRef = useRef<HTMLDivElement>(null);
   const [signUpInfo, setSignUpInfo] = useState({
     userEmail: '',
     password: '',
@@ -151,11 +151,11 @@ function SidebarSignUp() {
             }}
           />
           {!check.userEmail ? (
-            <TestDiv>올바른 이메일을 입력해주세요</TestDiv>
+            <div className='default'> 올바른 이메일을 입력해주세요.</div>
           ) : !duple.userEmail ? (
-            <TestDiv>이미 사용 중인 이메일입니다</TestDiv>
+            <div className='invalid'> 이미 사용 중인 이메일입니다.</div>
           ) : (
-            <TestDiv>사용 가능</TestDiv>
+            <div className='ok'>사용 가능한 이메일 입니다.</div>
           )}
           <InputCatecory>닉네임</InputCatecory>
           <SignUpInput
@@ -168,11 +168,11 @@ function SidebarSignUp() {
             }}
           />
           {!check.nickName ? (
-            <TestDiv>닉네임을 입력해주세요</TestDiv>
+            <div className='default'> 닉네임을 입력해주세요.</div>
           ) : !duple.nickName ? (
-            <TestDiv>이미 사용 중인 닉네임입니다</TestDiv>
+            <div className='invalid'> 이미 사용 중인 닉네임입니다.</div>
           ) : (
-            <TestDiv>사용 가능</TestDiv>
+            <div className='ok'>사용 가능한 닉네임입니다.</div>
           )}
           <InputCatecory>password</InputCatecory>
           <SignUpInput
@@ -246,23 +246,24 @@ const SignUpWrapper = styled.div`
   background-color: #15172b;
   border-radius: 20px;
   box-sizing: border-box;
-  height: 680px;
+  height: 700px;
   padding: 20px 25px;
-  width: 500px;
+  width: 400px;
   transition: all 0.2s ease-in-out;
   text-decoration: none;
-  z-index: 10;
+  z-index: 1;
   position: relative;
+  margin-top: 70px;
   & .invisable {
     display: none;
   }
   & .alert-box {
-    color: #eee;
+    color: #fff;
   }
 `;
 
 const Title = styled.div`
-  color: #eee;
+  color: #fff;
   font-family: sans-serif;
   font-size: 36px;
   font-weight: 600;
@@ -281,7 +282,7 @@ const SigninClose = styled(AiOutlineClose)`
   color: #fff;
 `;
 const SubTitle = styled.div`
-  color: #eee;
+  color: #fff;
   font-family: sans-serif;
   font-size: 20px;
   font-weight: bold;
@@ -292,6 +293,21 @@ const SignUpContainer = styled.form`
   height: 50px;
   position: relative;
   width: 100%;
+  & .invalid {
+    font-size: 12px;
+    color: orange;
+    padding: 5px 0 0 10px;
+  }
+  & .ok {
+    font-size: 12px;
+    color: pink;
+    padding: 5px 0 0 10px;
+  }
+  & .default {
+    font-size: 12px;
+    color: #fff;
+    padding: 5px 0 0 10px;
+  }
 `;
 const EditContainer = styled.form`
   height: 50px;
@@ -304,17 +320,14 @@ const InputCatecory = styled.div`
   height: 30px;
   padding: 0.5rem;
   margin: 5px;
-  color: #eee;
+  color: #fff;
 `;
 
-const ErrorMsg = styled.div`
-  font-size: 10px;
-  color: pink;
-`;
+const ErrorMsg = styled.div``;
 
 const SignUpInput = styled.input`
   box-sizing: border-box;
-  color: #eee;
+  color: #fff;
   font-size: 15px;
   height: 80%;
   outline: 0;
@@ -335,7 +348,7 @@ const SignUpInput = styled.input`
 
 const EditInput = styled.input`
   box-sizing: border-box;
-  color: #eee;
+  color: #fff;
   font-size: 15px;
   height: 80%;
   outline: 0;
@@ -355,7 +368,7 @@ const SignUpSubmit = styled.input`
   border-radius: 12px;
   border: 0;
   box-sizing: border-box;
-  color: #eee;
+  color: #fff;
   cursor: pointer;
   font-size: 18px;
   height: 50px;
@@ -367,7 +380,7 @@ const SignUpSubmit = styled.input`
 
   &:hover {
     transition: all 0.2s ease-in-out;
-    background-color: #eee;
+    background-color: #fff;
     color: #15172b;
   }
 `;
@@ -402,7 +415,7 @@ const SubmitDiv = styled.div`
   border-radius: 12px;
   border: 0;
   box-sizing: border-box;
-  color: #eee;
+  color: #fff;
   cursor: pointer;
   font-size: 18px;
   height: 50px;

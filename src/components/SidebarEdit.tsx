@@ -13,10 +13,8 @@ function SidebarEdit() {
   const isSidebar = useSelector((state: RootState) => state.sidebarReducer.isSidebar);
   const userInfo = useSelector((state: RootState) => state.userInfoReducer.userInfo);
   const dispatch = useDispatch();
-  const history = useHistory();
+  const modalRef = useRef<HTMLDivElement>(null);
   const [editUserInfo, setEditUserInfo] = useState(userInfo);
-  const [changeInfo, setChangeInfo] = useState(false);
-
   const { password, password2, errorMsg } = editUserInfo;
 
   const [check, setCheck] = useState({
@@ -24,27 +22,29 @@ function SidebarEdit() {
     password2: false,
     nickName: false,
   });
+  const [duple, setduple] = useState({
+    userEmail: false,
+    nickName: false,
+  });
 
-  useEffect(() => {
-    if (changeInfo) {
-      axios({
-        url: 'https://server.birthwiki.space/user/info',
-        method: 'POST',
-        data: {
-          userEmail: userInfo.userEmail,
-          accessToken: `Bearer ${userInfo.accessToken}`,
-        },
-      }).then((res) => {
-        let newUserInfo = Object.assign({}, userInfo, {
-          nickName: res.data.data.nickName,
-          profileImage: res.data.data.profileImage,
-        });
-        dispatch(setUserInfo(newUserInfo));
-        dispatch(setIsEdit(false));
-        dispatch(setIsSidbar(true));
+  const changeInfo = () => {
+    axios({
+      url: 'https://server.birthwiki.space/user/info',
+      method: 'POST',
+      data: {
+        userEmail: userInfo.userEmail,
+        accessToken: `Bearer ${userInfo.accessToken}`,
+      },
+    }).then((res) => {
+      let newUserInfo = Object.assign({}, userInfo, {
+        nickName: res.data.data.nickName,
+        profileImage: res.data.data.profileImage,
       });
-    }
-  }, [changeInfo]);
+      dispatch(setUserInfo(newUserInfo));
+      dispatch(setIsEdit(false));
+      dispatch(setIsSidbar(true));
+    });
+  };
 
   const inputHandler = async (key: string, e: any) => {
     setEditUserInfo({
@@ -97,29 +97,17 @@ function SidebarEdit() {
           nickName: editUserInfo.nickName,
         },
       })
-        .then((res) => {
-          setEditUserInfo({
-            ...editUserInfo,
-            errorMsg: '',
-          });
+        .then(() => {
+          setduple({ ...duple, nickName: true });
         })
         .catch((err) => {
-          console.log(err);
-          return !err.response
-            ? setEditUserInfo({
-                ...editUserInfo,
-                errorMsg: '❗️ 서버 오류, 잠시 후 다시 시도해주세요',
-              })
-            : setEditUserInfo({
-                ...editUserInfo,
-                errorMsg: '❗️ 이미 사용중인 닉네임입니다',
-              });
+          setduple({ ...duple, nickName: false });
         });
     }
   };
 
   const closeEidt = () => {
-    dispatch(setIsSidbar(!isSidebar));
+    dispatch(setIsSidbar(true));
     dispatch(setIsEdit(false));
   };
   return (
@@ -132,10 +120,10 @@ function SidebarEdit() {
           name='frAttachFiles'
           className='invisable'
           onLoad={() => {
-            setChangeInfo(true);
+            changeInfo();
           }}
         ></iframe>
-        {errorMsg ? <div className='alert-box'>{errorMsg}</div> : ''}
+
         <EditContainer
           action='https://server.birthwiki.space/user/update'
           method='post'
@@ -161,15 +149,14 @@ function SidebarEdit() {
             }}
             onBlur={checkedNickName}
           />
-          {check.nickName ? (
-            <Valid to='#'>
-              <ColorIcon.FcApproval />
-            </Valid>
+          {!check.nickName ? (
+            <div className='default'> 닉네임을 수정해주세요.</div>
+          ) : !duple.nickName ? (
+            <div className='invalid'> 이미 사용 중인 닉네임입니다.</div>
           ) : (
-            <Invalid to='#'>
-              <ColorIcon.FcCancel />
-            </Invalid>
+            <div className='ok'>사용 가능한 닉네임입니다.</div>
           )}
+          {errorMsg ? <div className='alert-box'>{errorMsg}</div> : ''}
           <InputCatecory>password</InputCatecory>
           <EditInput
             type='password'
@@ -210,7 +197,7 @@ function SidebarEdit() {
           <SubTitle>선택사항</SubTitle>
           <InputCatecory>프로필 이미지 등록</InputCatecory>
           <EditInput type='file' name='profileImage' accept='image/*' />
-          {(check.password && check.password2) || check.nickName ? (
+          {(check.password && check.password2) || duple.nickName ? (
             <EditSubmit type='submit' value='회원 정보 수정'></EditSubmit>
           ) : (
             <SubmitDiv>회원 정보 수정</SubmitDiv>
@@ -236,18 +223,19 @@ const EditWrapper = styled.div`
   background-color: #0e6973;
   border-radius: 20px;
   box-sizing: border-box;
-  height: 580px;
+  height: 600px;
   padding: 20px 25px;
   width: 400px;
   transition: all 0.2s ease-in-out;
   text-decoration: none;
-  z-index: 10;
+  z-index: 1;
   position: relative;
+  margin-top: 70px;
   & .invisable {
     display: none;
   }
   & .alert-box {
-    color: #eee;
+    color: #fff;
   }
   & .access {
     display: none;
@@ -266,7 +254,7 @@ const EditClose = styled(AiOutlineClose)`
   color: #fff;
 `;
 const Title = styled.div`
-  color: #eee;
+  color: #fff;
   font-family: sans-serif;
   font-size: 36px;
   font-weight: 600;
@@ -274,7 +262,7 @@ const Title = styled.div`
 `;
 
 const SubTitle = styled.div`
-  color: #eee;
+  color: #fff;
   font-family: sans-serif;
   font-size: 20px;
   font-weight: bold;
@@ -284,6 +272,21 @@ const EditContainer = styled.form`
   height: 50px;
   position: relative;
   width: 100%;
+  & .invalid {
+    font-size: 12px;
+    color: yellow;
+    padding: 5px 0 0 10px;
+  }
+  & .ok {
+    font-size: 12px;
+    color: pink;
+    padding: 5px 0 0 10px;
+  }
+  & .default {
+    font-size: 12px;
+    color: #fff;
+    padding: 5px 0 0 10px;
+  }
 `;
 
 const InputCatecory = styled.div`
@@ -291,12 +294,12 @@ const InputCatecory = styled.div`
   height: 30px;
   padding: 0.5rem;
   margin: 5px;
-  color: #eee;
+  color: #fff;
 `;
 
 const EditInput = styled.input`
   box-sizing: border-box;
-  color: #eee;
+  color: #fff;
   font-size: 15px;
   height: 80%;
   outline: 0;
@@ -341,7 +344,7 @@ const SubmitDiv = styled.div`
   border-radius: 12px;
   border: 0;
   box-sizing: border-box;
-  color: #eee;
+  color: #fff;
   cursor: pointer;
   font-size: 18px;
   height: 50px;

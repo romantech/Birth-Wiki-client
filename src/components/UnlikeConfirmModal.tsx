@@ -17,6 +17,8 @@ interface UnlikeConfirmModal {
 }
 
 const UnlikeConfirmModal = ({ ...props }: UnlikeConfirmModal): JSX.Element => {
+  const isLogin = useSelector((state: RootState) => state.loginReducer.isLogin);
+  const isGuest = useSelector((state: RootState) => state.guestReducer.isGuest);
   const modalRef = useRef<HTMLDivElement>(null);
   const userInfo = useSelector((state: RootState) => state.userInfoReducer.userInfo);
   const dispatch = useDispatch();
@@ -30,6 +32,8 @@ const UnlikeConfirmModal = ({ ...props }: UnlikeConfirmModal): JSX.Element => {
   });
 
   const setUnlike = () => {
+    props.setUnlikeModal((prev) => !prev);
+
     const setLiked = props.filteredArray.map((el) => {
       if (el.id === props.id) {
         el.like = false;
@@ -39,25 +43,34 @@ const UnlikeConfirmModal = ({ ...props }: UnlikeConfirmModal): JSX.Element => {
     });
     props.setFilteredArray(setLiked);
 
-    axios({
-      url: 'https://server.birthwiki.space/like',
-      method: 'post',
-      data: {
-        action: 'cancel',
-        nickName: userInfo.nickName,
-        cardId: props.id,
-        category: props.category,
-        accessToken: `Bearer ${userInfo.accessToken}`,
-      },
-    }).then((res) => {
-      dispatch(
-        setUserInfo({
-          ...userInfo,
-          likeCards: res.data.data.likeCards,
-          recordCards: res.data.data.recordCards,
-        }),
-      );
+    let newCards = userInfo.likeCards.filter((el: { id: number; category: string }) => {
+      if (el.id !== props.id || el.category !== props.category) {
+        return el;
+      }
     });
+    let newUserInfo: any = Object.assign({}, userInfo, {
+      likeCards: newCards,
+    });
+
+    if (isGuest) {
+      dispatch(setUserInfo(newUserInfo));
+    }
+
+    if (isLogin) {
+      axios({
+        url: 'https://server.birthwiki.space/like',
+        method: 'post',
+        data: {
+          action: 'cancel',
+          nickName: userInfo.nickName,
+          cardId: props.id,
+          category: props.category,
+          accessToken: `Bearer ${userInfo.accessToken}`,
+        },
+      }).then(() => {
+        dispatch(setUserInfo(newUserInfo));
+      });
+    }
   };
 
   const closeModal = (e: React.MouseEvent<HTMLElement>) => {

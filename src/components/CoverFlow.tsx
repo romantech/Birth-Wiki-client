@@ -4,19 +4,34 @@ import styled from 'styled-components';
 import './CoverFlow.css';
 import FavoriteButton from './FavoriteButton';
 import CreateCard from './CardCreate';
+import { FaRegArrowAltCircleLeft } from 'react-icons/fa';
+import { FaRegArrowAltCircleRight } from 'react-icons/fa';
 
 import movieCover from '../img/subData/movieCover.jpg';
 import musicCover from '../img/subData/musicCover.jpg';
+import recordCover from '../img/subData/recordCover.jpeg';
+import { check } from 'prettier';
 
 function CoverFlow(props: any) {
+  const subMovie = {
+    image: movieCover,
+    korea: { title: '영화정보가 없습니다', poster: movieCover },
+    world: { title: '영화정보가 없습니다', poster: movieCover },
+  };
+  const subMusic = {
+    image: musicCover,
+    korea: { title: '음악정보가 없습니다', poster: musicCover, singer: '가수정보가 없습니다' },
+    world: { title: '음악정보가 없습니다', poster: musicCover, singer: '가수정보가 없습니다' },
+  };
+
   const data = props.data;
   const issue = data.issueCard;
   const death = data.deathCard;
   const birth = data.birthCard;
-  const movie = data.movieCard ? data.movieCard : { image: movieCover };
-  const music = data.musicCard ? data.musicCard : { image: musicCover };
+  const movie = data.movieCard ? data.movieCard : subMovie;
+  const music = data.musicCard ? data.musicCard : subMusic;
 
-  const cardData = [issue, birth, death, movie, music];
+  const cardData = [issue, birth, death, movie, music, 0];
   const cardTitle = [
     '그날, 있었던 이슈',
     '그날, 누군가의 탄생',
@@ -25,82 +40,257 @@ function CoverFlow(props: any) {
     '그때, 가장 핫한 음악',
   ];
 
-  console.log(movie);
+  const initCheck = Array(6).fill(false);
+  initCheck[props.selected] = true;
+  const [checked, setChecked] = useState(initCheck);
+  const [isMove, setIsMove] = useState(false);
+
+  const prevHandler = () => {
+    const curCheck = checked.indexOf(true) === 0 ? 6 : checked.indexOf(true);
+    const changeCheck = Array(6).fill(false);
+    changeCheck[curCheck - 1] = true;
+    setChecked(changeCheck);
+    props.setSelected(curCheck - 1);
+  };
+
+  const nextHandler = () => {
+    const curCheck = checked.indexOf(true) === 5 ? -1 : checked.indexOf(true);
+    const changeCheck = Array(6).fill(false);
+    changeCheck[curCheck + 1] = true;
+    setChecked(changeCheck);
+  };
+
+  const clickHandler = (idx: number) => {
+    if (!isMove) {
+      const changeCheck = Array(6).fill(false);
+      changeCheck[idx] = true;
+      setChecked(changeCheck);
+    }
+    setIsMove(false);
+  };
+
+  const pressHandler = (e: React.KeyboardEvent<HTMLDivElement>) => {
+    if (e.key === 'ArrowLeft' || e.key === 'ArrowDown') {
+      prevHandler();
+    } else if (e.key === 'ArrowRight' || e.key === 'ArrowUp') {
+      nextHandler();
+    }
+  };
+
+  let prevArr: number[] = [];
+  let nextArr: number[] = [];
+  const wheelHandler = (e: React.WheelEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    // if (e.deltaY > 0) {
+    //   prevArr.push(1);
+    //   setTimeout(() => {
+    //     if (prevArr[0]) {
+    //       prevHandler();
+    //       prevArr = [];
+    //     }
+    //   }, 100);
+    // } else
+    if (e.deltaY < 0) {
+      nextArr.push(1);
+      setTimeout(() => {
+        if (nextArr[0]) {
+          nextHandler();
+          nextArr = [];
+        }
+      }, 100);
+    }
+  };
+
+  let startP: number;
+  let endP: number;
+  function dragStart(e: any) {
+    setIsMove(true);
+    e.preventDefault();
+    if (e.type === 'touchstart') {
+      startP = e.touches[0].clientX;
+    } else {
+      startP = e.clientX;
+    }
+    document.onmousemove = dragAction;
+    document.onmouseup = dragEnd;
+  }
+
+  function dragAction(e: any) {
+    if (e.type === 'touchmove') {
+      endP = e.touches[0].clientX;
+    } else {
+      endP = e.clientX;
+    }
+  }
+
+  async function dragEnd(e: any) {
+    if (startP - endP > 0) {
+      await nextHandler();
+    } else if (startP - endP < 0) {
+      await prevHandler();
+    }
+
+    document.onmousemove = null;
+    document.onmouseup = null;
+  }
 
   return (
     <Container>
-      <div className='slider'>
-        {cardData.map((el, idx) => {
-          if (props.selected === idx) {
-            return (
-              <input key={idx} type='radio' className='slideInput' name='testimonial' id={`t-${idx + 1}`} />
-            );
-          } else {
-            return (
-              <input key={idx} type='radio' className='slideInput' name='testimonial' id={`t-${idx + 1}`} />
-            );
-          }
+      <button onClick={prevHandler} className='moveBtn'>
+        <FaRegArrowAltCircleLeft />
+      </button>
+      <div className='slider' tabIndex={0} onKeyUp={pressHandler} draggable='true' onDragStart={dragStart}>
+        {cardData.map((el, idx: any) => {
+          return (
+            <input
+              key={idx}
+              type='checkbox'
+              className='slideInput'
+              name='testimonial'
+              id={`t-${idx + 1}`}
+              checked={checked[idx]}
+              onClick={() => {
+                clickHandler(idx);
+              }}
+            />
+          );
         })}
-        <input type='radio' className='slideInput' name='testimonial' id='t-6' />
-
         <div className='testimonials'>
           {cardData.map((el, idx) => {
-            return (
-              <label
-                key={idx}
-                className='item'
-                htmlFor={`t-${idx + 1}`}
-                style={{
-                  backgroundImage: `url(${el.image})`,
-                  backgroundSize: 'cover',
-                }}
-              >
-                <FavoriteButton cardData={el} />
-                <h2 className='cardTitle'>{cardTitle[idx]}</h2>
-                <ul className='card_content'>
+            if (idx < 5) {
+              return (
+                <label key={idx} className='item' htmlFor={`t-${idx + 1}`}>
                   {el.contents ? (
-                    el.contents.map((list: any, i: any) => {
-                      return (
-                        <li key={i}>
-                          <span>{list[0]}</span> {list[1]}
-                        </li>
-                      );
-                    })
-                  ) : (
-                    <div className='culture'>
-                      <div>
-                        <h3>
-                          해외 : <span>{el.world.title}</span>
-                          <p>{el.world.singer}</p>
-                        </h3>
-
-                        <img src={`${el.world.poster}`} alt={el.world.title} />
+                    <div className='inner_item'>
+                      <div className='sideImg'>
+                        <img
+                          src={`${el.image}`}
+                          alt={`${el.category}`}
+                          draggable='false'
+                          onWheel={wheelHandler}
+                        />
                       </div>
-                      {el.korea ? (
+                      <div className='sideContent'>
                         <div>
-                          <h3>
-                            한국 : <span>{el.korea.title}</span>
-                          </h3>
-                          <img src={`${el.korea.poster}`} alt={el.korea.title} />
+                          <h2 className='cardTitle'>{cardTitle[idx]}</h2>
                         </div>
-                      ) : null}
+                        <div className='issueList'>
+                          {el.contents.map((list: any, i: any) => {
+                            return (
+                              <p key={i}>
+                                <span>{list[0]}</span> {list[1]}
+                              </p>
+                            );
+                          })}
+                        </div>
+                        <div>
+                          <FavoriteButton cardData={el} />
+                        </div>
+                      </div>
+                    </div>
+                  ) : (
+                    <div className='inner_item'>
+                      <div className='sideImg'>
+                        <img
+                          src={`${el.image}`}
+                          alt={`${el.category}`}
+                          draggable='false'
+                          onWheel={wheelHandler}
+                        />
+                      </div>
+                      <div className='sideContent'>
+                        <div>
+                          <h2 className='cardTitle'>{cardTitle[idx]}</h2>
+                        </div>
+                        <div>
+                          {el.world ? (
+                            <>
+                              <img
+                                src={`${el.world.poster}`}
+                                alt={`${el.world.title}`}
+                                style={{ width: '100px', height: '100px' }}
+                                draggable='false'
+                              />
+                              <h3>{el.world.title}</h3>
+                            </>
+                          ) : (
+                            <div>자료없음</div>
+                          )}
+                          {el.world && el.world.singer ? (
+                            <h4>{el.world.singer.replace('&amp;', '&')}</h4>
+                          ) : null}
+                          <p>해외</p>
+                          {el.korea ? (
+                            <>
+                              <img
+                                src={`${el.korea.poster}`}
+                                alt={`${el.korea.title}`}
+                                style={{ width: '100px', height: '100px' }}
+                                draggable='false'
+                              />
+                              <h3>{el.korea.title}</h3>
+                            </>
+                          ) : (
+                            <div>자료없음</div>
+                          )}
+                          {el.korea && el.korea.singer ? (
+                            <h4>{el.korea.singer.replace('&amp;', '&')}</h4>
+                          ) : null}
+                          <p>한국</p>
+                        </div>
+                        <div>
+                          <FavoriteButton cardData={el} />
+                        </div>
+                      </div>
                     </div>
                   )}
-                </ul>
-              </label>
-            );
+                </label>
+              );
+            }
           })}
           <label htmlFor='t-6' className='item'>
-            <CreateCard />
+            {checked[5] ? (
+              <div className='inner_item'>
+                <div className='sideImg'>
+                  <img
+                    src={`${recordCover}`}
+                    alt={`${recordCover}`}
+                    draggable='false'
+                    onWheel={wheelHandler}
+                  />
+                </div>
+                <div className='sideContent'>
+                  <CreateCard setChecked={setChecked} />
+                </div>
+              </div>
+            ) : (
+              <div>
+                <img
+                  src={`${recordCover}`}
+                  alt={`${recordCover}`}
+                  style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                />
+              </div>
+            )}
           </label>
         </div>
-        <div className='dots'>
+        <div className='dots' onWheel={wheelHandler}>
           {cardData.map((el, idx) => {
             return <label key={idx} htmlFor={`t-${idx + 1}`}></label>;
           })}
-          <label htmlFor='t-6'></label>
         </div>
       </div>
+      <button onClick={nextHandler} className='moveBtn'>
+        <FaRegArrowAltCircleRight />
+      </button>
+      <div
+        className='slideBG'
+        draggable={true}
+        onClick={() => {
+          props.setIsFlow(false);
+          props.setIsHover(true);
+        }}
+      ></div>
     </Container>
   );
 }
@@ -108,93 +298,119 @@ function CoverFlow(props: any) {
 const Container = styled.div`
   display: flex;
   align-items: center;
-  min-width: 100vw;
+  min-width: 85vw;
   min-height: 100vh;
+  z-index: 2;
+  user-select: none;
 
-  & .cardTitle {
-    background: rgba(0, 0, 0, 0.3);
-    color: #fff;
-    margin: 0;
-    padding: 10px;
-    border-radius: 10px 10px 0 0;
-  }
+  & .inner_item {
+    display: flex;
 
-  & .card_content {
-    height: 270px;
-    overflow-y: scroll;
-    margin: 0;
-    padding: 0;
-    background: rgba(0, 0, 0, 0.1);
-    position: relative;
+    & .sideImg {
+      width: 100%;
+      background: #fff;
+      color: #000;
+      box-shadow: 0 5px 16px rgb(0 0 0 / 20%);
+      border-radius: 15px;
+      z-index: 3;
+      position: relative;
 
-    &::-webkit-scrollbar {
+      @media (max-width: 699px) {
+        width: 100%;
+        height: 18vh;
+        box-shadow: none;
+        border-radius: 0;
+      }
+    }
+
+    & .sideImg img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    & .sideContent {
+      width: 100%;
+      height: 430px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      line-height: 1.8;
+      color: #141414;
+      padding: 10px;
+      overflow: auto;
+
+      & img {
+        width: 150px;
+        height: 150px;
+        border-radius: 50%;
+        border: 6px solid #eee;
+      }
+
+      @media (max-width: 699px) {
+        width: 100%;
+        height: 250px;
+        padding: 0;
+      }
+    }
+
+    & .sideContent p:after {
+      content: '';
+      display: block;
+      border-bottom: 1px solid rgba(155, 155, 155, 0.13);
+      margin-top: 10px;
+    }
+
+    & .sideContent::-webkit-scrollbar {
       width: 2px;
     }
 
-    &::hover li {
-      opacity: 0.2;
-    }
-
-    & li {
-      list-style: none;
-      padding: 10px;
-      width: 100%;
-      background: rgba(255, 255, 255, 0.1);
-      box-shadow: 0 5px 25px rgba(0, 0, 0, 0.1);
-      transition: transform 0.5s;
-      color: #fff;
+    & .issueList p {
       word-break: keep-all;
-    }
+      font-size: 1.1rem;
+      font-weight: 600;
 
-    & li:hover {
-      transform: scale(1.05);
-      z-index: 100;
-      background: rgba(0, 0, 0, 0.4);
-      color: #fff;
-      font-weight: 700;
-    }
+      & span {
+        color: #333;
+        padding: 5px 10px;
+        border-radius: 15px;
+        background: #eee;
+      }
 
-    & li span {
-      width: 60px;
-      height: 22px;
-      text-align: center;
-      line-height: 22px;
-      background: rgba(0, 0, 0, 0.4);
-      color: #fff;
-      display: inline-block;
-      border-radius: 15px;
-      margin-right: 10px;
-      font-size: 15px;
-      font-weight: 700;
-      transform: translateY(-2px);
-    }
-
-    & li:hover span {
-      background: rgba(255, 255, 255, 0.8);
-      color: #f20;
+      @media (max-width: 699px) {
+        font-size: 0.8rem;
+      }
     }
   }
 
-  & .culture {
-    display: flex;
-    flex-direction: column-reverse;
+  & .slideBG {
+    position: fixed;
+    top: 70px;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 1;
+  }
 
-    & h3 {
-      color: #fff;
-      margin-bottom: 4px;
-    }
+  & .slider {
+    outline: none;
+  }
 
-    & h3 span {
-      font-size: 1.5rem;
-    }
+  & .moveBtn {
+    position: relative;
+    z-index: 2;
+    font-size: 3rem;
+    background: none;
+    line-height: 90px;
+    width: 100px;
+    height: 80px;
+    cursor: pointer;
+    border-radius: 50%;
+    border: none;
+  }
 
-    & img {
-      border-radius: 10px;
-      display: inline-block;
-      width: 50%;
-      height: 100%;
-      object-fit: contain;
-    }
+  & .moveBtn:active {
+    color: #fff;
   }
 `;
 

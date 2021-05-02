@@ -3,42 +3,17 @@ import styled from 'styled-components';
 import axios from 'axios';
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from '../store/index';
-import { setUserInfo } from '../actions/index';
+import { setUserInfo, setGuestModal } from '../actions/index';
 
 import { FcLike } from 'react-icons/fc';
 import { FaRegHeart } from 'react-icons/fa';
-import GuestModal from './GuestModal';
 
 function FavoriteButton(props: any) {
   const [isLikeAdd, setIsLikeAdd] = useState(false);
   const isLogin = useSelector((state: RootState) => state.loginReducer.isLogin);
   const isGuest = useSelector((state: RootState) => state.guestReducer.isGuest);
-  const isGuestModal = useSelector((state: RootState) => state.guestReducer.isGuestModal);
   const userInfo = useSelector((state: RootState) => state.userInfoReducer.userInfo);
-  const [changeCard, setChangeCard] = useState(false);
-  const [modalOpen, setModalOpen] = useState(false);
-
   const dispatch = useDispatch();
-
-  useEffect(() => {
-    if (changeCard) {
-      axios({
-        url: 'https://server.birthwiki.space/user/card',
-        method: 'POST',
-        data: {
-          nickName: userInfo.nickName,
-          accessToken: `Bearer ${userInfo.accessToken}`,
-        },
-      }).then((res) => {
-        let newUserInfo = Object.assign({}, userInfo, {
-          likeCards: res.data.data.likeCards,
-          recordCards: res.data.data.recordCards,
-        });
-        dispatch(setUserInfo(newUserInfo));
-        setChangeCard(false);
-      });
-    }
-  }, [changeCard]);
 
   useEffect(() => {
     if (userInfo.likeCards) {
@@ -51,21 +26,31 @@ function FavoriteButton(props: any) {
   }, []);
 
   const likeAddHandler = async () => {
-    let action;
-    if (!isLogin && !isGuestModal) {
-      setModalOpen(true);
+    let action = isLikeAdd ? 'cancel' : 'like';
+
+    if (!isLogin && !isGuest) {
+      dispatch(setGuestModal(true));
+      return;
     } else {
-      action = isLikeAdd ? 'cancel' : 'like';
       setIsLikeAdd(!isLikeAdd);
     }
 
-    if (isGuest) {
-      let newCards = userInfo.likeCards ? [...userInfo.likeCards, props.cardData] : [props.cardData];
-      let newUserInfo = Object.assign({}, userInfo, {
-        likeCards: newCards,
+    let newCard = Object.assign({}, props.cardData, { like: true });
+    let newCards;
+    if (action === 'like') {
+      newCards = userInfo.likeCards ? [...userInfo.likeCards, newCard] : [newCard];
+    } else {
+      newCards = userInfo.likeCards.filter((el: any) => {
+        if (el.id !== newCard.id || el.category !== newCard.category) {
+          return el;
+        }
       });
-      dispatch(setUserInfo(newUserInfo));
     }
+
+    let newUserInfo = Object.assign({}, userInfo, {
+      likeCards: newCards,
+    });
+    dispatch(setUserInfo(newUserInfo));
 
     if (isLogin) {
       await axios({
@@ -79,8 +64,8 @@ function FavoriteButton(props: any) {
           category: props.cardData.category,
           accessToken: `Bearer ${userInfo.accessToken}`,
         },
-      }).then(() => {
-        setChangeCard(true);
+      }).catch((err) => {
+        console.log(err);
       });
     }
   };
@@ -94,13 +79,12 @@ function FavoriteButton(props: any) {
     top: 0;
     right: 0;
     z-index: 100;
-    color: #fff;
+    color: #000;
     cursor: pointer;
   `;
 
   return (
     <div>
-      {modalOpen ? <GuestModal /> : null}
       <FavoriteBtn onClick={likeAddHandler}>{isLikeAdd ? <FcLike /> : <FaRegHeart />}</FavoriteBtn>
     </div>
   );

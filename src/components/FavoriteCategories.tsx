@@ -8,12 +8,14 @@ interface Props {
     imagePath: string;
   };
   likeCards: LikeCardsGeneral[];
+  recordCards: any[];
   setFilteredArray: React.Dispatch<React.SetStateAction<LikeCardsGeneral[]>>;
   setRenderArray: React.Dispatch<React.SetStateAction<LikeCardsGeneral[]>>;
 }
 const FavoriteCategories = ({
   category,
   likeCards,
+  recordCards,
   setFilteredArray,
   setRenderArray,
 }: Props): JSX.Element => {
@@ -25,9 +27,13 @@ const FavoriteCategories = ({
       if (likeCards !== null) {
         return setFilteredArray(likeCards);
       }
-    } else {
+    } else if (categoryName.toLowerCase() !== 'mycards') {
       if (likeCards !== null) {
         return setFilteredArray(likeCards.filter((el) => el.category === categoryName.toLowerCase()));
+      }
+    } else {
+      if (recordCards !== null) {
+        return setFilteredArray(recordCards);
       }
     }
   };
@@ -73,6 +79,8 @@ const Wrapper = styled.div`
 const Category = styled.button<{ imagePath: string }>`
   cursor: pointer;
   font-size: 1.5rem;
+  text-shadow: 11px 4px 15px rgba(186, 186, 186, 1);
+  font-weight: 700;
   height: 100%;
   width: 100%;
   outline: none;

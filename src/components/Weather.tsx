@@ -6,6 +6,8 @@ import rain from '../img/icons/rain.png';
 import cloud from '../img/icons/cloud.png';
 import lightning from '../img/icons/lightning.png';
 import snow from '../img/icons/snow.png';
+import iridescence from '../img/icons/iridescence.png';
+import noData from '../img/icons/noData.png';
 
 interface tempOBJ {
   평균기온?: string;
@@ -26,7 +28,7 @@ const Weather = ({ data, selectedDate }: any) => {
   const weatherData = data.weatherCard ? data.weatherCard : null;
   const temprature: tempOBJ = weatherData
     ? Object.assign({}, weatherData.temperature[0], weatherData.temperature[1], weatherData.temperature[2])
-    : { 평균기온: '정보가 없습니다', 최고기온: '정보가 없습니다', 최저기온: '정보가 없습니다' };
+    : { 평균기온: '0.0 ℃', 최고기온: '0.0 ℃', 최저기온: '0.0 ℃' };
 
   const [iconUp, setIconUp] = useState<weatherIcon | null>(null) as any;
   const [text, setText] = useState('날씨 정보가 없습니다.');
@@ -58,6 +60,10 @@ const Weather = ({ data, selectedDate }: any) => {
         case '뇌전':
           setText('번개가 치는 날입니다.');
           setIconUp(lightning);
+          break;
+        case '채운':
+          setText('채운이 지는 날입니다.');
+          setIconUp(iridescence);
           break;
         case '우박':
           setText('우박이 내린 날입니다.');
@@ -103,7 +109,13 @@ const Weather = ({ data, selectedDate }: any) => {
             <WeatherImg>
               <img src={`${iconUp}`} alt='' style={{ width: '9.5rem' }} />
             </WeatherImg>
-            <h2>{weatherData ? weatherData.weather : text}</h2>
+            <h2>
+              {weatherData ? (
+                weatherData.weather
+              ) : (
+                <img src={noData} alt='noWeatherData' style={{ width: '60%', height: '60%' }} />
+              )}
+            </h2>
           </div>
         </div>
       </div>

@@ -5,6 +5,8 @@ export default {
   isEdit: false,
   isGuest: false,
   isGuestModal: false,
+  isReject: false,
+  isSave: false,
   userInfo: {
     userEmail: null || '',
     nickName: null || '',

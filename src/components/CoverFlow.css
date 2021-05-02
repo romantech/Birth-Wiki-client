@@ -1,5 +1,7 @@
 .slider {
   width: 100%;
+  position: relative;
+  z-index: 1000;
 }
 .slider .slideInput {
   display: none;
@@ -9,18 +11,56 @@
   align-items: center;
   justify-content: center;
   position: relative;
-  min-height: 350px;
+  min-height: 450px;
   perspective: 1000px;
   overflow: hidden;
+}
+
+@media (max-width: 899px) {
+  .testimonials {
+    max-width: 600px;
+    width: 100%;
+    margin: 0 auto;
+  }
+}
+
+@media (max-width: 699px) {
+  .testimonials {
+    max-width: 450px;
+    width: 100%;
+    margin: 0 auto;
+  }
+
+  .testimonials .item {
+    max-width: 450px;
+  }
+
+  .inner_item {
+    flex-direction: column;
+  }
+
+  .inner_item .sideImg {
+    width: 100%;
+    height: 25vh;
+    overflow: hidden;
+    border-radius: 15px 0 0;
+  }
+
+  .inner_item .sideContent {
+    width: 100%;
+  }
 }
 
 .testimonials .item {
   top: 0;
   position: absolute;
   box-sizing: border-box;
-  width: 450px;
+  max-width: 600px;
+  width: 100%;
+  background: #fff;
   border-radius: 10px;
-  height: 330px;
+  height: 430px;
+  overflow: hidden;
   text-align: center;
   transition: transform 0.4s;
   transform-style: preserve-3d;
@@ -29,13 +69,6 @@
 }
 
 @media only screen and (max-width: 768px) {
-  .testimonials .item {
-    width: 100%;
-  }
-}
-
-.testimonials .item p {
-  color: #ddd;
 }
 
 .dots {

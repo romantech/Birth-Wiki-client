@@ -13,24 +13,23 @@ import { RootState } from '../store';
 import { LikeCardsGeneral } from '../types/index';
 import { ArrowLeft, ArrowRight } from '../components/ArrowIcon';
 import { FaArrowCircleUp } from 'react-icons/fa';
+import addLikeProperty from '../utils/addLikeProperty';
 
 let sliceStart = 0;
 let sliceEnd = 11;
 const FavoritePage = (): JSX.Element => {
-  const isLogin = useSelector((state: RootState) => state.loginReducer.isLogin);
-  const isGuest = useSelector((state: RootState) => state.guestReducer.isGuest);
   const { userInfo } = useSelector((state: RootState) => state.userInfoReducer);
-  const { likeCards } = userInfo;
+  let { likeCards } = useSelector((state: RootState) => state.userInfoReducer.userInfo);
+  let { recordCards } = useSelector((state: RootState) => state.userInfoReducer.userInfo);
 
-  const [renderArray, setRenderArray] = useState<LikeCardsGeneral[]>([]);
-  const [filteredArray, setFilteredArray] = useState<LikeCardsGeneral[]>(
-    likeCards !== null ? likeCards.filter((el: { like: boolean }) => el.like === true) : [],
-  );
+  likeCards = addLikeProperty(likeCards);
+  const [renderArray, setRenderArray] = useState<any[]>([]);
+  const [filteredArray, setFilteredArray] = useState<LikeCardsGeneral[]>(likeCards !== null ? likeCards : []);
 
   const getLikeCards = (start: number, end: number) => {
     const sliced = filteredArray.slice(start, end);
-    if (sliced.length) {
-      setRenderArray(renderArray.concat(...sliced));
+    if (sliced.length !== 0) {
+      setRenderArray(renderArray.concat(sliced));
       sliceStart = sliceEnd;
       sliceEnd = sliceEnd + 11;
     }
@@ -42,7 +41,7 @@ const FavoritePage = (): JSX.Element => {
       sliceEnd = 11;
       getLikeCards(sliceStart, sliceEnd);
     }
-  }, [renderArray, filteredArray]);
+  }, [filteredArray]);
 
   const breakPoints = {
     default: 6,
@@ -55,7 +54,7 @@ const FavoritePage = (): JSX.Element => {
 
   return (
     <Container>
-      <h1 className='Favorite-H1'>CATEGORY</h1>
+      <h1 className='Favorite-H1 h1-top'>CATEGORY</h1>
       <Categories>
         <ScrollMenu
           data={categories.map((category) => (
@@ -64,6 +63,7 @@ const FavoritePage = (): JSX.Element => {
               key={category.categoryName}
               setFilteredArray={setFilteredArray}
               likeCards={likeCards}
+              recordCards={recordCards}
               setRenderArray={setRenderArray}
             />
           ))}
@@ -76,7 +76,7 @@ const FavoritePage = (): JSX.Element => {
       <h1 className='Favorite-H1'>YOUR CARDS</h1>
       <InfiniteScroll
         dataLength={renderArray.length}
-        next={() => setTimeout(() => getLikeCards(sliceStart, sliceEnd), 1200)}
+        next={() => setTimeout(() => getLikeCards(sliceStart, sliceEnd), 500)}
         hasMore={renderArray.length < filteredArray.length}
         loader={<Loader />}
         endMessage={
@@ -107,6 +107,9 @@ const FavoritePage = (): JSX.Element => {
                     korea={card.korea}
                     world={card.world}
                     key={index}
+                    recordImage={card.cardImage}
+                    recordDesc={card.cardDesc}
+                    recordWriter={card.writer}
                     setFilteredArray={setFilteredArray}
                     filteredArray={filteredArray}
                   />
@@ -124,12 +127,15 @@ const FavoritePage = (): JSX.Element => {
 const Container = styled.div`
   padding: 1.8rem 5rem 5rem 4rem;
   /* background: #d4dbdd; */
+  .Favorite-H1.h1-top {
+    margin-top: 80px;
+  }
 
-  // 1200px 이하인 경우
   @media (max-width: 1500px) {
     padding: 1.8rem 4rem 4rem 3rem;
   }
 
+  // 1200px 이하인 경우
   @media (max-width: 1200px) {
     padding: 1.6rem 2rem 2rem 1rem;
     .Favorite-H1 {
@@ -150,6 +156,9 @@ const Container = styled.div`
     .Favorite-H1 {
       font-size: 1.7em;
       text-align: center;
+    }
+    .Favorite-H1.h1-top {
+      margin-top: 100px;
     }
   }
 
@@ -188,7 +197,7 @@ const Categories = styled.div`
 `;
 
 const ScrollIcon = styled(FaArrowCircleUp)`
-  color: gray;
+  color: #a7a7a7;
   opacity: 0.4;
   font-size: 2.5rem;
   cursor: pointer;
@@ -198,7 +207,7 @@ const ScrollIcon = styled(FaArrowCircleUp)`
   transition: all 0.3s ease-in-out;
 
   &:hover {
-    color: black;
+    color: #6b6b6b;
     transition: all 0.3s ease-in-out;
     bottom: 30px;
     opacity: 0.7;
@@ -228,10 +237,6 @@ const Loader = styled.img.attrs({
   margin-right: auto;
   height: 100px;
   width: 100px;
-`;
-
-const Modal = styled.div`
-  background-color: rgba(6, 11, 38, 0.8);
 `;
 
 export default FavoritePage;

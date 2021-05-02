@@ -3,10 +3,14 @@ import styled from 'styled-components';
 import { useHistory, Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../store/index';
-import { setIsLogin, setUserInfo, setIsSidbar, setIsEdit, setGuest, setGuestModal } from '../actions/index';
+import { setIsLogin, setUserInfo, setIsSidbar, setIsEdit, setGuest, setGuestReject } from '../actions/index';
 import axios from 'axios';
 import initialState from '../reducers/initialState';
 import SidebarMystory from './SidebarMystory';
+import { LikeCardsGeneral } from '../types/index';
+import Pagination from './pagination';
+import { AiFillCaretUp, AiFillCaretDown } from 'react-icons/ai';
+import guestState from '../reducers/guestState';
 
 const MypageContainer = styled.div`
   color: #fff;
@@ -119,7 +123,7 @@ const RecordCardsList = styled.div`
   padding: 10px;
   color: #fff;
 
-  background-color: #eee;
+  background-color: #fff;
   color: #444;
   cursor: pointer;
   padding: 18px;
@@ -152,7 +156,7 @@ const LikeCardsList = styled.div`
   padding: 10px;
   color: #fff;
 
-  background-color: #eee;
+  background-color: #fff;
   color: #444;
   cursor: pointer;
   padding: 18px;
@@ -161,12 +165,6 @@ const LikeCardsList = styled.div`
   text-align: left;
   outline: none;
   font-size: 15px;
-
-  .active,
-  &:hover {
-    background-color: #ccc;
-  }
-
   p {
     margin: 0;
   }
@@ -189,19 +187,21 @@ function SidebarMypage() {
   const dispatch = useDispatch();
   const [storyclicked, setStoryClicked] = useState(false);
   const [markclicked, setMarkClicked] = useState(false);
-  const [showModal, setShowModal] = useState(false);
   const isGuest = useSelector((state: RootState) => state.guestReducer.isGuest);
-  const [shareModalMain, setShareModalMain] = useState(false);
-  const [unLikeModal, setUnlikeModal] = useState(false);
+  const [filteredArray, setFilteredArray] = useState<LikeCardsGeneral[]>(
+    likeCards !== null ? likeCards.filter((el: { like: boolean }) => el.like === true) : [],
+  );
+  const [currentPage, setCurrentPage] = useState(1);
+  const [cardsPerPage, setCardsPerPage] = useState(5);
 
   const logoutHandler = () => {
     if (isGuest) {
       dispatch(setGuest(false));
-      dispatch(setGuestModal(false));
+      dispatch(setIsSidbar(false));
+      dispatch(setUserInfo(guestState));
     } else {
-      const birthwikiServer = 'https://server.birthwiki.space/user/logout';
       axios({
-        url: birthwikiServer,
+        url: 'https://server.birthwiki.space/user/logout',
         method: 'POST',
         data: {
           source: source,
@@ -210,20 +210,25 @@ function SidebarMypage() {
           authorization: `Bearer ${accessToken}`,
         },
       })
-        .then((res) => {
-          console.log('Logout', res);
+        .then(() => {
           dispatch(setIsLogin(false));
           dispatch(setIsSidbar(false));
           dispatch(setUserInfo(initialState.userInfo));
         })
-        .then(() => console.log(userInfo))
+        .then(() => {
+          window.location.href = `${process.env.REACT_APP_CLIENT_URL}`;
+        })
         .catch((error) => console.log('err', error.message));
     }
   };
 
   const editHandler = () => {
-    dispatch(setIsSidbar(false));
-    dispatch(setIsEdit(true));
+    if (isGuest) {
+      dispatch(setGuestReject(true));
+    } else {
+      dispatch(setIsSidbar(false));
+      dispatch(setIsEdit(true));
+    }
   };
 
   const clickedStoryHandler = () => {
@@ -233,11 +238,24 @@ function SidebarMypage() {
   const clickMarkHandler = () => {
     setMarkClicked(!markclicked);
   };
+
+  const indexOfLastCard = currentPage * cardsPerPage;
+  const indexOfFirstCard = indexOfLastCard - cardsPerPage;
+  const currentlikeCards = likeCards ? likeCards.slice(indexOfFirstCard, indexOfLastCard) : [];
+  const currentrecodeCards = recordCards ? recordCards.slice(indexOfFirstCard, indexOfLastCard) : [];
+
+  const paginate = (pageNumber: number) => {
+    setCurrentPage(pageNumber);
+  };
+
+  const modalHandler = () => {
+    window.location.href = `${process.env.REACT_APP_CLIENT_URL}/myFavorite`;
+  };
   return (
     <MypageContainer>
       Mypage
       <ProfileContainer>
-        <Profile>
+        <Profile onClick={modalHandler}>
           {profileImage ? (
             <UserPoto src={`${profileImage}`} />
           ) : (
@@ -256,36 +274,55 @@ function SidebarMypage() {
       </ProfileContainer>
       <MyStoryContainer>
         <RecordCardsList>
-          <p onClick={clickedStoryHandler}> 나만의 기록리스트 </p>
-          {recordCards !== null
+          <p onClick={clickedStoryHandler}>
+            나만의 기록리스트
+            {storyclicked ? <AiFillCaretUp /> : <AiFillCaretDown />}
+          </p>
+          {/* {recordCards !== null && currentrecodeCards !== null
             ? storyclicked
-              ? recordCards.map((data: any) => (
+              ? currentrecodeCards.map((data: any, index: any) => (
                   <MyStory to='/' key={data.id}>
                     {data}
                   </MyStory>
                 ))
               : ''
-            : ''}
+            : ''} */}
         </RecordCardsList>
         <LikeCardsList>
-          <p onClick={clickMarkHandler}> 내가 찜한 카드 </p>
-          {likeCards !== null
-            ? markclicked
-              ? likeCards.map((card: any, index: any) => (
-                  <SidebarMystory
-                    id={card.id}
-                    like={card.like}
-                    date={card.date}
-                    category={card.category}
-                    contents={card.contents}
-                    image={card.image}
-                    korea={card.korea}
-                    world={card.world}
-                    key={index}
-                  />
-                ))
-              : ''
-            : ''}
+          <p onClick={clickMarkHandler}>
+            내가 찜한 카드
+            {markclicked ? <AiFillCaretUp /> : <AiFillCaretDown />}
+          </p>
+          {likeCards !== null && currentlikeCards !== null ? (
+            markclicked ? (
+              <div>
+                <Pagination cardsPerPage={cardsPerPage} totalCards={likeCards.length} paginate={paginate} />
+                {currentlikeCards.map((card: LikeCardsGeneral, index: React.Key | null | undefined) => {
+                  if (card.like === true) {
+                    return (
+                      <SidebarMystory
+                        id={card.id}
+                        like={card.like}
+                        date={card.date}
+                        category={card.category}
+                        contents={card.contents}
+                        image={card.image}
+                        korea={card.korea}
+                        world={card.world}
+                        key={index}
+                        setFilteredArray={setFilteredArray}
+                        filteredArray={filteredArray}
+                      />
+                    );
+                  }
+                })}
+              </div>
+            ) : (
+              ''
+            )
+          ) : (
+            ''
+          )}
         </LikeCardsList>
       </MyStoryContainer>
     </MypageContainer>

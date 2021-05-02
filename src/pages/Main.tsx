@@ -6,7 +6,6 @@ import { useSelector } from 'react-redux';
 import { RootState } from '../store';
 import { Link } from 'react-router-dom';
 import HoverCard from '../components/HoverCard';
-import CardLists from '../components/CardLists';
 import Weather from '../components/Weather';
 import CoverFlow from '../components/CoverFlow';
 import BirthWikiSearch from '../components/BirthWikiSearch';
@@ -17,21 +16,22 @@ import snow from '../img/snow.jpg';
 import cloud from '../img/cloud.jpg';
 import solar from '../img/solar.jpg';
 import lightning from '../img/lightning.jpg';
+import iridescence from '../img/iridescence.jpg';
 
-const Main = () => {
+const Main = ({ setIsLoading }: any) => {
   const selectedDate = new URL(window.location.href).pathname;
   const [showCard, setShowCard] = useState(false);
   const [data, setData] = useState(null);
   const [weather, setWeather] = useState(clear);
   const [isHover, setIsHover] = useState(true);
   const [isFlow, setIsFlow] = useState(false);
-  const [isHoriz, setisHoriz] = useState(false);
   const [selected, setSelected] = useState(0);
   const date = selectedDate.split('/')[2];
   const year = date.split('-')[0];
   const month = date.split('-')[1];
   const day = date.split('-')[2];
 
+  setIsLoading(true);
   useEffect(() => {
     Axios({
       url: 'https://server.birthwiki.space/data/date',
@@ -65,6 +65,9 @@ const Main = () => {
       case '뇌전':
         setWeather(lightning);
         break;
+      case '채운':
+        setWeather(iridescence);
+        break;
       case '우박':
         setWeather(snow);
         break;
@@ -73,7 +76,7 @@ const Main = () => {
 
   const Background = styled.div`
     display: flex;
-    justify-content: space-around;
+    justify-content: space-between;
     align-items: center;
     flex-direction: column;
     width: 100%;
@@ -88,81 +91,43 @@ const Main = () => {
       ),
       url(${weather}) center center/cover no-repeat;
     transition: 0.5s ease;
+
+    @media (max-width: 1400px) {
+      height: auto;
+    }
   `;
 
-  const DateInput = styled.div`
-    width: 100%;
-    margin: 0 auto 35px;
+  const Loadingground = styled.div`
     display: flex;
-    justify-content: center;
-
-    input {
-      display: block;
-      font-size: 1.3rem;
-      padding: 10px;
-      background: none;
-      appearance: none;
-      border: none;
-      outline: none;
-      background-color: rgba(255, 255, 255, 1);
-      border-radius: 0 0 16px 16px;
-      box-shadow: 0px 5px rgba(0, 0, 0, 0.2);
-      transition: 0.4s ease;
-
-      &:focus {
-        background-color: rgba(255, 255, 255, 0.75);
-      }
-    }
-  `;
-
-  const WeatherDetail = styled.div`
-    width: 35vw;
-    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.19), 0 6px 6px rgba(0, 0, 0, 0.23);
-    background: rgba(0, 0, 0, 0.6);
-    border-radius: 14px;
-    color: #fff;
-    text-align: center;
-    padding: 20px;
-
-    @media (max-width: 920px) {
-      width: 45vw;
-    }
-
-    @media (max-width: 600px) {
-      width: 90%;
-    }
+    justify-content: space-between;
+    align-items: center;
+    flex-direction: column;
+    width: 100%;
+    height: 10000px;
+    overflow: hidden;
+    object-fit: contain;
+    background: linear-gradient(
+        90deg,
+        rgba(255, 255, 255, 0.3) 0%,
+        rgba(255, 255, 255, 0.3) 50%,
+        rgba(255, 255, 255, 0.3) 100%
+      ),
+      url(${weather}) center center/cover no-repeat;
   `;
 
   const openCard = () => {
     setShowCard((prev) => !prev);
   };
 
-  const cardRef: any = useRef<HTMLDivElement>(null);
-  const animation: any = useSpring({
-    //카드 클릭시 에니메이션 효과
-    config: {
-      duration: 200,
-    },
-    opacity: showCard ? 1 : 0,
-    transform: showCard ? `translateY(0%)` : `translateY(100%)`,
-  });
-
-  const closeCard = (e: React.SyntheticEvent) => {
-    //배경 클릭시 카드 off
-    if (cardRef.current === (e.target as typeof e.target)) {
-      setShowCard(false);
-    }
-  };
-
   return (
     <>
       {data ? (
         <Background>
-          <DateInput>
-            <BirthWikiSearch year={year} month={month} day={day} />
-          </DateInput>
           {isHover ? (
             <>
+              <DateInput>
+                <BirthWikiSearch year={year} month={month} day={day} />
+              </DateInput>
               <WeatherDetail>
                 <Weather data={data} selectedDate={selectedDate} />
               </WeatherDetail>
@@ -174,12 +139,69 @@ const Main = () => {
               />
             </>
           ) : null}
-          {isFlow ? <CoverFlow data={data} selected={selected} /> : null}
-          {/* isHoriz?<HorizFlow data={data} /> : null */}
+          {isFlow ? (
+            <CoverFlow
+              data={data}
+              selectedDate={selectedDate}
+              selected={selected}
+              setSelected={setSelected}
+              setIsFlow={setIsFlow}
+              setIsHover={setIsHover}
+            />
+          ) : null}
         </Background>
-      ) : null}
+      ) : (
+        <Loadingground />
+      )}
     </>
   );
 };
+
+const DateInput = styled.div`
+  padding: 10px 10px 10px 10;
+  margin-top: 140px;
+  margin-bottom: 20px;
+  border-radius: 16px;
+  display: flex;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.3);
+
+  input {
+    display: block;
+    font-size: 1.3rem;
+    height: 25px;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    border: none;
+    outline: none;
+    box-shadow: 0px 3px rgb(0 0 0 / 50%);
+    -webkit-transition: 0.4s ease;
+    transition: 0.4s ease;
+    margin-bottom: 20px;
+
+    &:focus {
+      background-color: rgba(255, 255, 255, 0.75);
+    }
+  }
+`;
+
+const WeatherDetail = styled.div`
+  width: 35vw;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.19), 0 6px 6px rgba(0, 0, 0, 0.23);
+  background: rgba(0, 0, 0, 0.6);
+  border-radius: 14px;
+  color: #fff;
+  text-align: center;
+  padding: 20px;
+
+  @media (max-width: 920px) {
+    width: 55vw;
+  }
+
+  @media (max-width: 600px) {
+    width: 70%;
+  }
+`;
 
 export default Main;

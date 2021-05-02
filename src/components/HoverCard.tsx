@@ -18,50 +18,6 @@ const HoverCard = (props: any) => {
   const cardData = [issue, birth, death, movie, music, { image: recordCover }];
   const cardTitle = ['ISSUE', 'BIRTH', 'DEATH', 'MOVIE', 'MUSIC', 'RECORD'];
 
-  const CardLists = styled.div`
-    display: flex;
-    justify-content: center;
-    width: 100%;
-    padding: 4% 2% 0;
-    box-sizing: border-box;
-    height: 60vh;
-    background: linear-gradient(rgba(204, 255, 255, 0) 30%, rgba(248, 251, 233, 1) 60%);
-  `;
-
-  const CardContents = styled.div`
-    flex: 1;
-    overflow: hidden;
-    transition: 0.4s;
-    margin: 0 1%;
-    box-shadow: 0 20px 30px rgba(0, 0, 0, 0.4);
-    border-radius: 15px;
-    background-size: cover;
-    position: relative;
-    top: 100px;
-    color: #fff;
-    cursor: pointer;
-    @media only screen and (width: 500px) {
-      display: none;
-    }
-    & h2 {
-      font-size: 3.2vh;
-      display: block;
-      text-align: center;
-      height: 6vh;
-      line-height: 1.6;
-      color: #fff;
-      text-transform: uppercase;
-    }
-    &:hover {
-      flex: 0 0 25%;
-      top: 0px;
-    }
-    & img:hover {
-      width: 100%;
-      height: 100%;
-    }
-  `;
-
   const openCard = () => {
     setShowCard((prev) => !prev);
   };
@@ -75,13 +31,6 @@ const HoverCard = (props: any) => {
     opacity: showCard ? 1 : 0,
     transform: showCard ? `translateY(0%)` : `translateY(100%)`,
   });
-
-  const closeCard = (e: React.SyntheticEvent) => {
-    //배경 클릭시 카드 off
-    if (cardRef.current === (e.target as typeof e.target)) {
-      setShowCard(false);
-    }
-  };
 
   return (
     <CardLists>
@@ -103,5 +52,58 @@ const HoverCard = (props: any) => {
     </CardLists>
   );
 };
+
+const CardLists = styled.div`
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  padding: 4% 2% 0;
+  box-sizing: border-box;
+
+  @media (max-width: 800px) {
+    flex-direction: column;
+  }
+`;
+
+const CardContents = styled.div`
+  flex: 1;
+  overflow: hidden;
+  transition: 0.4s;
+  margin: 0 1%;
+  box-shadow: 0 20px 30px rgba(0, 0, 0, 0.4);
+  border-radius: 15px;
+  background-size: cover;
+  position: relative;
+  height: 25vh;
+  top: 40px;
+  bottom: 0px;
+  color: #fff;
+  cursor: pointer;
+
+  @media (max-width: 800px) {
+    top: 0px;
+    width: 70%;
+    margin: 0 auto 10px;
+  }
+
+  & h2 {
+    font-size: 3.2vh;
+    display: block;
+    text-align: center;
+    height: 6vh;
+    line-height: 1.6;
+    color: #fff;
+    text-shadow: 2px 2px 14px rgba(0, 0, 0, 1);
+    text-transform: uppercase;
+  }
+  &:hover {
+    flex: 0 0 25%;
+    top: 0px;
+  }
+  & img:hover {
+    width: 100%;
+    height: 100%;
+  }
+`;
 
 export default HoverCard;
