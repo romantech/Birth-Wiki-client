@@ -247,11 +247,15 @@ function SidebarMypage() {
   const paginate = (pageNumber: number) => {
     setCurrentPage(pageNumber);
   };
+
+  const modalHandler = () => {
+    window.location.href = `${process.env.REACT_APP_CLIENT_URL}/myFavorite`;
+  };
   return (
     <MypageContainer>
       Mypage
       <ProfileContainer>
-        <Profile>
+        <Profile onClick={modalHandler}>
           {profileImage ? (
             <UserPoto src={`${profileImage}`} />
           ) : (

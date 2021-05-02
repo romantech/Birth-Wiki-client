@@ -5,43 +5,37 @@ export default function LaunchPage_2() {
   return (
     <LaunchPageContainer>
       <MainDescContainer>
-        <Title>
-          내 생일에 어떤 일이 있었는지 궁금하지 않으신가요?
-          <br />
-          자신의 생일에 대한 흥미롭고 재미있는 사실을 발견하세요.
-          <br />
+        <Title data-aos='fade-up' data-aos-duration='1000'>
+          생일을 입력해보세요
         </Title>
-      </MainDescContainer>
-
-      <DescContainer>
-        <TextContainer>
-          <div className='text'>내 생일의 날씨정보</div>
-          <div className='text'>내 생일에 발생했던 이슈</div>
-          <div className='text'>나와 생일 같은 유명인</div>
-          <div className='text'>내 생일이 기일인 유명인</div>
-          <div className='text'>내 생일의 1위 영화 </div>
-          <div className='text'>내 생일의 1위 음악</div>
+        <br />
+        <TextContainer data-aos='fade-up' data-aos-duration='1000'>
           <div className='text'>
-            그리고 <span className='color'>카드 수집 기능</span>
+            자신의 생일에 대한 <span className='color'>흥미</span>롭고 <span className='color'>재미</span>
+            있는 사실을 발견하세요.
           </div>
+          {/* <div className='text'>내 생일의 날씨정보 / </div>
+          <div className='text'>내 생일에 발생했던 이슈 / </div>
+          <div className='text'>나와 생일 같은 유명인 / </div>
+          <br />
+          <div className='text'>내 생일이 기일인 유명인 / </div>
+          <div className='text'>내 생일의 1위 영화 / </div>
+          <div className='text'>내 생일의 1위 음악</div> */}
         </TextContainer>
         <VideoContainer>
-          <div className='videoContiner'>
-            <video className='video' muted loop autoPlay={true}>
-              <source src='../background.mp4' type='video/mp4'></source>
-            </video>
-          </div>
+          <img className='img' src={`${process.env.PUBLIC_URL}/section_2.gif`} />
         </VideoContainer>
-      </DescContainer>
+      </MainDescContainer>
     </LaunchPageContainer>
   );
 }
 
 const LaunchPageContainer = styled.section`
   font-family: sans-serif;
-  background: #f4f9f9;
+  background: #f5f7b2;
+  background: #f4eeed;
   height: 100vh;
-  background-size: 100%;
+  width: 100vw;
   flex-wrap: wrap;
   display: flex;
   justify-content: center;
@@ -53,45 +47,44 @@ const LaunchPageContainer = styled.section`
 
 const MainDescContainer = styled.div`
   display: flex;
+  flex-direction: column;
+  align-items: center;
 `;
 
 const Title = styled.div`
-  font-size: 2rem;
+  font-size: 3em;
   font-weight: 800;
   letter-spacing: 0.1rem;
-  line-height: 3.5rem;
-  color: #2b2e4a;
+  line-height: 4.5rem;
+  color: #000;
+  text-align: start;
+  margin: 0 30px;
+  transform: translateY(0);
+  opacity: 1;
+  transition: all 1s 0.2s;
 
-  @media (max-width: 970px) {
+  @media (max-width: 699px) {
     flex-direction: column;
-    line-height: 3rem;
+    line-height: 4rem;
   }
-`;
-
-const DescContainer = styled.div`
-  display: flex;
-  align-items: center;
-
-  @media (max-width: 970px) {
-    flex-direction: column;
+  @media (max-width: 499px) {
+    font-size: 2rem;
+    line-height: 3rem;
   }
 `;
 
 const TextContainer = styled.div`
   display: flex;
-  flex-direction: column;
-  align-items: flex-start;
+  flex-wrap: wrap;
+  justify-content: center;
   font-size: 1.3rem;
   line-height: 3rem;
   padding: 5px;
   font-weight: 400;
-  color: #09015f;
-  margin-right: 20px;
+  color: #2b2e4a;
+  margin: 0 30px 20px;
 
   @media (max-width: 970px) {
-    flex-direction: row;
-    flex-wrap: wrap;
-    justify-content: center;
     line-height: 2rem;
   }
 
@@ -106,19 +99,11 @@ const TextContainer = styled.div`
 `;
 
 const VideoContainer = styled.div`
-  background: #060b26;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  padding: 0;
-  width: 700px;
+  width: 60%;
   position: relative;
   z-index: 1;
-  @media (max-width: 970px) {
-    width: 100%;
-  }
 
-  & .video {
+  & .img {
     width: 100%;
     height: 100%;
   }

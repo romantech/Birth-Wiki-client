@@ -15,6 +15,7 @@
     "@types/react-scroll": "^1.8.2",
     "@types/redux-persist": "^4.3.1",
     "@types/swiper": "^5.4.2",
+    "aos": "^2.3.4",
     "axios": "^0.21.1",
     "dotenv": "^8.2.0",
     "node-sass": "^5.0.0",
@@ -40,7 +41,7 @@
     "typescript": "^4.2.3"
   },
   "scripts": {
-    "start": "HTTPS=true SSL_CRT_FILE='../Birth-Wiki-client/cert.pem' SSL_KEY_FILE='../Birth-Wiki-client/key.pem' react-scripts start",
+    "start": "HTTPS=true SSL_CRT_FILE='./cert.pem' SSL_KEY_FILE='./key.pem' react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
