@@ -1,6 +1,6 @@
 # About
 
-![Birth Wiki 로고](https://user-images.githubusercontent.com/8604840/116270940-85793180-a7ba-11eb-8339-3cf603b82e99.png)
+<img width="1001" alt="iShot2021-04-28_02 49 57" src="https://user-images.githubusercontent.com/8604840/116859786-83d8bf00-ac3b-11eb-8957-770c16b830f5.png">
 
 내 생일에 어떤 일이 있었는지 궁금하지 않으신가요?  
 [Birth Wiki](https://birthwiki.space)에서 확인할 수 있습니다.
