@@ -29,4 +29,5 @@
 > _인터넷 익스플로러 9 출시_  
 > _등..._
 
-### [Birth Wiki 바로가기](https://birthwiki.space)
+### [🔗 Birth Wiki 사용해보기](https://birthwiki.space)
+### [🔗 프로젝트 더 알아보기](https://bit.ly/3voSkdW)
