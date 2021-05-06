@@ -157,7 +157,7 @@ const FavoriteCardList = ({ ...props }: SetFilteredArray): JSX.Element => {
                   <p style={{ marginTop: '-10px' }}>
                     {movieInfoKorean.vote_average !== undefined
                       ? getMovieRateStar(movieInfoKorean.vote_average).map((el, index) => {
-                          if (el[0] === 'black') {
+                          if (el === 'black') {
                             return <MovieRateStarBlack style={{ color: 'white' }} key={index} />;
                           } else {
                             return <MovieRateStarGray style={{ color: 'gray' }} key={index} />;
@@ -178,7 +178,7 @@ const FavoriteCardList = ({ ...props }: SetFilteredArray): JSX.Element => {
                   <p style={{ marginTop: '-15px' }}>
                     {movieInfoWorld.vote_average !== undefined
                       ? getMovieRateStar(movieInfoWorld.vote_average).map((el, index) => {
-                          if (el[0] === 'black') {
+                          if (el === 'black') {
                             return <MovieRateStarBlack style={{ color: 'white' }} key={index} />;
                           } else {
                             return <MovieRateStarGray style={{ color: 'gray' }} key={index} />;
