@@ -171,10 +171,6 @@ const Categories = styled.div`
     outline: none;
   }
 
-  .menu-item {
-    user-select: none;
-  }
-
   .scroll-menu-arrow {
     padding: 20px;
     cursor: pointer;

@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, createRef } from 'react';
 import styled, { css } from 'styled-components';
 import { FiHeart, FiShare, FiZoomIn } from 'react-icons/fi';
 import FavoriteModal from '../components/FavoriteModal';
@@ -18,8 +18,6 @@ interface SetFilteredArray extends LikeCardsGeneral {
 }
 
 const FavoriteCardList = ({ ...props }: SetFilteredArray): JSX.Element => {
-  // const shareRef = useRef<HTMLDivElement>(null);
-
   const contents = props.contents !== null ? props.contents : [];
   const category = props.category;
 
@@ -34,6 +32,26 @@ const FavoriteCardList = ({ ...props }: SetFilteredArray): JSX.Element => {
   const [movieInfoKorean, setMovieInfoKorean] = useState<MovieInfo>();
   const [movieInfoWorld, setMovieInfoWorld] = useState<MovieInfo>();
   const [fetchStatus, setFetchStatus] = useState(false);
+
+  const shareRef = useRef<HTMLDivElement>(null);
+  if (shareRef.current) {
+    const clientRect = shareRef.current.getBoundingClientRect();
+    const absoluteTop = window.pageYOffset + clientRect.top;
+    // console.log(absoluteTop);
+  }
+
+  // const openShareModal = (e: { pageX: number; pageY: number }) => {
+  //   // const clientRect = e.target.getBoundingClientRect();
+  //   // const relativeTop = clientRect.top;
+  //   // const scrolledTopLength = window.pageYOffset;
+  //   // const absoluteTop = scrolledTopLength + relativeTop;
+
+  //   setShareModalMini((prev) => !prev);
+  //   setXYPosition({
+  //     pageX: e.pageX,
+  //     pageY: e.pageY,
+  //   });
+  // };
 
   const fetchImage = (url: string) => {
     axios.get(url).then((res) => {
@@ -79,19 +97,6 @@ const FavoriteCardList = ({ ...props }: SetFilteredArray): JSX.Element => {
   const openModal = () => {
     setShowModal((prev) => !prev);
   };
-
-  // const openShareModal = (e: { pageX: number; pageY: number }) => {
-  //   // const clientRect = e.target.getBoundingClientRect();
-  //   // const relativeTop = clientRect.top;
-  //   // const scrolledTopLength = window.pageYOffset;
-  //   // const absoluteTop = scrolledTopLength + relativeTop;
-
-  //   setShareModalMini((prev) => !prev);
-  //   setXYPosition({
-  //     pageX: e.pageX,
-  //     pageY: e.pageY,
-  //   });
-  // };
 
   if (props.category === 'movie') {
     props.image = props.world?.poster ? props.world?.poster : props.image;

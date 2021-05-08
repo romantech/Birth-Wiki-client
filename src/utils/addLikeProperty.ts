@@ -5,7 +5,6 @@ const addLikeProperty = (likeCards: LikeCardsGeneral[]) => {
     return likeCards.map((card) => {
       if (card.like === undefined) {
         card['like'] = true;
-        return card;
       }
       return card;
     });
