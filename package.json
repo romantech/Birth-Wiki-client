@@ -16,7 +16,7 @@
     "@types/redux-persist": "^4.3.1",
     "@types/swiper": "^5.4.2",
     "aos": "^2.3.4",
-    "axios": "^0.21.1",
+    "axios": "^0.21.2",
     "dotenv": "^8.2.0",
     "node-sass": "^5.0.0",
     "react": "^17.0.2",
